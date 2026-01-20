@@ -1,21 +1,6 @@
 package tech.minediamond.lusternbt.tag;
 
-import tech.minediamond.lusternbt.tag.builtin.ByteArrayTag;
-import tech.minediamond.lusternbt.tag.builtin.ByteTag;
-import tech.minediamond.lusternbt.tag.builtin.CompoundTag;
-import tech.minediamond.lusternbt.tag.builtin.DoubleTag;
-import tech.minediamond.lusternbt.tag.builtin.FloatTag;
-import tech.minediamond.lusternbt.tag.builtin.IntArrayTag;
-import tech.minediamond.lusternbt.tag.builtin.IntTag;
-import tech.minediamond.lusternbt.tag.builtin.ListTag;
-import tech.minediamond.lusternbt.tag.builtin.LongTag;
-import tech.minediamond.lusternbt.tag.builtin.ShortTag;
-import tech.minediamond.lusternbt.tag.builtin.StringTag;
-import tech.minediamond.lusternbt.tag.builtin.Tag;
-import tech.minediamond.lusternbt.tag.builtin.custom.DoubleArrayTag;
-import tech.minediamond.lusternbt.tag.builtin.custom.FloatArrayTag;
-import tech.minediamond.lusternbt.tag.builtin.LongArrayTag;
-import tech.minediamond.lusternbt.tag.builtin.custom.ShortArrayTag;
+import tech.minediamond.lusternbt.tag.builtin.*;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -41,10 +26,6 @@ public class TagRegistry {
         register(10, CompoundTag.class);
         register(11, IntArrayTag.class);
         register(12, LongArrayTag.class);
-
-        register(60, DoubleArrayTag.class);
-        register(61, FloatArrayTag.class);
-        register(65, ShortArrayTag.class);
     }
 
     /**
@@ -55,11 +36,11 @@ public class TagRegistry {
      * @throws TagRegisterException If an error occurs while registering the tag.
      */
     public static void register(int id, Class<? extends Tag> tag) throws TagRegisterException {
-        if(idToTag.containsKey(id)) {
+        if (idToTag.containsKey(id)) {
             throw new TagRegisterException("Tag ID \"" + id + "\" is already in use.");
         }
 
-        if(tagToId.containsKey(tag)) {
+        if (tagToId.containsKey(tag)) {
             throw new TagRegisterException("Tag \"" + tag.getSimpleName() + "\" is already registered.");
         }
 
@@ -70,7 +51,7 @@ public class TagRegistry {
     /**
      * Unregisters a tag class.
      *
-     * @param id  ID of the tag to unregister.
+     * @param id ID of the tag to unregister.
      */
     public static void unregister(int id) {
         tagToId.remove(getClassFor(id));
@@ -84,7 +65,7 @@ public class TagRegistry {
      * @return The tag class with the given id, or null if it cannot be found.
      */
     public static Class<? extends Tag> getClassFor(int id) {
-        if(!idToTag.containsKey(id)) {
+        if (!idToTag.containsKey(id)) {
             return null;
         }
 
@@ -98,7 +79,7 @@ public class TagRegistry {
      * @return The id of the given tag class, or -1 if it cannot be found.
      */
     public static int getIdFor(Class<? extends Tag> clazz) {
-        if(!tagToId.containsKey(clazz)) {
+        if (!tagToId.containsKey(clazz)) {
             return -1;
         }
 
@@ -115,7 +96,7 @@ public class TagRegistry {
      */
     public static Tag createInstance(int id, String tagName) throws TagCreateException {
         Class<? extends Tag> clazz = idToTag.get(id);
-        if(clazz == null) {
+        if (clazz == null) {
             throw new TagCreateException("Could not find tag with ID \"" + id + "\".");
         }
 
@@ -123,7 +104,7 @@ public class TagRegistry {
             Constructor<? extends Tag> constructor = clazz.getDeclaredConstructor(String.class);
             constructor.setAccessible(true);
             return constructor.newInstance(tagName);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new TagCreateException("Failed to create instance of tag \"" + clazz.getSimpleName() + "\".", e);
         }
     }

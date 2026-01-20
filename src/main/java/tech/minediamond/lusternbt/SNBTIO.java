@@ -1,33 +1,9 @@
 package tech.minediamond.lusternbt;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PushbackReader;
-import java.util.regex.Pattern;
+import tech.minediamond.lusternbt.tag.builtin.*;
 
-import tech.minediamond.lusternbt.tag.builtin.ByteArrayTag;
-import tech.minediamond.lusternbt.tag.builtin.ByteTag;
-import tech.minediamond.lusternbt.tag.builtin.CompoundTag;
-import tech.minediamond.lusternbt.tag.builtin.DoubleTag;
-import tech.minediamond.lusternbt.tag.builtin.FloatTag;
-import tech.minediamond.lusternbt.tag.builtin.IntArrayTag;
-import tech.minediamond.lusternbt.tag.builtin.IntTag;
-import tech.minediamond.lusternbt.tag.builtin.ListTag;
-import tech.minediamond.lusternbt.tag.builtin.LongArrayTag;
-import tech.minediamond.lusternbt.tag.builtin.LongTag;
-import tech.minediamond.lusternbt.tag.builtin.ShortTag;
-import tech.minediamond.lusternbt.tag.builtin.StringTag;
-import tech.minediamond.lusternbt.tag.builtin.Tag;
-import tech.minediamond.lusternbt.tag.builtin.custom.DoubleArrayTag;
-import tech.minediamond.lusternbt.tag.builtin.custom.FloatArrayTag;
-import tech.minediamond.lusternbt.tag.builtin.custom.ShortArrayTag;
+import java.io.*;
+import java.util.regex.Pattern;
 
 /**
  * A class containing methods for reading/writing stringified NBT tags.
@@ -105,8 +81,8 @@ public class SNBTIO {
      * @throws java.io.IOException If an I/O error occurs.
      */
     public static void writeFile(CompoundTag tag, File file, boolean linebreak) throws IOException {
-        if(!file.exists()) {
-            if(file.getParentFile() != null && !file.getParentFile().exists()) {
+        if (!file.exists()) {
+            if (file.getParentFile() != null && !file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
 
@@ -163,9 +139,9 @@ public class SNBTIO {
 
         public Tag readNextTag(String name) throws IOException {
             skipWhitespace();
-            if(lookAhead(0) == '{') {
+            if (lookAhead(0) == '{') {
                 return readCompoundTag(name);
-            } else if(lookAhead(0) == '[') {
+            } else if (lookAhead(0) == '[') {
                 return readListOrArrayTag(name);
             } else {
                 return readPrimitiveTag(name);
@@ -177,29 +153,20 @@ public class SNBTIO {
         }
 
         private Tag readListOrArrayTag(String name) throws IOException {
-            if(lookAhead(2) == ';') {
-                switch(lookAhead(1)) {
-                case 'B':
-                    // Byte array
-                    return parseTag(new ByteArrayTag(name));
-                case 'S':
-                    // Short array
-                    return parseTag(new ShortArrayTag(name));
-                case 'I':
-                    // Integer array
-                    return parseTag(new IntArrayTag(name));
-                case 'L':
-                    // Long array
-                    return parseTag(new LongArrayTag(name));
-                case 'F':
-                    // Float array
-                    return parseTag(new FloatArrayTag(name));
-                case 'D':
-                    // Double array
-                    return parseTag(new DoubleArrayTag(name));
-                default:
-                    // Treat as list tag
-                    break;
+            if (lookAhead(2) == ';') {
+                switch (lookAhead(1)) {
+                    case 'B':
+                        // Byte array
+                        return parseTag(new ByteArrayTag(name));
+                    case 'I':
+                        // Integer array
+                        return parseTag(new IntArrayTag(name));
+                    case 'L':
+                        // Long array
+                        return parseTag(new LongArrayTag(name));
+                    default:
+                        // Treat as list tag
+                        break;
                 }
             }
 
@@ -220,7 +187,7 @@ public class SNBTIO {
         // Used when expecting to unread to limit read to the length of the pushback buffer.
         public String readNextSingleValueString(int maxReadLenght) throws IOException {
             String valueString;
-            if(lookAhead(0) == '\'' || lookAhead(0) == '\"') {
+            if (lookAhead(0) == '\'' || lookAhead(0) == '\"') {
                 char c = (char) read();
                 valueString = c + readUntil(maxReadLenght, true, c);
             } else {
@@ -237,22 +204,22 @@ public class SNBTIO {
         static final Pattern shortTagValuePattern = Pattern.compile("[-+]?\\d+[sS]");
 
         private Tag getTagForStringifiedValue(String name, String stringifiedValue) {
-            if(byteTagValuePattern.matcher(stringifiedValue).matches()) {
+            if (byteTagValuePattern.matcher(stringifiedValue).matches()) {
                 // Byte
                 return new ByteTag(name);
-            } else if(doubleTagValuePattern.matcher(stringifiedValue).matches()) {
+            } else if (doubleTagValuePattern.matcher(stringifiedValue).matches()) {
                 // Double
                 return new DoubleTag(name);
-            } else if(floatTagValuePattern.matcher(stringifiedValue).matches()) {
+            } else if (floatTagValuePattern.matcher(stringifiedValue).matches()) {
                 // Float
                 return new FloatTag(name);
-            } else if(intTagValuePattern.matcher(stringifiedValue).matches()) {
+            } else if (intTagValuePattern.matcher(stringifiedValue).matches()) {
                 // Integer
                 return new IntTag(name);
-            } else if(longTagValuePattern.matcher(stringifiedValue).matches()) {
+            } else if (longTagValuePattern.matcher(stringifiedValue).matches()) {
                 // Long
                 return new LongTag(name);
-            } else if(shortTagValuePattern.matcher(stringifiedValue).matches()) {
+            } else if (shortTagValuePattern.matcher(stringifiedValue).matches()) {
                 // Short
                 return new ShortTag(name);
             }
@@ -267,8 +234,8 @@ public class SNBTIO {
 
         public void skipWhitespace() throws IOException {
             char c;
-            while((c = (char) read()) != -1) {
-                if(c == '\t' || c == '\r' || c == '\n' || c == ' ') {
+            while ((c = (char) read()) != -1) {
+                if (c == '\t' || c == '\r' || c == '\n' || c == ' ') {
                     continue;
                 } else {
                     unread(c);
@@ -292,14 +259,14 @@ public class SNBTIO {
             boolean escapeEnd = false;
             int reads = 0;
             char c;
-            while(++reads < maxReadLenght && (c = (char) read()) != -1) {
-                if(c == '\\') {
+            while (++reads < maxReadLenght && (c = (char) read()) != -1) {
+                if (c == '\\') {
                     sb.append(c);
                     escapeEnd = true;
                     continue;
                 }
-                if(!escapeEnd && matchesAny(c, endChar)) {
-                    if(includeEndChar) {
+                if (!escapeEnd && matchesAny(c, endChar)) {
+                    if (includeEndChar) {
                         sb.append(c);
                     } else {
                         unread(c);
@@ -320,8 +287,8 @@ public class SNBTIO {
         }
 
         public static boolean matchesAny(char c, char[] matchable) {
-            for(char m : matchable) {
-                if(c == m)
+            for (char m : matchable) {
+                if (c == m)
                     return true;
             }
             return false;
@@ -340,21 +307,21 @@ public class SNBTIO {
         }
 
         public void writeTag(Tag tag, boolean linebreak, int depth) throws IOException {
-            if(linebreak && depth > 0) {
+            if (linebreak && depth > 0) {
                 append('\n');
                 indent(depth);
             }
 
-            if(tag.getName() != null && !tag.getName().equals("")) {
+            if (tag.getName() != null && !tag.getName().equals("")) {
                 appendTagName(tag.getName());
 
                 append(':');
                 append(' ');
             }
 
-            if(tag instanceof CompoundTag) {
+            if (tag instanceof CompoundTag) {
                 tag.stringify(this, linebreak, depth);
-            } else if(tag instanceof ListTag) {
+            } else if (tag instanceof ListTag) {
                 tag.stringify(this, linebreak, depth);
             } else {
                 tag.stringify(this, linebreak, depth);
@@ -364,7 +331,7 @@ public class SNBTIO {
         public static Pattern nonEscapedTagName = Pattern.compile("(?!\\d+)[\\w\\d]*");
 
         public void appendTagName(String tagName) throws IOException {
-            if(!nonEscapedTagName.matcher(tagName).matches()) {
+            if (!nonEscapedTagName.matcher(tagName).matches()) {
                 append('"');
                 append(tagName.replaceAll("\\\"", "\\\""));
                 append('"');
@@ -374,7 +341,7 @@ public class SNBTIO {
         }
 
         public void indent(int depth) throws IOException {
-            for(int i = 0; i < depth; i++) {
+            for (int i = 0; i < depth; i++) {
                 append('\t');
             }
         }

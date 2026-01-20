@@ -1,13 +1,7 @@
 package tech.minediamond.lusternbt.conversion;
 
 import tech.minediamond.lusternbt.conversion.builtin.*;
-import tech.minediamond.lusternbt.conversion.builtin.custom.DoubleArrayTagConverter;
-import tech.minediamond.lusternbt.conversion.builtin.custom.FloatArrayTagConverter;
-import tech.minediamond.lusternbt.conversion.builtin.custom.ShortArrayTagConverter;
 import tech.minediamond.lusternbt.tag.builtin.*;
-import tech.minediamond.lusternbt.tag.builtin.custom.DoubleArrayTag;
-import tech.minediamond.lusternbt.tag.builtin.custom.FloatArrayTag;
-import tech.minediamond.lusternbt.tag.builtin.custom.ShortArrayTag;
 
 import java.io.Serializable;
 import java.util.*;
@@ -32,10 +26,6 @@ public class ConverterRegistry {
         register(CompoundTag.class, Map.class, new CompoundTagConverter());
         register(IntArrayTag.class, int[].class, new IntArrayTagConverter());
         register(LongArrayTag.class, long[].class, new LongArrayTagConverter());
-
-        register(DoubleArrayTag.class, double[].class, new DoubleArrayTagConverter());
-        register(FloatArrayTag.class, float[].class, new FloatArrayTagConverter());
-        register(ShortArrayTag.class, short[].class, new ShortArrayTagConverter());
     }
 
     /**
