@@ -1,7 +1,7 @@
 LusterNBT is forked from [OpenNBT](https://github.com/GeyserMC/OpenNBT)
 
 # LusterNBT
-LusterNBT is a library for reading and writing NBT files and stringified NBT, with some extra custom tags added to allow the storage of more data types.
+LusterNBT is a library for reading and writing NBT files and stringified NBT.
 
 ## Under development
 
