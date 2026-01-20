@@ -3,24 +3,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.steveice10</groupId>
-    <artifactId>opennbt</artifactId>
-    <version>1.6</version>
+    <groupId>tech.minediamond</groupId>
+    <artifactId>lusternbt</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>OpenNBT</name>
+    <name>lusternbt</name>
     <description>A library for reading and writing NBT files, written in Java.</description>
-    <url>http://github.com/Steveice10/OpenNBT/</url>
+    <url>https://github.com/Mine-diamond/LusterNBT/</url>
 
     <scm>
-        <connection>scm:git:git@github.com:Steveice10/OpenNBT.git</connection>
-        <developerConnection>scm:git:git@github.com:Steveice10/OpenNBT.git</developerConnection>
-        <url>http://github.com/Steveice10/OpenNBT/</url>
+        <connection>scm:git:git@github.com:Mine-diamond/LusterNBT.git</connection>
+        <developerConnection>scm:git:git@github.com:Mine-diamond/LusterNBT.git</developerConnection>
+        <url>https://github.com/Mine-diamond/LusterNBT/</url>
     </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.8</jdk.version>
+        <jdk.version>17</jdk.version>
     </properties>
 
     <licenses>
@@ -33,22 +33,22 @@
 
     <developers>
         <developer>
-            <id>steveice10</id>
-            <name>Steveice10</name>
-            <email>Steveice10@gmail.com</email>
+            <id>Mine-diamond</id>
+            <name>Mine-diamond</name>
+            <email>mine_yaoym@outlook.com</email>
         </developer>
         <developer>
-            <id>GeyserMC</id>
-            <name>GeyserMC</name>
-            <url>https://geysermc.org/</url>
-            <organization>GeyserMC</organization>
-            <organizationUrl>https://github.com/GeyserMC</organizationUrl>
+            <id>steveice10</id>
+            <name>Steveice10</name>
+            <roles>
+                <role>Original Author</role>
+            </roles>
         </developer>
     </developers>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/Steveice10/OpenNBT/issues</url>
+        <url>https://github.com/Mine-diamond/LusterNBT/issues</url>
     </issueManagement>
 
     <build>
@@ -133,7 +133,9 @@
         </plugins>
     </build>
 
-    <profiles>
+    <!--
+
+     <profiles>
         <profile>
             <id>deploy</id>
             <activation>
@@ -151,4 +153,7 @@
             </distributionManagement>
         </profile>
     </profiles>
+
+     -->
+
 </project>
