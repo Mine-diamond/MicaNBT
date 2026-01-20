@@ -1,10 +1,10 @@
 package tech.minediamond.lusternbt.tag.builtin;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Array;
+import java.nio.charset.StandardCharsets;
 
+import tech.minediamond.lusternbt.SNBTIO;
 import tech.minediamond.lusternbt.SNBTIO.StringifiedNBTReader;
 import tech.minediamond.lusternbt.SNBTIO.StringifiedNBTWriter;
 
@@ -133,5 +133,11 @@ public abstract class Tag implements Cloneable {
         }
 
         return this.getClass().getSimpleName() + name + " { " + value + " }";
+    }
+
+    public String toSNBTString(boolean linebreak) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        SNBTIO.writeTag(out, this, linebreak);
+        return out.toString(StandardCharsets.UTF_8);
     }
 }
