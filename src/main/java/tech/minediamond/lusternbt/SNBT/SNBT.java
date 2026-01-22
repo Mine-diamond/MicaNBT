@@ -18,7 +18,11 @@ public class SNBT {
         new SNBTWriter(tag, linebreak).writeSNBT(path);
     }
 
-    public static Tag deserialize(String s) {
-        return null;
+    public static Tag deserialize(String SNBTText) {
+        return new SNBTReader(SNBTText).getTag();
+    }
+
+    public static Tag readSNBT(Path path) throws IOException {
+        return new SNBTReader(path).getTag();
     }
 }
