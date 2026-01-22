@@ -79,7 +79,7 @@ final class Tokens {
     }
 
     static boolean isFormatChar(final char c) {
-        return c == TAB || c == SPACE || c == CARRIAGE_RETURN || c == EOF;
+        return c == TAB || c == SPACE || c == CARRIAGE_RETURN || c == NEWLINE || c == EOF;
     }
 
     /**

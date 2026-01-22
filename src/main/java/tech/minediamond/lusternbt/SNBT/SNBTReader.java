@@ -160,7 +160,6 @@ public class SNBTReader {
             if (value.endsWith("b") || value.endsWith("B")) {
                 value = value.substring(0, value.length() - 1);
             }
-            value = value.substring(0, value.length() - 1);
             bytes.add(Byte.parseByte(value));
             if (peek() == Tokens.VALUE_SEPARATOR) {
                 consume(); // `,`
@@ -218,7 +217,6 @@ public class SNBTReader {
             if (value.endsWith("l") || value.endsWith("L")) {
                 value = value.substring(0, value.length() - 1);
             }
-            value = value.substring(0, value.length() - 1);
             longs.add(Long.parseLong(value));
             if (peek() == Tokens.VALUE_SEPARATOR) {
                 consume(); // `,`
@@ -337,7 +335,7 @@ public class SNBTReader {
         skipEmptyChar();
         reusableBuilder.setLength(0);
         while (charBuffer.hasRemaining()) {
-            char c = charBuffer.get();
+            char c = consume();
             if (Tokens.isAllowedInUnquotedString(c)) {
                 reusableBuilder.append(c);
             } else {
