@@ -18,7 +18,7 @@ public class SNBTReader {
     public SNBTReader(String SNBTText) {
         this.charBuffer = CharBuffer.wrap(SNBTText);
         try {
-            tag = parseTag("");
+            tag = readRoot();
         } catch (Exception e) {
             if (charBuffer.position() >= 40) {
                 throw new SNBTParseException("Error while parsing SNBTText\n..." + charBuffer.subSequence(charBuffer.position() - 40, charBuffer.position()) + " <- here", e);
@@ -31,7 +31,7 @@ public class SNBTReader {
     public SNBTReader(Path path) throws IOException {
         this.charBuffer = CharBuffer.wrap(Files.readString(path));
         try {
-            tag = parseTag("");
+            tag = readRoot();
         } catch (Exception e) {
             if (charBuffer.position() >= 40) {
                 throw new SNBTParseException("Error while parsing SNBTText\n..." + charBuffer.subSequence(charBuffer.position() - 40, charBuffer.position()) + " <- here", e);
@@ -59,6 +59,23 @@ public class SNBTReader {
 
     private void printlnFromStartToPosition() { // for debug use
         System.out.println("current processed: " + fromStartToPosition(charBuffer));
+    }
+
+    private Tag readRoot() {
+        skipEmptyChar();
+        int pos = charBuffer.position();
+        char first = peek();
+        if (first == Tokens.COMPOUND_BEGIN || first == Tokens.ARRAY_BEGIN) {
+            return parseTag("");
+        }
+        String name = parseString();
+        skipEmptyChar();
+        if (!charBuffer.hasRemaining() || peek() != Tokens.COMPOUND_KEY_VALUE_SEPARATOR) {
+            charBuffer.position(pos);
+            return parseTag("");
+        }
+        skip(); //`:`
+        return parseTag(name);
     }
 
     private Tag parseTag(String name) {
