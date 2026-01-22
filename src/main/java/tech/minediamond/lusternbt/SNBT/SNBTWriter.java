@@ -7,13 +7,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class SNBTWriter {
+    private final Tag tag;
     private final StringBuilder builder;
-    private final boolean linebreak;
+    private final boolean prettyPrint;
     private int depth = 0;
 
-    public SNBTWriter(Tag tag, boolean linebreak) {
+    public SNBTWriter(Tag tag, boolean stringifyRootTagName, boolean pettyPrint) {
+        this.tag = tag;
         this.builder = new StringBuilder();
-        this.linebreak = linebreak;
+        this.prettyPrint = pettyPrint;
+        if (stringifyRootTagName) {
+            stringifyRootTagName();
+        }
         stringify(tag);
     }
 
@@ -25,6 +30,13 @@ public class SNBTWriter {
         Files.writeString(path, getSNBTString());
     }
 
+    private void stringifyRootTagName() {
+        stringifyString(tag.getName());
+        builder.append(Tokens.COMPOUND_KEY_VALUE_SEPARATOR).append(Tokens.SPACE);
+    }
+
+    // For primitive data types, do not care the surrounding tabs;
+    // CompoundTag/ListTag/ArrayTag should pay attention and fill in appropriate new lines and tabs for their subTags.
     private void stringify(Tag tag) {
         if (tag instanceof CompoundTag compoundTag) {
             stringifyCompoundTag(compoundTag);
@@ -54,14 +66,14 @@ public class SNBTWriter {
     }
 
     private void stringifyCompoundTag(CompoundTag compoundTag) {
-        if (linebreak) {
-            stringifyCompoundTagIfLineWarp(compoundTag);
-        } else  {
-            stringifyCompoundTagIfLineNotWarp(compoundTag);
+        if (prettyPrint) {
+            stringifyCompoundTagIfPrettyPrint(compoundTag);
+        } else {
+            stringifyCompoundTagIfNotPrettyPrint(compoundTag);
         }
     }
 
-    private void stringifyCompoundTagIfLineWarp(CompoundTag compoundTag) {
+    private void stringifyCompoundTagIfPrettyPrint(CompoundTag compoundTag) {
         builder.append(Tokens.COMPOUND_BEGIN);
         if (!compoundTag.isEmpty()) {
             depth++;
@@ -72,18 +84,16 @@ public class SNBTWriter {
                 } else {
                     isFirst = false;
                 }
-                builder.append(Tokens.NEWLINE);
-                addTab();
-                setCompoundItemString(subTag);
+                newLineAndAddTab();
+                stringifyCompoundItem(subTag);
             }
-            builder.append(Tokens.NEWLINE);
             depth--;
-            addTab();
+            newLineAndAddTab();
         }
         builder.append(Tokens.COMPOUND_END);
     }
 
-    private void stringifyCompoundTagIfLineNotWarp(CompoundTag compoundTag) {
+    private void stringifyCompoundTagIfNotPrettyPrint(CompoundTag compoundTag) {
         builder.append(Tokens.COMPOUND_BEGIN);
         if (!compoundTag.isEmpty()) {
             boolean isFirst = true;
@@ -94,13 +104,13 @@ public class SNBTWriter {
                 } else {
                     isFirst = false;
                 }
-                setCompoundItemString(subTag);
+                stringifyCompoundItem(subTag);
             }
         }
         builder.append(Tokens.COMPOUND_END);
     }
 
-    private void setCompoundItemString(Tag subTag) {
+    private void stringifyCompoundItem(Tag subTag) {
         boolean needQuotation = Tokens.needQuotation(subTag.getName());
         if (needQuotation) {
             builder.append(Tokens.DOUBLE_QUOTE);
@@ -115,14 +125,14 @@ public class SNBTWriter {
     }
 
     private void stringifyListTag(ListTag listTag) {
-        if (linebreak) {
-            stringifyListTagIfLineWarp(listTag);
+        if (prettyPrint) {
+            stringifyListTagIfPrettyPrint(listTag);
         } else {
-            stringifyListTagIfLineNotWarp(listTag);
+            stringifyListTagIfNotPrettyPrint(listTag);
         }
     }
 
-    private void stringifyListTagIfLineWarp(ListTag listTag) {
+    private void stringifyListTagIfPrettyPrint(ListTag listTag) {
         builder.append(Tokens.ARRAY_BEGIN);
         if (listTag.size() != 0) {
             depth++;
@@ -133,18 +143,16 @@ public class SNBTWriter {
                 } else {
                     isFirst = false;
                 }
-                builder.append(Tokens.NEWLINE);
-                addTab();
+                newLineAndAddTab();
                 stringify(subTag);
             }
-            builder.append(Tokens.NEWLINE);
             depth--;
-            addTab();
+            newLineAndAddTab();
         }
         builder.append(Tokens.ARRAY_END);
     }
 
-    private void stringifyListTagIfLineNotWarp(ListTag listTag) {
+    private void stringifyListTagIfNotPrettyPrint(ListTag listTag) {
         builder.append(Tokens.ARRAY_BEGIN);
         if (listTag.size() != 0) {
             boolean isFirst = true;
@@ -152,7 +160,7 @@ public class SNBTWriter {
                 if (!isFirst) {
                     builder.append(Tokens.VALUE_SEPARATOR);
                     builder.append(Tokens.SPACE);
-                } else  {
+                } else {
                     isFirst = false;
                 }
                 stringify(subTag);
@@ -162,7 +170,11 @@ public class SNBTWriter {
     }
 
     private void stringifyStringTag(StringTag stringTag) {
-        builder.append(Tokens.DOUBLE_QUOTE).append(stringTag.getValue().replace("\"", "\\\"")).append(Tokens.DOUBLE_QUOTE);
+        stringifyString(stringTag.getValue());
+    }
+
+    private void stringifyString(String string) {
+        builder.append(Tokens.DOUBLE_QUOTE).append(escape(string)).append(Tokens.DOUBLE_QUOTE);
     }
 
     private void stringifyByteArrayTag(ByteArrayTag byteArrayTag) {
@@ -218,5 +230,31 @@ public class SNBTWriter {
             builder.append(Tokens.TAB);
             i++;
         }
+    }
+
+    private void newLineAndAddTab() {
+        builder.append(Tokens.NEWLINE);
+        addTab();
+    }
+
+    //All escape character supported by snbt and `"`
+    private static String escape(String input) {
+        if (input == null || input.isEmpty()) return input;
+
+        int len = input.length();
+        StringBuilder sb = new StringBuilder(len + 8);
+
+        for (int i = 0; i < len; i++) {
+            char c = input.charAt(i);
+            switch (c) {
+                case '\n' -> sb.append("\\n");
+                case '\t' -> sb.append("\\t");
+                case '\r' -> sb.append("\\r");
+                case '\\' -> sb.append("\\\\");
+                case '"' -> sb.append("\\\"");
+                default -> sb.append(c);
+            }
+        }
+        return sb.toString();
     }
 }

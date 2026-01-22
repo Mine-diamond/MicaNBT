@@ -11,27 +11,30 @@ public class SNBT {
 
     /**
      * Serialize the specified {@link Tag} into an SNBT string.
-     * @param tag NBT tag that needs to be serialized.
-     * @param linebreak Whether to enable line wrapping. If {@code true}, output a beautified multi-line string; otherwise, output a single-line compressed string.
+     *
+     * @param tag         NBT tag that needs to be serialized.
+     * @param prettyPrint Whether to enable line wrapping. If {@code true}, output a beautified multi-line string; otherwise, output a single-line compressed string.
      * @return Serialized SNBT text.
      */
-    public static String serialize(Tag tag, boolean linebreak) {
-        return new SNBTWriter(tag, linebreak).getSNBTString();
+    public static String serialize(Tag tag, boolean stringifyRootTagName, boolean prettyPrint) {
+        return new SNBTWriter(tag, stringifyRootTagName, prettyPrint).getSNBTString();
     }
 
     /**
      * Serializes the specified {@link Tag} and writes it to the specified file path.
-     * @param tag NBT tag that needs to be serialized.
-     * @param path The target file path.
-     * @param linebreak Whether to enable line wrapping. If {@code true}, output a beautified multi-line string; otherwise, output a single-line compressed string.
+     *
+     * @param tag         NBT tag that needs to be serialized.
+     * @param path        The target file path.
+     * @param prettyPrint Whether to enable line wrapping. If {@code true}, output a beautified multi-line string; otherwise, output a single-line compressed string.
      * @throws IOException If an I/O error occurs during file writing.
      */
-    public static void writeAsSNBT(Tag tag, Path path, boolean linebreak) throws IOException {
-        new SNBTWriter(tag, linebreak).writeSNBT(path);
+    public static void writeAsSNBT(Tag tag, boolean stringifyRootTagName, Path path, boolean prettyPrint) throws IOException {
+        new SNBTWriter(tag, stringifyRootTagName, prettyPrint).writeSNBT(path);
     }
 
     /**
      * Parses an SNBT-formatted string back into a {@link Tag} object.
+     *
      * @param SNBTText A string conforming to the SNBT specification.
      * @return The parsed NBT tag.
      * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail
@@ -42,10 +45,11 @@ public class SNBT {
 
     /**
      * Parses an SNBT-formatted string back into a {@link Tag} object from a file.
+     *
      * @param path The file path for storing SNBT data.
      * @return The parsed NBT tag.
      * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail
-     * @throws IOException If an I/O error occurs during file writing.
+     * @throws IOException        If an I/O error occurs during file writing.
      */
     public static Tag readSNBT(Path path) throws IOException {
         return new SNBTReader(path).getTag();

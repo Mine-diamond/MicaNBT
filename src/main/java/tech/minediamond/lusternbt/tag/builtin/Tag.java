@@ -133,7 +133,7 @@ public abstract class Tag implements Cloneable {
         return this.getClass().getSimpleName() + name + " { " + value + " }";
     }
 
-    public String toSNBTString(boolean linebreak) {
-        return SNBT.serialize(this, linebreak);
+    public String toSNBTString(boolean stringifyRootTagName, boolean prettyPrint) {
+        return SNBT.serialize(this, stringifyRootTagName, prettyPrint);
     }
 }
