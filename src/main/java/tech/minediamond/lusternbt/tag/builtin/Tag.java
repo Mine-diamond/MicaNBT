@@ -1,8 +1,6 @@
 package tech.minediamond.lusternbt.tag.builtin;
 
 import tech.minediamond.lusternbt.SNBT.SNBT;
-import tech.minediamond.lusternbt.SNBTIO.StringifiedNBTReader;
-import tech.minediamond.lusternbt.SNBTIO.StringifiedNBTWriter;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -64,13 +62,12 @@ public abstract class Tag implements Cloneable {
      *
      * @param in String to parse.
      */
-    public abstract void destringify(StringifiedNBTReader in) throws IOException;
+    //public abstract void destringify(StringifiedNBTReader in) throws IOException;
 
     /**
      * Write this tag as stringified NBT.
      */
-    public abstract void stringify(StringifiedNBTWriter out, boolean linebreak, int depth) throws IOException;
-
+    //public abstract void stringify(StringifiedNBTWriter out, boolean linebreak, int depth) throws IOException;
     @Override
     public abstract Tag clone();
 

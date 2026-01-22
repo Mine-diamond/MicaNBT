@@ -1,21 +1,13 @@
 package tech.minediamond.lusternbt.tag.builtin;
 
+import tech.minediamond.lusternbt.NBTIO;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.EOFException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-
-import tech.minediamond.lusternbt.NBTIO;
-import tech.minediamond.lusternbt.SNBTIO.StringifiedNBTReader;
-import tech.minediamond.lusternbt.SNBTIO.StringifiedNBTWriter;
 
 /**
  * A compound tag containing other tags.
@@ -153,77 +145,31 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
         List<Tag> tags = new ArrayList<Tag>();
         try {
             Tag tag;
-            while((tag = NBTIO.readTag(in)) != null) {
+            while ((tag = NBTIO.readTag(in)) != null) {
                 tags.add(tag);
             }
-        } catch(EOFException e) {
+        } catch (EOFException e) {
             throw new IOException("Closing EndTag was not found!");
         }
 
-        for(Tag tag : tags) {
+        for (Tag tag : tags) {
             this.put(tag);
         }
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
-        for(Tag tag : this.value.values()) {
+        for (Tag tag : this.value.values()) {
             NBTIO.writeTag(out, tag);
         }
 
         out.writeByte(0);
     }
-    
-    @Override
-    public void destringify(StringifiedNBTReader in) throws IOException {
-        in.readSkipWhitespace();
-        while(true) {
-            String tagName = "";
-            if((tagName += in.readSkipWhitespace()).equals("\"")) {
-                tagName = in.readUntil(false, '"');
-                in.read();
-            }
-            tagName += in.readUntil(false, ':');
-            in.read();
-
-            put(in.readNextTag(tagName));
-
-            char endChar = in.readSkipWhitespace();
-            if(endChar == ',')
-                continue;
-            if(endChar == '}')
-                break;
-        }
-    }
-    
-    @Override
-    public void stringify(StringifiedNBTWriter out, boolean linebreak, int depth) throws IOException {
-        out.append('{');
-        
-        boolean first = true;
-        for(Tag t: value.values()) {
-            if(first) {
-                first = false;
-            } else {
-                out.append(',');
-                if(!linebreak) {
-                    out.append(' ');
-                }
-            }
-            out.writeTag(t, linebreak, depth + 1);
-        }
-        
-        if(linebreak) {
-            out.append('\n');
-            out.indent(depth);
-        }
-        out.append('}');
-    }
 
     @Override
     public CompoundTag clone() {
         Map<String, Tag> newMap = new LinkedHashMap<String, Tag>();
-        for(Entry<String, Tag> entry : this.value.entrySet()) {
+        for (Entry<String, Tag> entry : this.value.entrySet()) {
             newMap.put(entry.getKey(), entry.getValue().clone());
         }
 

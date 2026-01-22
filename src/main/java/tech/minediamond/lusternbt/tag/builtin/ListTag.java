@@ -1,16 +1,14 @@
 package tech.minediamond.lusternbt.tag.builtin;
 
+import tech.minediamond.lusternbt.tag.TagCreateException;
+import tech.minediamond.lusternbt.tag.TagRegistry;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import tech.minediamond.lusternbt.SNBTIO.StringifiedNBTReader;
-import tech.minediamond.lusternbt.SNBTIO.StringifiedNBTWriter;
-import tech.minediamond.lusternbt.tag.TagCreateException;
-import tech.minediamond.lusternbt.tag.TagRegistry;
 
 /**
  * A tag containing a list of tags.
@@ -73,7 +71,7 @@ public class ListTag extends Tag implements Iterable<Tag> {
         this.type = null;
         this.value.clear();
 
-        for(Tag tag : value) {
+        for (Tag tag : value) {
             this.add(tag);
         }
     }
@@ -96,14 +94,14 @@ public class ListTag extends Tag implements Iterable<Tag> {
      * @throws IllegalArgumentException If the tag's type differs from the list tag's type.
      */
     public boolean add(Tag tag) throws IllegalArgumentException {
-        if(tag == null) {
+        if (tag == null) {
             return false;
         }
 
         // If empty list, use this as tag type.
-        if(this.type == null) {
+        if (this.type == null) {
             this.type = tag.getClass();
-        } else if(tag.getClass() != this.type) {
+        } else if (tag.getClass() != this.type) {
             throw new IllegalArgumentException("Tag type cannot differ from ListTag type.");
         }
 
@@ -151,19 +149,19 @@ public class ListTag extends Tag implements Iterable<Tag> {
         this.value.clear();
 
         int id = in.readUnsignedByte();
-        if(id != 0) {
+        if (id != 0) {
             this.type = TagRegistry.getClassFor(id);
-            if(this.type == null) {
+            if (this.type == null) {
                 throw new IOException("Unknown tag ID in ListTag: " + id);
             }
         }
 
         int count = in.readInt();
-        for(int index = 0; index < count; index++) {
+        for (int index = 0; index < count; index++) {
             Tag tag = null;
             try {
                 tag = TagRegistry.createInstance(id, "");
-            } catch(TagCreateException e) {
+            } catch (TagCreateException e) {
                 throw new IOException("Failed to create tag.", e);
             }
 
@@ -174,11 +172,11 @@ public class ListTag extends Tag implements Iterable<Tag> {
 
     @Override
     public void write(DataOutput out) throws IOException {
-        if(this.type == null) {
+        if (this.type == null) {
             out.writeByte(0);
         } else {
             int id = TagRegistry.getIdFor(this.type);
-            if(id == -1) {
+            if (id == -1) {
                 throw new IOException("ListTag contains unregistered tag class.");
             }
 
@@ -186,52 +184,15 @@ public class ListTag extends Tag implements Iterable<Tag> {
         }
 
         out.writeInt(this.value.size());
-        for(Tag tag : this.value) {
+        for (Tag tag : this.value) {
             tag.write(out);
         }
-    }
-    
-    @Override
-    public void destringify(StringifiedNBTReader in) throws IOException {
-        in.readSkipWhitespace();
-        while(true) {
-            add(in.readNextTag(""));
-
-            char endChar = in.readSkipWhitespace();
-            if(endChar == ',')
-                continue;
-            if(endChar == ']')
-                break;
-        }
-    }
-    
-    public void stringify(StringifiedNBTWriter out, boolean linebreak, int depth) throws IOException {
-        out.append('[');
-        
-        boolean first = true;
-        for(Tag t: value) {
-            if(first) {
-                first = false;
-            } else {
-                out.append(',');
-                if(!linebreak) {
-                    out.append(' ');
-                }
-            }
-            out.writeTag(t, linebreak, depth + 1);
-        }
-        
-        if(linebreak) {
-            out.append('\n');
-            out.indent(depth);
-        }
-        out.append(']');
     }
 
     @Override
     public ListTag clone() {
         List<Tag> newList = new ArrayList<Tag>();
-        for(Tag value : this.value) {
+        for (Tag value : this.value) {
             newList.add(value.clone());
         }
 

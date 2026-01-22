@@ -4,9 +4,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import tech.minediamond.lusternbt.SNBTIO.StringifiedNBTReader;
-import tech.minediamond.lusternbt.SNBTIO.StringifiedNBTWriter;
-
 /**
  * A tag containing a byte.
  */
@@ -55,21 +52,6 @@ public class ByteTag extends Tag {
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeByte(this.value);
-    }
-
-    @Override
-    public void destringify(StringifiedNBTReader in) throws IOException {
-        String s = in.readNextSingleValueString();
-        s = s.toLowerCase().substring(0, s.length() - 1);
-        value = Byte.parseByte(s);
-    }
-
-    @Override
-    public void stringify(StringifiedNBTWriter out, boolean linebreak, int depth) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        sb.append(value);
-        sb.append('b');
-        out.append(sb.toString());
     }
 
     @Override

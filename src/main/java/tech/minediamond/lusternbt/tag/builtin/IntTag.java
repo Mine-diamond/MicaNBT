@@ -4,9 +4,6 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import tech.minediamond.lusternbt.SNBTIO.StringifiedNBTReader;
-import tech.minediamond.lusternbt.SNBTIO.StringifiedNBTWriter;
-
 /**
  * A tag containing an integer.
  */
@@ -55,19 +52,6 @@ public class IntTag extends Tag {
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeInt(this.value);
-    }
-
-    @Override
-    public void destringify(StringifiedNBTReader in) throws IOException {
-        String s = in.readNextSingleValueString();
-        value = Integer.parseInt(s);
-    }
-
-    @Override
-    public void stringify(StringifiedNBTWriter out, boolean linebreak, int depth) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        sb.append(value);
-        out.append(sb.toString());
     }
 
     @Override
