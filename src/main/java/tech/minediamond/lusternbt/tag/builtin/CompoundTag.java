@@ -82,23 +82,21 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
     /**
      * Puts the tag into this compound tag.
      *
-     * @param <T> Type of tag to put.
      * @param tag Tag to put into this compound tag.
      * @return The previous tag associated with its name, or null if there wasn't one.
      */
-    public <T extends Tag> T put(T tag) {
-        return (T) this.value.put(tag.getName(), tag);
+    public Tag put(Tag tag) {
+        return this.value.put(tag.getName(), tag);
     }
 
     /**
      * Removes a tag from this compound tag.
      *
-     * @param <T>     Type of tag to remove.
      * @param tagName Name of the tag to remove.
      * @return The removed tag.
      */
-    public <T extends Tag> T remove(String tagName) {
-        return (T) this.value.remove(tagName);
+    public Tag remove(String tagName) {
+        return this.value.remove(tagName);
     }
 
     /**
