@@ -1,5 +1,6 @@
 package tech.minediamond.lusternbt.tag.builtin;
 
+import tech.minediamond.lusternbt.SNBT.SNBTStyle;
 import tech.minediamond.lusternbt.SNBT.SNBT;
 
 import java.io.DataInput;
@@ -133,7 +134,7 @@ public abstract class Tag implements Cloneable {
         return this.getClass().getSimpleName() + name + " { " + value + " }";
     }
 
-    public String toSNBTString(boolean stringifyRootTagName, boolean prettyPrint) {
-        return SNBT.serialize(this, stringifyRootTagName, prettyPrint);
+    public String toSNBTString(boolean stringifyRootTagName, SNBTStyle snbtStyle) {
+        return SNBT.serialize(this, stringifyRootTagName, snbtStyle);
     }
 }

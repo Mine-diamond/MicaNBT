@@ -9,13 +9,13 @@ import java.nio.file.Path;
 public class SNBTWriter {
     private final Tag tag;
     private final StringBuilder builder;
-    private final boolean prettyPrint;
+    private final SNBTStyle snbtStyle;
     private int depth = 0;
 
-    public SNBTWriter(Tag tag, boolean stringifyRootTagName, boolean pettyPrint) {
+    public SNBTWriter(Tag tag, boolean stringifyRootTagName, SNBTStyle snbtStyle) {
         this.tag = tag;
         this.builder = new StringBuilder();
-        this.prettyPrint = pettyPrint;
+        this.snbtStyle = snbtStyle;
         if (stringifyRootTagName) {
             stringifyRootTagName();
         }
@@ -32,7 +32,10 @@ public class SNBTWriter {
 
     private void stringifyRootTagName() {
         stringifyString(tag.getName());
-        builder.append(Tokens.COMPOUND_KEY_VALUE_SEPARATOR).append(Tokens.SPACE);
+        builder.append(Tokens.COMPOUND_KEY_VALUE_SEPARATOR);
+        if (snbtStyle != SNBTStyle.COMPACT) {
+            builder.append(Tokens.SPACE);
+        }
     }
 
     // For primitive data types, do not care the surrounding tabs;
@@ -66,14 +69,14 @@ public class SNBTWriter {
     }
 
     private void stringifyCompoundTag(CompoundTag compoundTag) {
-        if (prettyPrint) {
-            stringifyCompoundTagIfPrettyPrint(compoundTag);
+        if (snbtStyle == SNBTStyle.INDENTED) {
+            stringifyCompoundTagIfLineBreak(compoundTag);
         } else {
-            stringifyCompoundTagIfNotPrettyPrint(compoundTag);
+            stringifyCompoundTagIfNotLineBreak(compoundTag);
         }
     }
 
-    private void stringifyCompoundTagIfPrettyPrint(CompoundTag compoundTag) {
+    private void stringifyCompoundTagIfLineBreak(CompoundTag compoundTag) {
         builder.append(Tokens.COMPOUND_BEGIN);
         if (!compoundTag.isEmpty()) {
             depth++;
@@ -93,14 +96,16 @@ public class SNBTWriter {
         builder.append(Tokens.COMPOUND_END);
     }
 
-    private void stringifyCompoundTagIfNotPrettyPrint(CompoundTag compoundTag) {
+    private void stringifyCompoundTagIfNotLineBreak(CompoundTag compoundTag) {
         builder.append(Tokens.COMPOUND_BEGIN);
         if (!compoundTag.isEmpty()) {
             boolean isFirst = true;
             for (Tag subTag : compoundTag) {
                 if (!isFirst) {
                     builder.append(Tokens.VALUE_SEPARATOR);
-                    builder.append(Tokens.SPACE);
+                    if (snbtStyle == SNBTStyle.SPACED) {
+                        builder.append(Tokens.SPACE);
+                    }
                 } else {
                     isFirst = false;
                 }
@@ -119,20 +124,22 @@ public class SNBTWriter {
         if (needQuotation) {
             builder.append(Tokens.DOUBLE_QUOTE);
         }
-        builder.append(Tokens.COMPOUND_KEY_VALUE_SEPARATOR)
-                .append(Tokens.SPACE);
+        builder.append(Tokens.COMPOUND_KEY_VALUE_SEPARATOR);
+        if (snbtStyle != SNBTStyle.COMPACT) {
+            builder.append(Tokens.SPACE);
+        }
         stringify(subTag);
     }
 
     private void stringifyListTag(ListTag listTag) {
-        if (prettyPrint) {
-            stringifyListTagIfPrettyPrint(listTag);
+        if (snbtStyle == SNBTStyle.INDENTED) {
+            stringifyListTagIfLineBreak(listTag);
         } else {
-            stringifyListTagIfNotPrettyPrint(listTag);
+            stringifyListTagIfNotLineBreak(listTag);
         }
     }
 
-    private void stringifyListTagIfPrettyPrint(ListTag listTag) {
+    private void stringifyListTagIfLineBreak(ListTag listTag) {
         builder.append(Tokens.ARRAY_BEGIN);
         if (listTag.size() != 0) {
             depth++;
@@ -152,14 +159,16 @@ public class SNBTWriter {
         builder.append(Tokens.ARRAY_END);
     }
 
-    private void stringifyListTagIfNotPrettyPrint(ListTag listTag) {
+    private void stringifyListTagIfNotLineBreak(ListTag listTag) {
         builder.append(Tokens.ARRAY_BEGIN);
         if (listTag.size() != 0) {
             boolean isFirst = true;
             for (Tag subTag : listTag) {
                 if (!isFirst) {
                     builder.append(Tokens.VALUE_SEPARATOR);
-                    builder.append(Tokens.SPACE);
+                    if (snbtStyle == SNBTStyle.SPACED) {
+                        builder.append(Tokens.SPACE);
+                    }
                 } else {
                     isFirst = false;
                 }
@@ -183,8 +192,10 @@ public class SNBTWriter {
                 .append(Tokens.ARRAY_SIGNATURE_SEPARATOR);
         if (byteArrayTag.getValue().length != 0) {
             for (byte b : byteArrayTag.getValue()) {
-                builder.append(Tokens.SPACE)
-                        .append(b)
+                if (snbtStyle != SNBTStyle.COMPACT) {
+                    builder.append(Tokens.SPACE);
+                }
+                builder.append(b)
                         .append(Tokens.TYPE_BYTE)
                         .append(Tokens.VALUE_SEPARATOR);
             }
@@ -199,8 +210,10 @@ public class SNBTWriter {
                 .append(Tokens.ARRAY_SIGNATURE_SEPARATOR);
         if (intArrayTag.getValue().length != 0) {
             for (int i : intArrayTag.getValue()) {
-                builder.append(Tokens.SPACE)
-                        .append(i)
+                if (snbtStyle != SNBTStyle.COMPACT) {
+                    builder.append(Tokens.SPACE);
+                }
+                builder.append(i)
                         .append(Tokens.VALUE_SEPARATOR);
             }
             builder.setLength(builder.length() - 1);
@@ -214,8 +227,10 @@ public class SNBTWriter {
                 .append(Tokens.ARRAY_SIGNATURE_SEPARATOR);
         if (longArrayTag.getValue().length != 0) {
             for (long l : longArrayTag.getValue()) {
-                builder.append(Tokens.SPACE)
-                        .append(l)
+                if (snbtStyle != SNBTStyle.COMPACT) {
+                    builder.append(Tokens.SPACE);
+                }
+                builder.append(l)
                         .append(Tokens.TYPE_LONG_UPPER)
                         .append(Tokens.VALUE_SEPARATOR);
             }
