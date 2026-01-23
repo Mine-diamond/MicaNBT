@@ -253,22 +253,36 @@ public class SNBTReader {
         boolean isSignedDefault = true;
         boolean isSigned = false;
         int radix = 10;
+        int prefixNum = 0;
+        int suffixNum = 1;
 
         try {
-            if (value.startsWith("0x") || value.startsWith("0X")) radix = 16;
-            if ((value.startsWith("0b") || value.startsWith("0B")) && value.length() >= 4) radix = 2;
+            if (value.startsWith("0x") || value.startsWith("0X")) {
+                prefixNum = 2;
+                radix = 16;
+            }
+            if ((value.startsWith("0b") || value.startsWith("0B")) && value.length() >= 4) {
+                prefixNum = 2;
+                radix = 2;
+            }
 
             try {
                 char lastChar2 = value.charAt(value.length() - 2);
                 if (lastChar2 == 'u' || lastChar2 == 'U') {
+                    suffixNum = 2;
                     isSignedDefault = false;
                     isSigned = false;
                 }
                 if (lastChar2 == 's' || lastChar2 == 'S') {
+                    suffixNum = 2;
                     isSignedDefault = false;
                     isSigned = true;
                 }
             } catch (Exception ignored) {
+            }
+
+            if (isSignedDefault) {
+                isSigned = radix != 16 && radix != 2;
             }
 
             if (Tokens.mayNumber(value)) {
@@ -278,40 +292,19 @@ public class SNBTReader {
                     return new IntTag(name, Integer.parseInt(value));
                 }
             }
-            String numPart;
-            // Since the symbol suffix must be at the second-to-last character,
-            // once isSignedDefault is false, there must be a two-character suffix;
-            // otherwise, it is a one-character suffix.
-            if (isSignedDefault) {
 
-                if (radix == 16 || radix == 2) {
-                    numPart = value.substring(2, value.length() - 1);
-                    return getUnSignedTag(name, value, suffix, radix, numPart);
-                } else {
-                    numPart = value.substring(0, value.length() - 1);
-                    return getSignedTag(name, value, suffix, radix, numPart);
-                }
+            String numPart = value.substring(prefixNum, value.length() - suffixNum);
 
+            if (isSigned) {
+                return getSignedTag(name, value, suffix, radix, numPart);
             } else {
-
-                if (radix == 16 || radix == 2) {
-                    numPart = value.substring(2, value.length() - 2);
-                } else {
-                    numPart = value.substring(0, value.length() - 2);
-                }
-
-                if (isSigned) {
-                    return getSignedTag(name, value, suffix, radix, numPart);
-                } else {
-                    return getUnSignedTag(name, value, suffix, radix, numPart);
-                }
+                return getUnSignedTag(name, value, suffix, radix, numPart);
             }
 
         } catch (NumberFormatException e) {
             if (e.getMessage().contains("Value out of range.")) {
                 throw e;
             }
-            System.out.println(e.getMessage());
             return new StringTag(name, value); // So this is unquoted string
         }
     }
@@ -324,6 +317,7 @@ public class SNBTReader {
             case Tokens.TYPE_LONG -> new LongTag(name, Long.parseLong(numPart, radix));
             case Tokens.TYPE_FLOAT -> new FloatTag(name, Float.parseFloat(numPart));
             case Tokens.TYPE_DOUBLE -> new DoubleTag(name, Double.parseDouble(numPart));
+            case '0', '1', '2', '3', '4', '5', '6', '7', '8','9' -> new IntTag(name, Integer.parseInt(numPart, radix));
             default -> new StringTag(name, value); // Unquoted string
         };
     }
@@ -331,7 +325,6 @@ public class SNBTReader {
     private Tag getUnSignedTag(String name, String value, char suffix, int radix, String numPart) {
         return switch (suffix) {
             case Tokens.TYPE_BYTE -> {
-                System.out.println("numPart: " + numPart + ", radix: " + radix);
                 int b = Integer.parseInt(numPart, radix);
                 if (b >= 256 || b <= -1)
                     throw new NumberFormatException("Value out of range. Value:\"" + value + "\"" + " Radix:" + radix);
@@ -343,7 +336,7 @@ public class SNBTReader {
                     throw new NumberFormatException("Value out of range. Value:\"" + value + "\"" + " Radix:" + radix);
                 yield new ShortTag(name, (short) s);
             }
-            case Tokens.TYPE_INT -> new IntTag(name, Integer.parseUnsignedInt(numPart, radix));
+            case Tokens.TYPE_INT, '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> new IntTag(name, Integer.parseUnsignedInt(numPart, radix));
             case Tokens.TYPE_LONG -> new LongTag(name, Long.parseUnsignedLong(numPart, radix));
             default -> new StringTag(name, value); // Unquoted string
         };
