@@ -20,11 +20,7 @@ public class SNBTReader {
         try {
             tag = readRoot();
         } catch (Exception e) {
-            if (charBuffer.position() >= 40) {
-                throw new SNBTParseException("Error while parsing SNBTText\n..." + charBuffer.subSequence(charBuffer.position() - 40, charBuffer.position()) + " <- here", e);
-            } else {
-                throw new SNBTParseException("Error while parsing SNBTText\n" + charBuffer.subSequence(0, charBuffer.position()) + " <- here", e);
-            }
+            throw new SNBTParseException(getSNBTParseExceptionText(), e);
         }
     }
 
@@ -33,11 +29,7 @@ public class SNBTReader {
         try {
             tag = readRoot();
         } catch (Exception e) {
-            if (charBuffer.position() >= 40) {
-                throw new SNBTParseException("Error while parsing SNBTText\n..." + charBuffer.subSequence(charBuffer.position() - 40, charBuffer.position()) + " <- here", e);
-            } else {
-                throw new SNBTParseException("Error while parsing SNBTText\n" + charBuffer.subSequence(0, charBuffer.position()) + " <- here", e);
-            }
+            throw new SNBTParseException(getSNBTParseExceptionText(), e);
         }
     }
 
@@ -59,6 +51,22 @@ public class SNBTReader {
 
     private void printlnFromStartToPosition() { // for debug use
         System.out.println("current processed: " + fromStartToPosition(charBuffer));
+    }
+
+    private String getSNBTParseExceptionText() {
+        int pos = charBuffer.position();
+        CharBuffer view = charBuffer.duplicate();
+        view.position(0);
+        if (charBuffer.hasRemaining()) {
+            view.limit(pos + 1);
+        } else {
+            view.limit(pos);
+        }
+        if (view.length() > 50) {
+            return "Error while parsing SNBTText\n..." + view.subSequence(view.length() - 50, view.length()) + " <- here";
+        } else {
+            return "Error while parsing SNBTText\n" + view.subSequence(0, view.length()) + " <- here";
+        }
     }
 
     private Tag readRoot() {
@@ -99,6 +107,9 @@ public class SNBTReader {
         }
     }
 
+    // This implementation has a flaw:
+    // if there is not a `,` between elements, and the parsing of sub-elements is correct,
+    // it can still parse successfully, such as in {subCompoundTag: {}str:"str"}
     private Tag parseCompound(String name) {
         CompoundTag compoundTag = new CompoundTag(name);
         skip(); // `{`
@@ -217,6 +228,9 @@ public class SNBTReader {
         return longArrayTag;
     }
 
+    // This implementation has a flaw:
+    // if there is not a `,` between elements, and the parsing of sub-elements is correct,
+    // it can still parse successfully, such as in [{str1:"str"}{str2:"str"}]
     private ListTag parseList(String name) {
         ListTag listTag = new ListTag(name);
         skip(); //`[`

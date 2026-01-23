@@ -70,23 +70,20 @@ public class SNBTWriter {
 
     private void stringifyCompoundTag(CompoundTag compoundTag) {
         builder.append(Tokens.COMPOUND_BEGIN);
-        boolean isFirst = true;
+        if (compoundTag.isEmpty()) {
+            builder.append(Tokens.COMPOUND_END);
+            return;
+        }
         if (snbtStyle == SNBTStyle.INDENTED) {
             depth++;
             newLineAndAddTab();
         }
+        boolean isFirst = true;
         for (Tag subTag : compoundTag) {
             if (isFirst) {
                 isFirst = false;
             } else {
-                switch (snbtStyle) {
-                    case COMPACT -> builder.append(Tokens.VALUE_SEPARATOR);
-                    case SPACED -> builder.append(Tokens.VALUE_SEPARATOR).append(Tokens.SPACE);
-                    case INDENTED -> {
-                        builder.append(Tokens.VALUE_SEPARATOR);
-                        newLineAndAddTab();
-                    }
-                }
+                addValueSeparator();
             }
             stringifyCompoundItem(subTag);
         }
@@ -100,11 +97,11 @@ public class SNBTWriter {
     private void stringifyCompoundItem(Tag subTag) {
         boolean needQuotation = Tokens.needQuotation(subTag.getName());
         if (needQuotation) {
-            builder.append(Tokens.DOUBLE_QUOTE);
-        }
-        builder.append(subTag.getName());
-        if (needQuotation) {
-            builder.append(Tokens.DOUBLE_QUOTE);
+            builder.append(Tokens.DOUBLE_QUOTE)
+                    .append(subTag.getName())
+                    .append(Tokens.DOUBLE_QUOTE);
+        } else {
+            builder.append(subTag.getName());
         }
         builder.append(Tokens.COMPOUND_KEY_VALUE_SEPARATOR);
         if (snbtStyle != SNBTStyle.COMPACT) {
@@ -124,14 +121,7 @@ public class SNBTWriter {
             if (isFirst) {
                 isFirst = false;
             } else {
-                switch (snbtStyle) {
-                    case COMPACT -> builder.append(Tokens.VALUE_SEPARATOR);
-                    case SPACED -> builder.append(Tokens.VALUE_SEPARATOR).append(Tokens.SPACE);
-                    case INDENTED -> {
-                        builder.append(Tokens.VALUE_SEPARATOR);
-                        newLineAndAddTab();
-                    }
-                }
+                addValueSeparator();
             }
 
             stringify(subTag);
@@ -206,7 +196,7 @@ public class SNBTWriter {
 
     private void addTab() {
         //noinspection StringRepeatCanBeUsed
-        for (int i = 0;i < depth ; i++) {
+        for (int i = 0; i < depth; i++) {
             builder.append(Tokens.TAB);
         }
     }
@@ -214,6 +204,17 @@ public class SNBTWriter {
     private void newLineAndAddTab() {
         builder.append(Tokens.NEWLINE);
         addTab();
+    }
+
+    private void addValueSeparator() {
+        switch (snbtStyle) {
+            case COMPACT -> builder.append(Tokens.VALUE_SEPARATOR);
+            case SPACED -> builder.append(Tokens.VALUE_SEPARATOR).append(Tokens.SPACE);
+            case INDENTED -> {
+                builder.append(Tokens.VALUE_SEPARATOR);
+                newLineAndAddTab();
+            }
+        }
     }
 
     //All escape character supported by snbt and `"`
