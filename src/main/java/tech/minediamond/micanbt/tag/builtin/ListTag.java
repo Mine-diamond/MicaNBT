@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class ListTag extends Tag implements Iterable<Tag> {
     private Class<? extends Tag> type;
-    private List<Tag> value;
+    private final List<Tag> value;
 
     /**
      * Creates an empty list tag with the specified name and no defined type.
@@ -26,7 +26,7 @@ public class ListTag extends Tag implements Iterable<Tag> {
         super(name);
 
         this.type = null;
-        this.value = new ArrayList<Tag>();
+        this.value = new ArrayList<>();
     }
 
     /**
@@ -121,12 +121,11 @@ public class ListTag extends Tag implements Iterable<Tag> {
     /**
      * Gets the tag at the given index of this list tag.
      *
-     * @param <T>   Type of tag to get
      * @param index Index of the tag.
      * @return The tag at the given index.
      */
-    public <T extends Tag> T get(int index) {
-        return (T) this.value.get(index);
+    public Tag get(int index) {
+        return this.value.get(index);
     }
 
     /**

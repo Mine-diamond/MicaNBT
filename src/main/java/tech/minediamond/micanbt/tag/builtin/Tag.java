@@ -15,7 +15,7 @@ import java.lang.reflect.Array;
  * Tags should also have setter methods specific to their value types.
  */
 public abstract class Tag implements Cloneable {
-    private String name;
+    private final String name;
 
     /**
      * Creates a tag with the specified name.
@@ -58,27 +58,15 @@ public abstract class Tag implements Cloneable {
      */
     public abstract void write(DataOutput out) throws IOException;
 
-    /**
-     * Parses this tag from stringified NBT.
-     *
-     * @param in String to parse.
-     */
-    //public abstract void destringify(StringifiedNBTReader in) throws IOException;
-
-    /**
-     * Write this tag as stringified NBT.
-     */
-    //public abstract void stringify(StringifiedNBTWriter out, boolean linebreak, int depth) throws IOException;
     @Override
     public abstract Tag clone();
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Tag)) {
+        if (!(obj instanceof Tag tag)) {
             return false;
         }
 
-        Tag tag = (Tag) obj;
         if (!this.getName().equals(tag.getName())) {
             return false;
         }

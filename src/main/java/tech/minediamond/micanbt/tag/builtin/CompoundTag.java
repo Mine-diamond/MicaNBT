@@ -21,7 +21,7 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
      * @param name The name of the tag.
      */
     public CompoundTag(String name) {
-        this(name, new LinkedHashMap<String, Tag>());
+        this(name, new LinkedHashMap<>());
     }
 
     /**
@@ -32,12 +32,12 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
      */
     public CompoundTag(String name, Map<String, Tag> value) {
         super(name);
-        this.value = new LinkedHashMap<String, Tag>(value);
+        this.value = new LinkedHashMap<>(value);
     }
 
     @Override
     public Map<String, Tag> getValue() {
-        return new LinkedHashMap<String, Tag>(this.value);
+        return new LinkedHashMap<>(this.value);
     }
 
     /**
@@ -46,7 +46,7 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
      * @param value New value of this tag.
      */
     public void setValue(Map<String, Tag> value) {
-        this.value = new LinkedHashMap<String, Tag>(value);
+        this.value = new LinkedHashMap<>(value);
     }
 
     /**
@@ -71,12 +71,11 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
     /**
      * Gets the tag with the specified name.
      *
-     * @param <T>     Type of tag to get.
      * @param tagName Name of the tag.
      * @return The tag with the specified name.
      */
-    public <T extends Tag> T get(String tagName) {
-        return (T) this.value.get(tagName);
+    public Tag get(String tagName) {
+        return this.value.get(tagName);
     }
 
     /**
