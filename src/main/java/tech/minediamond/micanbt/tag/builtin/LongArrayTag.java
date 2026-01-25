@@ -8,6 +8,7 @@ import java.io.IOException;
  * A tag containing a long array.
  */
 public class LongArrayTag extends Tag {
+    public static final int ID = 12;
     private long[] value;
 
     /**
@@ -66,6 +67,11 @@ public class LongArrayTag extends Tag {
      */
     public void setValue(int index, long value) {
         this.value[index] = value;
+    }
+
+    @Override
+    public int getTagId() {
+        return ID;
     }
 
     /**

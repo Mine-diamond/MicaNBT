@@ -43,7 +43,7 @@ public class SNBTWriter {
     private void stringify(Tag tag) {
         if (tag instanceof CompoundTag compoundTag) {
             stringifyCompoundTag(compoundTag);
-        } else if (tag instanceof ListTag listTag) {
+        } else if (tag instanceof ListTag<?> listTag) {
             stringifyListTag(listTag);
         } else if (tag instanceof StringTag stringTag) {
             stringifyStringTag(stringTag);
@@ -110,7 +110,7 @@ public class SNBTWriter {
         stringify(subTag);
     }
 
-    private void stringifyListTag(ListTag listTag) {
+    private void stringifyListTag(ListTag<?> listTag) {
         builder.append(Tokens.ARRAY_BEGIN);
         boolean isFirst = true;
         if (snbtStyle == SNBTStyle.INDENTED) {

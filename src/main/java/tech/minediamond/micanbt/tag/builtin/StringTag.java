@@ -8,6 +8,7 @@ import java.io.IOException;
  * A tag containing a string.
  */
 public class StringTag extends Tag {
+    public static final int ID = 8;
     private String value;
 
     /**
@@ -42,6 +43,11 @@ public class StringTag extends Tag {
      */
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public int getTagId() {
+        return ID;
     }
 
     @Override

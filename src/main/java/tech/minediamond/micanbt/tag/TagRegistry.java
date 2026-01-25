@@ -14,18 +14,18 @@ public class TagRegistry {
     private static final Map<Class<? extends Tag>, Integer> tagToId = new HashMap<Class<? extends Tag>, Integer>();
 
     static {
-        register(1, ByteTag.class);
-        register(2, ShortTag.class);
-        register(3, IntTag.class);
-        register(4, LongTag.class);
-        register(5, FloatTag.class);
-        register(6, DoubleTag.class);
-        register(7, ByteArrayTag.class);
-        register(8, StringTag.class);
-        register(9, ListTag.class);
-        register(10, CompoundTag.class);
-        register(11, IntArrayTag.class);
-        register(12, LongArrayTag.class);
+        register(ByteTag.ID, ByteTag.class);
+        register(ShortTag.ID, ShortTag.class);
+        register(IntTag.ID, IntTag.class);
+        register(LongTag.ID, LongTag.class);
+        register(FloatTag.ID, FloatTag.class);
+        register(DoubleTag.ID, DoubleTag.class);
+        register(ByteArrayTag.ID, ByteArrayTag.class);
+        register(StringTag.ID, StringTag.class);
+        register(ListTag.ID, ListTag.class);
+        register(CompoundTag.ID, CompoundTag.class);
+        register(IntArrayTag.ID, IntArrayTag.class);
+        register(LongArrayTag.ID, LongArrayTag.class);
     }
 
     /**
@@ -35,7 +35,7 @@ public class TagRegistry {
      * @param tag Tag class to register.
      * @throws TagRegisterException If an error occurs while registering the tag.
      */
-    public static void register(int id, Class<? extends Tag> tag) throws TagRegisterException {
+    private static void register(int id, Class<? extends Tag> tag) throws TagRegisterException {
         if (idToTag.containsKey(id)) {
             throw new TagRegisterException("Tag ID \"" + id + "\" is already in use.");
         }
@@ -46,16 +46,6 @@ public class TagRegistry {
 
         idToTag.put(id, tag);
         tagToId.put(tag, id);
-    }
-
-    /**
-     * Unregisters a tag class.
-     *
-     * @param id ID of the tag to unregister.
-     */
-    public static void unregister(int id) {
-        tagToId.remove(getClassFor(id));
-        idToTag.remove(id);
     }
 
     /**
@@ -95,17 +85,20 @@ public class TagRegistry {
      * @throws TagCreateException If an error occurs while creating the tag.
      */
     public static Tag createInstance(int id, String tagName) throws TagCreateException {
-        Class<? extends Tag> clazz = idToTag.get(id);
-        if (clazz == null) {
-            throw new TagCreateException("Could not find tag with ID \"" + id + "\".");
-        }
-
-        try {
-            Constructor<? extends Tag> constructor = clazz.getDeclaredConstructor(String.class);
-            constructor.setAccessible(true);
-            return constructor.newInstance(tagName);
-        } catch (Exception e) {
-            throw new TagCreateException("Failed to create instance of tag \"" + clazz.getSimpleName() + "\".", e);
-        }
+        return switch (id) {
+            case 1 -> new ByteTag(tagName);
+            case 2 -> new ShortTag(tagName);
+            case 3 -> new IntTag(tagName);
+            case 4 -> new LongTag(tagName);
+            case 5 -> new FloatTag(tagName);
+            case 6 -> new DoubleTag(tagName);
+            case 7 -> new ByteArrayTag(tagName);
+            case 8 -> new StringTag(tagName);
+            case 9 -> new ListTag<>(tagName);
+            case 10 -> new CompoundTag(tagName);
+            case 11 -> new IntArrayTag(tagName);
+            case 12 -> new LongArrayTag(tagName);
+            default -> throw new TagCreateException("Could not find tag with ID \"" + id + "\".");
+        };
     }
 }

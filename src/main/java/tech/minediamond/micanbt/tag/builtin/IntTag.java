@@ -8,6 +8,7 @@ import java.io.IOException;
  * A tag containing an integer.
  */
 public class IntTag extends Tag {
+    public static final int ID = 3;
     private int value;
 
     /**
@@ -42,6 +43,11 @@ public class IntTag extends Tag {
      */
     public void setValue(int value) {
         this.value = value;
+    }
+
+    @Override
+    public int getTagId() {
+        return ID;
     }
 
     @Override

@@ -8,6 +8,7 @@ import java.io.IOException;
  * A tag containing a byte array.
  */
 public class ByteArrayTag extends Tag {
+    public static final int ID = 7;
     private byte[] value;
 
     /**
@@ -66,6 +67,11 @@ public class ByteArrayTag extends Tag {
      */
     public void setValue(int index, byte value) {
         this.value[index] = value;
+    }
+
+    @Override
+    public int getTagId() {
+        return ID;
     }
 
     /**

@@ -8,6 +8,7 @@ import java.io.IOException;
  * A tag containing a double.
  */
 public class DoubleTag extends Tag {
+    public static final int ID = 6;
     private double value;
 
     /**
@@ -42,6 +43,11 @@ public class DoubleTag extends Tag {
      */
     public void setValue(double value) {
         this.value = value;
+    }
+
+    @Override
+    public int getTagId() {
+        return ID;
     }
 
     @Override

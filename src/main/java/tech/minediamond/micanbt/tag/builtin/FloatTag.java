@@ -8,6 +8,7 @@ import java.io.IOException;
  * A tag containing a float.
  */
 public class FloatTag extends Tag {
+    public static final int ID = 5;
     private float value;
 
     /**
@@ -42,6 +43,11 @@ public class FloatTag extends Tag {
      */
     public void setValue(float value) {
         this.value = value;
+    }
+
+    @Override
+    public int getTagId() {
+        return ID;
     }
 
     @Override

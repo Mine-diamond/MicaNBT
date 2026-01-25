@@ -42,6 +42,8 @@ public abstract class Tag implements Cloneable {
      */
     public abstract Object getValue();
 
+    public abstract int getTagId();
+
     /**
      * Reads this tag from an input stream.
      *

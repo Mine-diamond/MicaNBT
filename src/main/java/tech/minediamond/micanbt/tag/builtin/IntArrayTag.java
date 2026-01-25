@@ -8,6 +8,7 @@ import java.io.IOException;
  * A tag containing an integer array.
  */
 public class IntArrayTag extends Tag {
+    public static final int ID = 11;
     private int[] value;
 
     /**
@@ -46,6 +47,11 @@ public class IntArrayTag extends Tag {
         }
 
         this.value = value.clone();
+    }
+
+    @Override
+    public int getTagId() {
+        return ID;
     }
 
     /**
