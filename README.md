@@ -1,4 +1,4 @@
-LusterNBT is forked from [OpenNBT](https://github.com/GeyserMC/OpenNBT)
+MicaNBT is forked from [OpenNBT](https://github.com/GeyserMC/OpenNBT)
 
 # MicaNBT
 MicaNBT is a library for reading and writing NBT files and stringified NBT.
