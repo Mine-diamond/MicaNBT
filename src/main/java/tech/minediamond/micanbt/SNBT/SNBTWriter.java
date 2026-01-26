@@ -12,22 +12,22 @@ public class SNBTWriter {
     private final SNBTStyle snbtStyle;
     private int depth = 0;
 
-    public SNBTWriter(Tag tag, boolean stringifyRootTagName, SNBTStyle snbtStyle) {
+    public SNBTWriter(Tag tag, boolean includeRootName, SNBTStyle snbtStyle) {
         this.tag = tag;
         this.builder = new StringBuilder();
         this.snbtStyle = snbtStyle;
-        if (stringifyRootTagName) {
+        if (includeRootName) {
             stringifyRootTagName();
         }
         stringify(tag);
     }
 
-    public String getSNBTString() {
+    public String getSNBTText() {
         return builder.toString();
     }
 
-    public void writeSNBT(Path path) throws IOException {
-        Files.writeString(path, getSNBTString());
+    public void write(Path path) throws IOException {
+        Files.writeString(path, getSNBTText());
     }
 
     private void stringifyRootTagName() {

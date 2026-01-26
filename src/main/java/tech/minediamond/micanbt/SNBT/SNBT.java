@@ -16,8 +16,8 @@ public class SNBT {
      * @param snbtStyle Whether to enable line wrapping. If {@code true}, output a beautified multi-line string; otherwise, output a single-line compressed string.
      * @return Serialized SNBT text.
      */
-    public static String serialize(Tag tag, boolean stringifyRootTagName, SNBTStyle snbtStyle) {
-        return new SNBTWriter(tag, stringifyRootTagName, snbtStyle).getSNBTString();
+    public static String stringify(Tag tag, boolean includeRootName, SNBTStyle snbtStyle) {
+        return new SNBTWriter(tag, includeRootName, snbtStyle).getSNBTText();
     }
 
     /**
@@ -28,8 +28,8 @@ public class SNBT {
      * @param snbtStyle Whether to enable line wrapping. If {@code true}, output a beautified multi-line string; otherwise, output a single-line compressed string.
      * @throws IOException If an I/O error occurs during file writing.
      */
-    public static void writeAsSNBT(Tag tag, boolean stringifyRootTagName, Path path, SNBTStyle snbtStyle) throws IOException {
-        new SNBTWriter(tag, stringifyRootTagName, snbtStyle).writeSNBT(path);
+    public static void write(Tag tag, boolean includeRootName, Path path, SNBTStyle snbtStyle) throws IOException {
+        new SNBTWriter(tag, includeRootName, snbtStyle).write(path);
     }
 
     /**
@@ -39,7 +39,7 @@ public class SNBT {
      * @return The parsed NBT tag.
      * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail
      */
-    public static Tag deserialize(String SNBTText) {
+    public static Tag parse(String SNBTText) {
         return new SNBTReader(SNBTText).getTag();
     }
 
@@ -51,7 +51,7 @@ public class SNBT {
      * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail
      * @throws IOException        If an I/O error occurs during file writing.
      */
-    public static Tag readSNBT(Path path) throws IOException {
+    public static Tag read(Path path) throws IOException {
         return new SNBTReader(path).getTag();
     }
 }
