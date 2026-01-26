@@ -67,9 +67,6 @@ public class ShortTag extends Tag {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ShortTag shortTag = (ShortTag) o;
-        return value == shortTag.value;
+        return super.equals(o) && value == ((ShortTag) o).value;
     }
 }

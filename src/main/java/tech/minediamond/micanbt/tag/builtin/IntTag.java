@@ -67,9 +67,6 @@ public class IntTag extends Tag {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        IntTag intTag = (IntTag) o;
-        return value == intTag.value;
+        return super.equals(o) && value == ((IntTag) o).value;
     }
 }

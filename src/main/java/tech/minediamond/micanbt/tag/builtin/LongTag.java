@@ -67,9 +67,6 @@ public class LongTag extends Tag {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LongTag longTag = (LongTag) o;
-        return value == longTag.value;
+        return super.equals(o) && value == ((LongTag) o).value;
     }
 }

@@ -182,9 +182,6 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CompoundTag tag = (CompoundTag) o;
-        return value.equals(tag.value);
+        return super.equals(o) && value.equals(((CompoundTag) o).value);
     }
 }

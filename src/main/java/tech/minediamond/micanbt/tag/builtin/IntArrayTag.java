@@ -107,9 +107,6 @@ public class IntArrayTag extends Tag {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        IntArrayTag intArrayTag = (IntArrayTag) o;
-        return Arrays.equals(value, intArrayTag.value);
+        return super.equals(o) && Arrays.equals(value, ((IntArrayTag) o).value);
     }
 }

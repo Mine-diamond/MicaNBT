@@ -192,10 +192,10 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ListTag<?> listTag = (ListTag<?>) o;
-        if (this.typeId != listTag.typeId) return false;
-        return this.value.equals(listTag.value);
+        if (super.equals(o)) {
+            ListTag<?> listTag = (ListTag<?>) o;
+            return this.typeId == listTag.typeId && this.value.equals(listTag.value);
+        }
+        return false;
     }
 }

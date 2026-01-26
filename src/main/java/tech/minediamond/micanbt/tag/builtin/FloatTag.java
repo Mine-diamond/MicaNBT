@@ -67,9 +67,6 @@ public class FloatTag extends Tag {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FloatTag floatTag = (FloatTag) o;
-        return value == floatTag.value;
+        return super.equals(o) && value == ((FloatTag) o).value;
     }
 }

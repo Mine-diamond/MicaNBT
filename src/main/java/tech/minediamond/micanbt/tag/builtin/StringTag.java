@@ -68,9 +68,6 @@ public class StringTag extends Tag {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StringTag stringTag = (StringTag) o;
-        return Objects.equals(value, stringTag.value);
+        return super.equals(o) && Objects.equals(value, ((StringTag) o).value);
     }
 }

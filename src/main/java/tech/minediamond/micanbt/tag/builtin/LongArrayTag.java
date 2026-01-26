@@ -107,9 +107,6 @@ public class LongArrayTag extends Tag {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LongArrayTag longArrayTag = (LongArrayTag) o;
-        return Arrays.equals(value, longArrayTag.value);
+        return super.equals(o) && Arrays.equals(value, ((LongArrayTag) o).value);
     }
 }

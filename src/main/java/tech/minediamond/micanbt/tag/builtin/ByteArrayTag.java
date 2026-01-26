@@ -103,9 +103,6 @@ public class ByteArrayTag extends Tag {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ByteArrayTag byteTag = (ByteArrayTag) o;
-        return Arrays.equals(value, byteTag.value);
+        return super.equals(o) && Arrays.equals(value, ((ByteArrayTag) o).value);
     }
 }
