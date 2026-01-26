@@ -69,7 +69,10 @@ public abstract class Tag {
 
     @Override
     public boolean equals(Object o) {
-        return o != null && getClass() == o.getClass();
+        if (o != null && getClass() == o.getClass()) {
+            return this.name.equals(((Tag) o).name);
+        }
+        return false;
     }
 
     @Override
