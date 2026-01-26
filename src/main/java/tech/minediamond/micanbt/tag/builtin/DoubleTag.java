@@ -67,6 +67,6 @@ public class DoubleTag extends Tag {
 
     @Override
     public boolean equals(Object o) {
-        return super.equals(o) && value == ((DoubleTag) o).value;
+        return super.equals(o) && Double.compare(value, ((DoubleTag) o).value) == 0;
     }
 }
