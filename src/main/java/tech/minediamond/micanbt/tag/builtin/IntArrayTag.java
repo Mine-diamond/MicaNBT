@@ -3,6 +3,7 @@ package tech.minediamond.micanbt.tag.builtin;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * A tag containing an integer array.
@@ -102,5 +103,15 @@ public class IntArrayTag extends Tag {
     @Override
     public IntArrayTag copy() {
         return new IntArrayTag(this.getName(), this.getValue());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o) && Arrays.equals(value, ((IntArrayTag) o).value);
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * super.hashCode() + Arrays.hashCode(value);
     }
 }

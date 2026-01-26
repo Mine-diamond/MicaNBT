@@ -64,4 +64,14 @@ public class DoubleTag extends Tag {
     public DoubleTag copy() {
         return new DoubleTag(this.getName(), this.getValue());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o) && Double.compare(value, ((DoubleTag) o).value) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * super.hashCode() + Double.hashCode(value);
+    }
 }

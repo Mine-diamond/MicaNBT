@@ -68,39 +68,16 @@ public abstract class Tag {
     public abstract Tag copy();
 
     @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Tag tag)) {
-            return false;
+    public boolean equals(Object o) {
+        if (o != null && getClass() == o.getClass()) {
+            return this.name.equals(((Tag) o).name);
         }
+        return false;
+    }
 
-        if (!this.getName().equals(tag.getName())) {
-            return false;
-        }
-
-        if (this.getValue() == null) {
-            return tag.getValue() == null;
-        } else if (tag.getValue() == null) {
-            return false;
-        }
-
-        if (this.getValue().getClass().isArray() && tag.getValue().getClass().isArray()) {
-            int length = Array.getLength(this.getValue());
-            if (Array.getLength(tag.getValue()) != length) {
-                return false;
-            }
-
-            for (int index = 0; index < length; index++) {
-                Object o = Array.get(this.getValue(), index);
-                Object other = Array.get(tag.getValue(), index);
-                if (o == null && other != null || o != null && !o.equals(other)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        return this.getValue().equals(tag.getValue());
+    @Override
+    public int hashCode() {
+        return this.name.hashCode();
     }
 
     @Override

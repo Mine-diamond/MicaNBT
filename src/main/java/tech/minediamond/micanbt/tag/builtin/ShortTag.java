@@ -64,4 +64,14 @@ public class ShortTag extends Tag {
     public ShortTag copy() {
         return new ShortTag(this.getName(), this.getValue());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o) && value == ((ShortTag) o).value;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * super.hashCode() + Short.hashCode(value);
+    }
 }

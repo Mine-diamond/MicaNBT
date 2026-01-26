@@ -64,4 +64,14 @@ public class LongTag extends Tag {
     public LongTag copy() {
         return new LongTag(this.getName(), this.getValue());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o) && value == ((LongTag) o).value;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * super.hashCode() + Long.hashCode(value);
+    }
 }

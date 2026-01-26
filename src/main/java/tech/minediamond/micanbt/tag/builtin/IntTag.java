@@ -64,4 +64,14 @@ public class IntTag extends Tag {
     public IntTag copy() {
         return new IntTag(this.getName(), this.getValue());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o) && value == ((IntTag) o).value;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * super.hashCode() + this.value;
+    }
 }

@@ -3,6 +3,7 @@ package tech.minediamond.micanbt.tag.builtin;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * A tag containing a byte.
@@ -63,5 +64,15 @@ public class ByteTag extends Tag {
     @Override
     public ByteTag copy() {
         return new ByteTag(this.getName(), this.getValue());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o) && value == ((ByteTag) o).value;
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * super.hashCode() + Byte.hashCode(value);
     }
 }
