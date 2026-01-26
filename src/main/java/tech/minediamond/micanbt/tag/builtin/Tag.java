@@ -80,32 +80,27 @@ public abstract class Tag {
         return this.name.hashCode();
     }
 
+    /**
+     * get SNBT present of this tag.
+     *
+     * @return the SNBT present of this tag.
+     */
     @Override
     public String toString() {
-        String name = this.getName() != null && !this.getName().equals("") ? "(" + this.getName() + ")" : "";
-        String value = "";
-        if (this.getValue() != null) {
-            value = this.getValue().toString();
-            if (this.getValue().getClass().isArray()) {
-                StringBuilder build = new StringBuilder();
-                build.append("[");
-                for (int index = 0; index < Array.getLength(this.getValue()); index++) {
-                    if (index > 0) {
-                        build.append(", ");
-                    }
-
-                    build.append(Array.get(this.getValue(), index));
-                }
-
-                build.append("]");
-                value = build.toString();
-            }
-        }
-
-        return this.getClass().getSimpleName() + name + " { " + value + " }";
+        return this.toString(true, SNBTStyle.COMPACT);
     }
 
-    public String toSNBTString(boolean stringifyRootTagName, SNBTStyle snbtStyle) {
+    /**
+     * get SNBT present of this tag.
+     *
+     * @param stringifyRootTagName does snbt include tag names
+     * @param snbtStyle The format of SNBT
+     *
+     * @return the SNBT present of this tag.
+     *
+     * @see SNBTStyle
+     */
+    public String toString(boolean stringifyRootTagName, SNBTStyle snbtStyle) {
         return SNBT.serialize(this, stringifyRootTagName, snbtStyle);
     }
 }
