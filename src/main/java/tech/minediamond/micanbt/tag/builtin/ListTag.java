@@ -150,6 +150,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked") // Safe cast: typeId guarantees all tags in the list are of type T
     public void read(DataInput in) throws IOException {
         this.value.clear();
         this.typeId = in.readUnsignedByte();
@@ -180,6 +181,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     }
 
     @Override
+    @SuppressWarnings("unchecked") // Safe cast: tag.clone() returns a Tag of the same concrete type
     public ListTag<T> clone() {
         ListTag<T> copy = new ListTag<>(this.getName(), this.typeId);
         for (T tag : this.value) {
