@@ -4,9 +4,9 @@ import java.nio.BufferUnderflowException;
 import java.nio.CharBuffer;
 
 /**
- * 专门处理 SNBT 字符缓冲区的导航和操作
+ * Specialized in navigating and manipulating SNBT character buffers
  */
-public class SNBTBuffer {
+class SNBTBuffer {
     private final CharBuffer charBuffer;
 
     public SNBTBuffer(String text) {
@@ -64,7 +64,7 @@ public class SNBTBuffer {
     }
 
     /**
-     * 获取用于异常提示的错误上下文文本
+     * Retrieve error context text for exception prompts
      */
     public String getErrorContext() {
         int pos = charBuffer.position();
@@ -83,7 +83,7 @@ public class SNBTBuffer {
         }
     }
 
-    // 用于调试
+    // for debug use
     public String fromStartToPosition() {
         int pos = charBuffer.position();
         CharBuffer view = charBuffer.duplicate();

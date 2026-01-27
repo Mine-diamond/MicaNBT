@@ -3,7 +3,6 @@ package tech.minediamond.micanbt.SNBT;
 import tech.minediamond.micanbt.tag.builtin.*;
 
 import java.io.IOException;
-import java.nio.CharBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
