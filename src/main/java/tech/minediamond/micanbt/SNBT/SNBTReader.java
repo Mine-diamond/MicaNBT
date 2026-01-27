@@ -64,7 +64,7 @@ public class SNBTReader {
     private Tag parseArrayOrList(String name) {
         if (snbtBuffer.peek(1) == Tokens.ARRAY_END) {
             snbtBuffer.skip(2); // `[]`
-            return new ListTag(name);
+            return new ListTag<>(name);
         }
         if (snbtBuffer.peek(2) == Tokens.ARRAY_SIGNATURE_SEPARATOR && "BIL".indexOf(snbtBuffer.peek(1)) != -1) {
             return parseTypedArray(snbtBuffer.peek(1), name);
@@ -280,11 +280,10 @@ public class SNBTReader {
         return switch (suffix) {
             case Tokens.TYPE_BYTE -> new ByteTag(name, Byte.parseByte(numPart, radix));
             case Tokens.TYPE_SHORT -> new ShortTag(name, Short.parseShort(numPart, radix));
-            case Tokens.TYPE_INT -> new IntTag(name, Integer.parseInt(numPart, radix));
+            case Tokens.TYPE_INT, '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> new IntTag(name, Integer.parseInt(numPart, radix));
             case Tokens.TYPE_LONG -> new LongTag(name, Long.parseLong(numPart, radix));
             case Tokens.TYPE_FLOAT -> new FloatTag(name, Float.parseFloat(numPart));
             case Tokens.TYPE_DOUBLE -> new DoubleTag(name, Double.parseDouble(numPart));
-            case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> new IntTag(name, Integer.parseInt(numPart, radix));
             default -> new StringTag(name, value); // Unquoted string
         };
     }
