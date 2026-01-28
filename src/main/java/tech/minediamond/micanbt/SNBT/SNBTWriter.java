@@ -145,7 +145,9 @@ public class SNBTWriter {
     }
 
     private void stringifyString(String string) {
-        builder.append(Tokens.DOUBLE_QUOTE).append(escape(string)).append(Tokens.DOUBLE_QUOTE);
+        builder.append(Tokens.DOUBLE_QUOTE);
+        escapeAndAppend(string);
+        builder.append(Tokens.DOUBLE_QUOTE);
     }
 
     private void stringifyByteArrayTag(ByteArrayTag byteArrayTag) {
@@ -226,25 +228,22 @@ public class SNBTWriter {
     }
 
     //All escape character supported by snbt and `"`
-    private static String escape(String input) {
-        if (input == null || input.isEmpty()) return input;
+    private void escapeAndAppend(String input) {
+        if (input == null || input.isEmpty()) return;
 
-        int len = input.length();
-        StringBuilder sb = new StringBuilder(len + 8);
-
-        for (int i = 0; i < len; i++) {
+        int length = input.length();
+        for (int i = 0; i < length; i++) {
             char c = input.charAt(i);
             switch (c) {
-                case '\b' -> sb.append("\\b");
-                case '\f' -> sb.append("\\f");
-                case '\n' -> sb.append("\\n");
-                case '\r' -> sb.append("\\r");
-                case '\t' -> sb.append("\\t");
-                case '\\' -> sb.append("\\\\");
-                case '"' -> sb.append("\\\"");
-                default -> sb.append(c);
+                case '\b' -> builder.append("\\b");
+                case '\f' -> builder.append("\\f");
+                case '\n' -> builder.append("\\n");
+                case '\r' -> builder.append("\\r");
+                case '\t' -> builder.append("\\t");
+                case '\\' -> builder.append("\\\\");
+                case '"' -> builder.append("\\\"");
+                default -> builder.append(c);
             }
         }
-        return sb.toString();
     }
 }
