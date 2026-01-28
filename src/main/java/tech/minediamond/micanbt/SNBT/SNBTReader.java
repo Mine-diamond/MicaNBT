@@ -1,5 +1,8 @@
 package tech.minediamond.micanbt.SNBT;
 
+import tech.minediamond.micanbt.SNBT.primitiveArray.ByteArray;
+import tech.minediamond.micanbt.SNBT.primitiveArray.IntArray;
+import tech.minediamond.micanbt.SNBT.primitiveArray.LongArray;
 import tech.minediamond.micanbt.tag.builtin.*;
 
 import java.io.IOException;
@@ -114,20 +117,16 @@ public class SNBTReader {
         if (snbtBuffer.peekOrConsume(Tokens.ARRAY_END)) { // `]`
             return byteArrayTag;
         }
-        ArrayList<Byte> bytes = new ArrayList<>();
+        ByteArray byteArray = new ByteArray();
         while (snbtBuffer.peek() != Tokens.ARRAY_END) {
-            bytes.add((byte) parseArrayNumber(parseUnquotedString(), Byte.MIN_VALUE, Byte.MAX_VALUE, 0, 256, 1));
+            byteArray.add((byte) parseArrayNumber(parseUnquotedString(), Byte.MIN_VALUE, Byte.MAX_VALUE, 0, 256, 1));
             if (snbtBuffer.peek() == Tokens.VALUE_SEPARATOR) {
                 snbtBuffer.skip(); // `,`
             }
             snbtBuffer.skipEmptyChar(); // skip empty char after `,` or something possible
         }
         snbtBuffer.skip(); // `]`
-        byte[] byteArray = new byte[bytes.size()];
-        for (int i = 0; i < bytes.size(); i++) {
-            byteArray[i] = bytes.get(i);
-        }
-        byteArrayTag.setValue(byteArray);
+        byteArrayTag.setValue(byteArray.toArray());
         return byteArrayTag;
     }
 
@@ -138,20 +137,16 @@ public class SNBTReader {
         if (snbtBuffer.peekOrConsume(Tokens.ARRAY_END)) { // `]`
             return intArrayTag;
         }
-        ArrayList<Integer> integers = new ArrayList<>();
+        IntArray intArray = new IntArray();
         while (snbtBuffer.peek() != Tokens.ARRAY_END) {
-            integers.add((int) parseArrayNumber(parseUnquotedString(), Integer.MIN_VALUE, Integer.MAX_VALUE, 0, Integer.MAX_VALUE * 2L, 0));
+            intArray.add((int) parseArrayNumber(parseUnquotedString(), Integer.MIN_VALUE, Integer.MAX_VALUE, 0, Integer.MAX_VALUE * 2L, 0));
             if (snbtBuffer.peek() == Tokens.VALUE_SEPARATOR) {
                 snbtBuffer.skip(); // `,`
             }
             snbtBuffer.skipEmptyChar(); // skip empty char after `,` or something possible
         }
         snbtBuffer.skip(); // `]`
-        int[] intArray = new int[integers.size()];
-        for (int i = 0; i < integers.size(); i++) {
-            intArray[i] = integers.get(i);
-        }
-        intArrayTag.setValue(intArray);
+        intArrayTag.setValue(intArray.toArray());
         return intArrayTag;
     }
 
@@ -161,20 +156,16 @@ public class SNBTReader {
         if (snbtBuffer.peekOrConsume(Tokens.ARRAY_END)) { // `]`
             return longArrayTag;
         }
-        ArrayList<Long> longs = new ArrayList<>();
+        LongArray longArray = new LongArray();
         while (snbtBuffer.peek() != Tokens.ARRAY_END) {
-            longs.add(parseArrayNumber(parseUnquotedString(), Long.MIN_VALUE, Long.MAX_VALUE, 0, Long.MAX_VALUE, 1));
+            longArray.add(parseArrayNumber(parseUnquotedString(), Long.MIN_VALUE, Long.MAX_VALUE, 0, Long.MAX_VALUE, 1));
             if (snbtBuffer.peek() == Tokens.VALUE_SEPARATOR) {
                 snbtBuffer.skip(); // `,`
             }
             snbtBuffer.skipEmptyChar(); // skip empty char after `,` or something possible
         }
         snbtBuffer.skip(); // `]`
-        long[] longArray = new long[longs.size()];
-        for (int i = 0; i < longs.size(); i++) {
-            longArray[i] = longs.get(i);
-        }
-        longArrayTag.setValue(longArray);
+        longArrayTag.setValue(longArray.toArray());
         return longArrayTag;
     }
 
