@@ -37,9 +37,16 @@ final class Tokens {
 
     static final char TYPE_SIGNED = 's';
     static final char TYPE_UNSIGNED = 'u';
+    static final char TYPE_SIGNED_UPPER = 'S';
+    static final char TYPE_UNSIGNED_UPPER = 'U';// Binary prefixes/Decimal prefixes
 
     static final String LITERAL_TRUE = "true";
     static final String LITERAL_FALSE = "false";
+
+    static final String BINARY_PREFIX = "0b";
+    static final String BINARY_PREFIX_UPPER = "0B";
+    static final String DECIMAL_PREFIX = "0x";
+    static final String DECIMAL_PREFIX_UPPER = "0X";
 
     static final char NEWLINE = '\n';
     static final char CARRIAGE_RETURN = '\r';

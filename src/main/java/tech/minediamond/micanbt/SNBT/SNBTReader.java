@@ -192,8 +192,8 @@ public class SNBTReader {
         snbtBuffer.skipEmptyChar();
 
         String value = parseString();
-        if (value.equalsIgnoreCase("true")) return new ByteTag(name, (byte) 1);
-        if (value.equalsIgnoreCase("false")) return new ByteTag(name, (byte) 0);
+        if (value.equalsIgnoreCase(Tokens.LITERAL_TRUE)) return new ByteTag(name, (byte) 1);
+        if (value.equalsIgnoreCase(Tokens.LITERAL_FALSE)) return new ByteTag(name, (byte) 0);
 
         if (value.isEmpty() || !Tokens.isDigit(value.charAt(0))) {
             return new StringTag(name, value);
@@ -208,23 +208,23 @@ public class SNBTReader {
         int suffixNum = 1;
 
         try {
-            if (value.startsWith("0x") || value.startsWith("0X")) {
+            if (value.startsWith(Tokens.DECIMAL_PREFIX) || value.startsWith(Tokens.DECIMAL_PREFIX_UPPER)) {
                 prefixNum = 2;
                 radix = 16;
             }
-            if ((value.startsWith("0b") || value.startsWith("0B")) && value.length() >= 4) {
+            if ((value.startsWith(Tokens.BINARY_PREFIX) || value.startsWith(Tokens.BINARY_PREFIX_UPPER)) && value.length() >= 4) {
                 prefixNum = 2;
                 radix = 2;
             }
 
             try {
                 char lastChar2 = value.charAt(value.length() - 2);
-                if (lastChar2 == 'u' || lastChar2 == 'U') {
+                if (lastChar2 == Tokens.TYPE_UNSIGNED || lastChar2 == Tokens.TYPE_UNSIGNED_UPPER) {
                     suffixNum = 2;
                     isSignedDefault = false;
                     isSigned = false;
                 }
-                if (lastChar2 == 's' || lastChar2 == 'S') {
+                if (lastChar2 == Tokens.TYPE_SIGNED || lastChar2 == Tokens.TYPE_SIGNED_UPPER) {
                     suffixNum = 2;
                     isSignedDefault = false;
                     isSigned = true;
