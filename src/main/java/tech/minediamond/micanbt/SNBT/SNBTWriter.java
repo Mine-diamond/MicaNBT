@@ -16,7 +16,10 @@ public class SNBTWriter {
     private int depth = 0;
 
     static {
-        Arrays.fill(INDENTS, "\t");
+        INDENTS[0] = ""; // 深度0没有缩进
+        for (int i = 1; i < INDENTS.length; i++) {
+            INDENTS[i] = INDENTS[i - 1] + "\t"; // 正确构建缩进字符串
+        }
     }
 
     public SNBTWriter(Tag tag, boolean includeRootName, SNBTStyle snbtStyle) {
