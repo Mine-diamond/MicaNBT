@@ -72,11 +72,13 @@ public class SNBTBuffer {
         if (cursor > length) {
             cursor = length;
         }
-        int contextLen = Math.min(cursor, 50);
-        if (cursor > 50) {
-            return "Error while parsing SNBTText\n..." + new String(buffer, cursor - contextLen, contextLen) + " <- here";
+        int start = Math.max(0, cursor - 49);
+        int count = cursor - start + 1;
+
+        if (cursor >= 50) {
+            return "Error while parsing SNBTText\n..." + new String(buffer, start, count) + " <- here";
         } else {
-            return "Error while parsing SNBTText\n" + new String(buffer, 0, contextLen) + " <- here";
+            return "Error while parsing SNBTText\n" + new String(buffer, start, count) + " <- here";
         }
     }
 }
