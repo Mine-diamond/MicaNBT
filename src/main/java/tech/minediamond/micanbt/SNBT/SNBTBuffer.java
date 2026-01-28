@@ -1,108 +1,82 @@
 package tech.minediamond.micanbt.SNBT;
 
-import java.nio.BufferUnderflowException;
-import java.nio.CharBuffer;
-
-/**
- * Specialized in navigating and manipulating SNBT character buffers
- */
-class SNBTBuffer {
-    private final CharBuffer charBuffer;
+public class SNBTBuffer {
+    private final char[] buffer;
+    private final int length;
+    private int cursor;
 
     public SNBTBuffer(String text) {
-        this.charBuffer = CharBuffer.wrap(text);
+        this.buffer = text.toCharArray();
+        this.length = buffer.length;
+        this.cursor = 0;
+    }
+
+    public SNBTBuffer(char[] chars) {
+        this.buffer = chars;
+        this.length = chars.length;
+        this.cursor = 0;
     }
 
     public char peek() {
-        return charBuffer.get(charBuffer.position());
+        return buffer[cursor];
     }
 
     public char peek(int offset) {
-        int target = charBuffer.position() + offset;
-        if (target >= charBuffer.limit()) {
-            throw new BufferUnderflowException();
-        }
-        return charBuffer.get(target);
+        return buffer[cursor + offset];
     }
 
     public boolean peekOrConsume(char c) {
-        if (peek() != c) return false;
-        consume();
-        return true;
+        if (peek() == c) {
+            skip();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public char consume() {
-        return charBuffer.get();
+        return buffer[cursor++];
     }
 
     public void skip() {
-        charBuffer.position(charBuffer.position() + 1);
+        cursor += 1;
     }
 
     public void skip(int n) {
-        charBuffer.position(charBuffer.position() + n);
+        cursor += n;
     }
 
     public void skipEmptyChar() {
-        while (charBuffer.hasRemaining()) {
-            char c = consume();
-            if (!Tokens.isFormatChar(c)) {
-                charBuffer.position(charBuffer.position() - 1);
+        while (hasRemaining()) {
+            if (Tokens.isFormatChar(peek())) {
+                skip();
+            } else {
                 return;
             }
         }
     }
 
     public boolean hasRemaining() {
-        return charBuffer.hasRemaining();
+        return cursor < length;
     }
 
     public int position() {
-        return charBuffer.position();
+        return cursor;
     }
 
     public void position(int newPos) {
-        charBuffer.position(newPos);
+        this.cursor = newPos;
     }
 
-    public int limit() {
-        return charBuffer.limit();
-    }
-
-    /**
-     * Retrieve error context text for exception prompts
-     */
     public String getErrorContext() {
-        int pos = charBuffer.position();
-        CharBuffer view = charBuffer.duplicate();
-        view.position(0);
-        if (charBuffer.hasRemaining()) {
-            view.limit(pos + 1);
-        } else {
-            view.limit(pos);
+        if (cursor > length) {
+            cursor = length;
         }
-
-        if (view.length() > 50) {
-            return "Error while parsing SNBTText\n..." + view.subSequence(view.length() - 50, view.length()) + " <- here";
+        int contextLen = Math.min(cursor, 50);
+        if (cursor > 50) {
+            return "Error while parsing SNBTText\n..." + new String(buffer, cursor - contextLen, contextLen) + " <- here";
         } else {
-            return "Error while parsing SNBTText\n" + view.subSequence(0, view.length()) + " <- here";
+            return "Error while parsing SNBTText\n" + new String(buffer, 0, contextLen) + " <- here";
         }
-    }
-
-    // for debug use
-    public String fromStartToPosition() {
-        int pos = charBuffer.position();
-        CharBuffer view = charBuffer.duplicate();
-        view.position(0);
-        view.limit(pos);
-        return view.toString();
-    }
-
-    private void printlnFromStartToPosition(String msg) { // for debug use
-        System.out.println("custom message: " + msg + "\ncurrent processed: " + fromStartToPosition());
-    }
-
-    private void printlnFromStartToPosition() { // for debug use
-        System.out.println("current processed: " + fromStartToPosition());
     }
 }
