@@ -76,16 +76,14 @@ public class SNBTReader {
         }
     }
 
-    // This implementation has a flaw:
-    // if there is not a `,` between elements, and the parsing of sub-elements is correct,
-    // it can still parse successfully, such as in {subCompoundTag: {}str:"str"}
     private Tag parseCompound(String name) {
         depth++;
         if (depth > Tokens.MAX_NESTING_DEPTH) {
             throw new SNBTParseException("max nesting depth exceeded");
         }
         CompoundTag compoundTag = new CompoundTag(name);
-        snbtBuffer.skip(); // `{`
+        snbtBuffer.skipOrThrow(Tokens.COMPOUND_BEGIN); // `{`
+        snbtBuffer.skipEmptyChar();
         if (snbtBuffer.peekOrConsume(Tokens.COMPOUND_END)) { // `}`
             return compoundTag;
         }
@@ -93,15 +91,15 @@ public class SNBTReader {
         while (snbtBuffer.peek() != Tokens.COMPOUND_END) {
             String subName = parseString();
             snbtBuffer.skipEmptyChar(); // empty char between `"` and `:`
-            snbtBuffer.skip(); // `:`
+            snbtBuffer.skipOrThrow(Tokens.COMPOUND_KEY_VALUE_SEPARATOR); // `:`
             compoundTag.put(parseTag(subName));
-            if (snbtBuffer.peek() == Tokens.VALUE_SEPARATOR) {
-                snbtBuffer.skip(); // `,`
+            if (!snbtBuffer.peekOrConsume(Tokens.VALUE_SEPARATOR)) {// `,`
+                break;
             }
             snbtBuffer.skipEmptyChar(); // skip empty char after `,` or something possible
         }
 
-        snbtBuffer.skip(); // `}`
+        snbtBuffer.skipOrThrow(Tokens.COMPOUND_END); // `}`
         depth--;
         return compoundTag;
     }
@@ -125,12 +123,13 @@ public class SNBTReader {
         ByteArray byteArray = new ByteArray();
         while (snbtBuffer.peek() != Tokens.ARRAY_END) {
             byteArray.add((byte) parseArrayNumber(parseUnquotedString(), Byte.MIN_VALUE, Byte.MAX_VALUE, 0, 256, 1));
-            if (snbtBuffer.peek() == Tokens.VALUE_SEPARATOR) {
-                snbtBuffer.skip(); // `,`
+            if (!snbtBuffer.peekOrConsume(Tokens.VALUE_SEPARATOR)) {// `,`
+                break;
             }
             snbtBuffer.skipEmptyChar(); // skip empty char after `,` or something possible
         }
-        snbtBuffer.skip(); // `]`
+
+        snbtBuffer.skipOrThrow(Tokens.ARRAY_END); // `]`
         byteArrayTag.setValue(byteArray.toArray());
         return byteArrayTag;
     }
@@ -145,12 +144,13 @@ public class SNBTReader {
         IntArray intArray = new IntArray();
         while (snbtBuffer.peek() != Tokens.ARRAY_END) {
             intArray.add((int) parseArrayNumber(parseUnquotedString(), Integer.MIN_VALUE, Integer.MAX_VALUE, 0, Integer.MAX_VALUE * 2L, 0));
-            if (snbtBuffer.peek() == Tokens.VALUE_SEPARATOR) {
-                snbtBuffer.skip(); // `,`
+            if (!snbtBuffer.peekOrConsume(Tokens.VALUE_SEPARATOR)) {// `,`
+                break;
             }
             snbtBuffer.skipEmptyChar(); // skip empty char after `,` or something possible
         }
-        snbtBuffer.skip(); // `]`
+
+        snbtBuffer.skipOrThrow(Tokens.ARRAY_END); // `]`
         intArrayTag.setValue(intArray.toArray());
         return intArrayTag;
     }
@@ -164,19 +164,17 @@ public class SNBTReader {
         LongArray longArray = new LongArray();
         while (snbtBuffer.peek() != Tokens.ARRAY_END) {
             longArray.add(parseArrayNumber(parseUnquotedString(), Long.MIN_VALUE, Long.MAX_VALUE, 0, Long.MAX_VALUE, 1));
-            if (snbtBuffer.peek() == Tokens.VALUE_SEPARATOR) {
-                snbtBuffer.skip(); // `,`
+            if (!snbtBuffer.peekOrConsume(Tokens.VALUE_SEPARATOR)) {// `,`
+                break;
             }
             snbtBuffer.skipEmptyChar(); // skip empty char after `,` or something possible
         }
-        snbtBuffer.skip(); // `]`
+
+        snbtBuffer.skipOrThrow(Tokens.ARRAY_END); // `]`
         longArrayTag.setValue(longArray.toArray());
         return longArrayTag;
     }
 
-    // This implementation has a flaw:
-    // if there is not a `,` between elements, and the parsing of sub-elements is correct,
-    // it can still parse successfully, such as in [{str1:"str"}{str2:"str"}]
     private ListTag<? extends Tag> parseList(String name) {
         depth++;
         if (depth > Tokens.MAX_NESTING_DEPTH) {
@@ -184,17 +182,19 @@ public class SNBTReader {
         }
         ListTag<Tag> listTag = new ListTag<>(name);
         snbtBuffer.skip(); //`[`
+        snbtBuffer.skipEmptyChar();
         if (snbtBuffer.peekOrConsume(Tokens.ARRAY_END)) { // `]`
             return listTag;
         }
         while (snbtBuffer.peek() != Tokens.ARRAY_END) {
             listTag.add(parseTag(""));
-            if (snbtBuffer.peek() == Tokens.VALUE_SEPARATOR) {
-                snbtBuffer.skip(); // `,`
+            if (!snbtBuffer.peekOrConsume(Tokens.VALUE_SEPARATOR)) {// `,`
+                break;
             }
             snbtBuffer.skipEmptyChar(); // skip empty char after `,` or something possible
         }
-        snbtBuffer.skip(); // `]`
+        snbtBuffer.skipEmptyChar();
+        snbtBuffer.skipOrThrow(Tokens.ARRAY_END); // `]`
         depth--;
         return listTag;
     }

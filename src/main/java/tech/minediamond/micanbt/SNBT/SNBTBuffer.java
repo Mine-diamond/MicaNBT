@@ -46,6 +46,12 @@ public class SNBTBuffer {
         cursor += n;
     }
 
+    public void skipOrThrow(char c) {
+        if (consume() != c) {
+            throw new SNBTParseException("Expected " + c + " but got " + consume());
+        }
+    }
+
     public void skipEmptyChar() {
         while (hasRemaining()) {
             if (Tokens.isFormatChar(peek())) {
