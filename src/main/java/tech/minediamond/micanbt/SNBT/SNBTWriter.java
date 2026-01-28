@@ -5,12 +5,19 @@ import tech.minediamond.micanbt.tag.builtin.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 public class SNBTWriter {
+    private static final String[] INDENTS = new String[16];
+
     private final Tag tag;
     private final StringBuilder builder;
     private final SNBTStyle snbtStyle;
     private int depth = 0;
+
+    static {
+        Arrays.fill(INDENTS, "\t");
+    }
 
     public SNBTWriter(Tag tag, boolean includeRootName, SNBTStyle snbtStyle) {
         this.tag = tag;
@@ -195,9 +202,10 @@ public class SNBTWriter {
     }
 
     private void addTab() {
-        //noinspection StringRepeatCanBeUsed
-        for (int i = 0; i < depth; i++) {
-            builder.append(Tokens.TAB);
+        if (depth < INDENTS.length) {
+            builder.append(INDENTS[depth]);
+        } else {
+            builder.append("\t".repeat(depth));
         }
     }
 
