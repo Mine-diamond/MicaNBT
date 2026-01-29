@@ -375,45 +375,47 @@ public class SNBTReader {
         int prefixNum = 0;
         int suffixNum = defaultSuffixNum;
 
-        String lowerValue = value.toLowerCase();
-        if (lowerValue.startsWith("0x")) {
-            prefixNum = 2;
-            radix = 16;
-        } else if (lowerValue.startsWith("0b")) {
-            // Special handling for byte tags as 0b is a valid byte tag
-            if (max > 255 || value.length() > 4) {
-                prefixNum = 2;
-                radix = 2;
-            }
+        if (value == null || value.isEmpty()) {
+            throw new RuntimeException("Expected a non-empty string but found an empty string.");
         }
 
+        char lastChar = value.charAt(value.length() - 1);
         int len = value.length();
-        if (len > 0 && lowerValue.endsWith("i")) { //Special handling for int tags
+        if (lastChar == Tokens.TYPE_INT || lastChar == Tokens.TYPE_INT_UPPER) { //Special handling for int tags
             suffixNum = 1;
         }
 
-        try {
-            if (len >= 2) {
-                char signChar = Character.toLowerCase(value.charAt(len - 2));
-                if (signChar == 'u') {
+        if (len > 2) {
+            if (value.charAt(0) == '0') {
+                char secondChar = value.charAt(1);
+                if (secondChar == 'x' || secondChar == 'X') {
+                    prefixNum = 2;
+                    radix = 16;
+                } else if (secondChar == 'b' || secondChar == 'B') {
+                    prefixNum = 2;
+                    radix = 2;
+                }
+            }
+
+            if (len - 2 >= prefixNum) {
+                char signChar = value.charAt(len - 2);
+                if (signChar == Tokens.TYPE_UNSIGNED || signChar == Tokens.TYPE_UNSIGNED_UPPER) {
                     suffixNum = 2;
                     isSignedDefault = false;
                     isSigned = false;
-                } else if (signChar == 's') {
+                } else if (signChar == Tokens.TYPE_SIGNED || signChar == Tokens.TYPE_SIGNED_UPPER) {
                     suffixNum = 2;
                     isSignedDefault = false;
                     isSigned = true;
                 }
             }
-        } catch (Exception ignored) {
         }
 
         if (isSignedDefault) {
             isSigned = radix != 16 && radix != 2;
         }
 
-        String numPart = value.substring(prefixNum, len - suffixNum);
-        long result = isSigned ? Long.parseLong(numPart, radix) : Long.parseUnsignedLong(numPart, radix);
+        long result = isSigned ? Long.parseLong(value, prefixNum, len - suffixNum, radix) : Long.parseUnsignedLong(value, prefixNum, len - suffixNum, radix);
 
         if (isSigned) {
             if (result < min || result > max) {
