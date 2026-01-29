@@ -122,7 +122,7 @@ public class SNBTReader {
         }
         ByteArray byteArray = new ByteArray();
         while (snbtBuffer.peek() != Tokens.ARRAY_END) {
-            byteArray.add((byte) parseArrayNumber(parseUnquotedString(), Byte.MIN_VALUE, Byte.MAX_VALUE, 0, 256, 1));
+            byteArray.add((byte) parseArrayNumber(parseUnquotedString(), Byte.MIN_VALUE, Byte.MAX_VALUE, 0, 255, 1));
             if (!snbtBuffer.peekOrConsume(Tokens.VALUE_SEPARATOR)) {// `,`
                 break;
             }
@@ -143,7 +143,7 @@ public class SNBTReader {
         }
         IntArray intArray = new IntArray();
         while (snbtBuffer.peek() != Tokens.ARRAY_END) {
-            intArray.add((int) parseArrayNumber(parseUnquotedString(), Integer.MIN_VALUE, Integer.MAX_VALUE, 0, Integer.MAX_VALUE * 2L, 0));
+            intArray.add((int) parseArrayNumber(parseUnquotedString(), Integer.MIN_VALUE, Integer.MAX_VALUE, 0, Integer.MAX_VALUE * 2L + 1, 0));
             if (!snbtBuffer.peekOrConsume(Tokens.VALUE_SEPARATOR)) {// `,`
                 break;
             }
@@ -163,7 +163,7 @@ public class SNBTReader {
         }
         LongArray longArray = new LongArray();
         while (snbtBuffer.peek() != Tokens.ARRAY_END) {
-            longArray.add(parseArrayNumber(parseUnquotedString(), Long.MIN_VALUE, Long.MAX_VALUE, 0, Long.MAX_VALUE, 1));
+            longArray.add(parseArrayNumber(parseUnquotedString(), Long.MIN_VALUE, Long.MAX_VALUE, Long.MIN_VALUE, Long.MAX_VALUE, 1));
             if (!snbtBuffer.peekOrConsume(Tokens.VALUE_SEPARATOR)) {// `,`
                 break;
             }
@@ -418,11 +418,11 @@ public class SNBTReader {
         long result = isSigned ? Long.parseLong(value, prefixNum, len - suffixNum, radix) : Long.parseUnsignedLong(value, prefixNum, len - suffixNum, radix);
 
         if (isSigned) {
-            if (result < min || result > max) {
+            if (result <= min || result >= max) {
                 throw new NumberFormatException("Value out of range. Value:\"" + value + "\" Radix:" + radix);
             }
         } else {
-            if (result < unSignedMin || result > unSignedMax) {
+            if (result <= unSignedMin || result >= unSignedMax) {
                 throw new NumberFormatException("Value out of range. Value:\"" + value + "\" Radix:" + radix);
             }
         }
