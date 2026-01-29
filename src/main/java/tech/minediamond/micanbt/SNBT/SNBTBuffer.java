@@ -67,12 +67,20 @@ public class SNBTBuffer {
         return cursor < length;
     }
 
+    public boolean isAvailable(int index) {
+        return index < length;
+    }
+
     public int position() {
         return cursor;
     }
 
     public void position(int newPos) {
         this.cursor = newPos;
+    }
+
+    public String substring(int start, int count) {
+        return new String(buffer, start, count);
     }
 
     public String getErrorContext() {

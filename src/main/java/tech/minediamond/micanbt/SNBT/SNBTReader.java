@@ -351,22 +351,21 @@ public class SNBTReader {
 
     private String parseUnquotedString() {
         snbtBuffer.skipEmptyChar();
-        reusableBuilder.setLength(0);
-        while (snbtBuffer.hasRemaining()) {
-            char c = snbtBuffer.consume();
-            if (Tokens.isAllowedInUnquotedString(c)) {
-                reusableBuilder.append(c);
+        int startPos = snbtBuffer.position();
+        int count = 0;
+        while (snbtBuffer.isAvailable(startPos + count)) {
+            if (Tokens.isAllowedInUnquotedString(snbtBuffer.peek(count))) {
+                count++;
             } else {
-                snbtBuffer.position(snbtBuffer.position() - 1);
                 break;
             }
         }
-
-        String result = reusableBuilder.toString();
-        if (result.isEmpty()) {
+        String substring = snbtBuffer.substring(startPos, count);
+        if (substring.isEmpty()) {
             throw new RuntimeException("Expected an unquoted key but found none.");
         }
-        return result;
+        snbtBuffer.position(startPos + count);
+        return substring;
     }
 
     private long parseArrayNumber(String value, long min, long max, long unSignedMin, long unSignedMax, int defaultSuffixNum) {
