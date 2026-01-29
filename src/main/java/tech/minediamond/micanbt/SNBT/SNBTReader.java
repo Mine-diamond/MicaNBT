@@ -352,19 +352,19 @@ public class SNBTReader {
     private String parseUnquotedString() {
         snbtBuffer.skipEmptyChar();
         int startPos = snbtBuffer.position();
-        int count = 0;
-        while (snbtBuffer.isAvailable(startPos + count)) {
-            if (Tokens.isAllowedInUnquotedString(snbtBuffer.peek(count))) {
-                count++;
+        int endPos = startPos;
+        while (snbtBuffer.isAvailable(endPos)) {
+            if (Tokens.isAllowedInUnquotedString(snbtBuffer.get(endPos))) {
+                endPos++;
             } else {
                 break;
             }
         }
-        String substring = snbtBuffer.substring(startPos, count);
+        String substring = snbtBuffer.substring(startPos, endPos - startPos);
         if (substring.isEmpty()) {
-            throw new RuntimeException("Expected an unquoted key but found none.");
+            throw new RuntimeException("Expected an unquoted string but found none.");
         }
-        snbtBuffer.position(startPos + count);
+        snbtBuffer.position(endPos);
         return substring;
     }
 

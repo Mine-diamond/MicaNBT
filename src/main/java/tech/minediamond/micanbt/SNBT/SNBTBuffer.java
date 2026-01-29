@@ -34,6 +34,10 @@ public class SNBTBuffer {
         }
     }
 
+    public char get(int index) {
+        return buffer[index];
+    }
+
     public char consume() {
         return buffer[cursor++];
     }
