@@ -98,7 +98,7 @@ public class SNBTReader {
             }
             snbtBuffer.skipEmptyChar(); // skip empty char after `,` or something possible
         }
-
+        snbtBuffer.skipEmptyChar();
         snbtBuffer.skipOrThrow(Tokens.COMPOUND_END); // `}`
         depth--;
         return compoundTag;
