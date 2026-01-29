@@ -418,11 +418,11 @@ public class SNBTReader {
         long result = isSigned ? Long.parseLong(value, prefixNum, len - suffixNum, radix) : Long.parseUnsignedLong(value, prefixNum, len - suffixNum, radix);
 
         if (isSigned) {
-            if (result <= min || result >= max) {
+            if (result < min || result > max) {
                 throw new NumberFormatException("Value out of range. Value:\"" + value + "\" Radix:" + radix);
             }
         } else {
-            if (result <= unSignedMin || result >= unSignedMax) {
+            if (result < unSignedMin || result > unSignedMax) {
                 throw new NumberFormatException("Value out of range. Value:\"" + value + "\" Radix:" + radix);
             }
         }
