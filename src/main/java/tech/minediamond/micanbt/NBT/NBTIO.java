@@ -22,6 +22,8 @@ import java.util.zip.GZIPOutputStream;
  */
 public class NBTIO {
 
+    private NBTIO() {}
+
     /**
      * Reads the compressed, big endian root CompoundTag from the given file.
      *
@@ -46,11 +48,11 @@ public class NBTIO {
         try (InputStream fis = Files.newInputStream(path);
              InputStream in = compressed ? new GZIPInputStream(fis) : fis) {
             Tag tag = readTag(in, littleEndian);
-            if (!(tag instanceof CompoundTag compoundTag)) {
-                throw new IOException("Root tag is not a CompoundTag!");
+            if (tag instanceof CompoundTag compoundTag) {
+                return compoundTag;
             }
-
-            return compoundTag;
+            throw new IOException("Root tag is not a CompoundTag! Found: " +
+                    (tag == null ? "null" : tag.getClass().getSimpleName()));
         }
     }
 
@@ -254,5 +256,4 @@ public class NBTIO {
             out.writeByte(0);
         }
     }
-
 }
