@@ -1,6 +1,7 @@
 package tech.minediamond.micanbt.tag.builtin;
 
-import tech.minediamond.micanbt.NBTIO;
+import tech.minediamond.micanbt.NBT.NBTReader;
+import tech.minediamond.micanbt.NBT.NBTWriter;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -149,7 +150,7 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
         List<Tag> tags = new ArrayList<Tag>();
         try {
             Tag tag;
-            while ((tag = NBTIO.readTag(in)) != null) {
+            while ((tag = NBTReader.readTag(in)) != null) {
                 tags.add(tag);
             }
         } catch (EOFException e) {
@@ -164,7 +165,7 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
     @Override
     public void write(DataOutput out) throws IOException {
         for (Tag tag : this.value.values()) {
-            NBTIO.writeTag(out, tag);
+            NBTWriter.writeTag(out, tag);
         }
 
         out.writeByte(0);
