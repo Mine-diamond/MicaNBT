@@ -3,7 +3,7 @@ package tech.minediamond.micanbt.SNBT;
 import tech.minediamond.micanbt.SNBT.primitiveArray.ByteArray;
 import tech.minediamond.micanbt.SNBT.primitiveArray.IntArray;
 import tech.minediamond.micanbt.SNBT.primitiveArray.LongArray;
-import tech.minediamond.micanbt.tag.builtin.*;
+import tech.minediamond.micanbt.tag.*;
 
 import java.io.IOException;
 import java.nio.file.Files;

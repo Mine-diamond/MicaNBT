@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.tag.builtin;
+package tech.minediamond.micanbt.tag;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -6,19 +6,19 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * A tag containing a byte array.
+ * A tag containing a long array.
  */
-public class ByteArrayTag extends Tag {
-    public static final int ID = 7;
-    private byte[] value;
+public class LongArrayTag extends Tag {
+    public static final int ID = 12;
+    private long[] value;
 
     /**
      * Creates a tag with the specified name.
      *
      * @param name The name of the tag.
      */
-    public ByteArrayTag(String name) {
-        this(name, new byte[0]);
+    public LongArrayTag(String name) {
+        this(name, new long[0]);
     }
 
     /**
@@ -27,13 +27,13 @@ public class ByteArrayTag extends Tag {
      * @param name  The name of the tag.
      * @param value The value of the tag.
      */
-    public ByteArrayTag(String name, byte[] value) {
+    public LongArrayTag(String name, long[] value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public byte[] getValue() {
+    public long[] getValue() {
         return this.value.clone();
     }
 
@@ -42,7 +42,7 @@ public class ByteArrayTag extends Tag {
      *
      * @param value New value of this tag.
      */
-    public void setValue(byte[] value) {
+    public void setValue(long[] value) {
         if (value == null) {
             return;
         }
@@ -56,7 +56,7 @@ public class ByteArrayTag extends Tag {
      * @param index Index of the value.
      * @return The value at the given index.
      */
-    public byte getValue(int index) {
+    public long getValue(int index) {
         return this.value[index];
     }
 
@@ -66,7 +66,7 @@ public class ByteArrayTag extends Tag {
      * @param index Index of the value.
      * @param value Value to set.
      */
-    public void setValue(int index, byte value) {
+    public void setValue(int index, long value) {
         this.value[index] = value;
     }
 
@@ -86,24 +86,28 @@ public class ByteArrayTag extends Tag {
 
     @Override
     public void read(DataInput in) throws IOException {
-        this.value = new byte[in.readInt()];
-        in.readFully(this.value);
+        this.value = new long[in.readInt()];
+        for (int index = 0; index < this.value.length; index++) {
+            this.value[index] = in.readLong();
+        }
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeInt(this.value.length);
-        out.write(this.value);
+        for (int index = 0; index < this.value.length; index++) {
+            out.writeLong(this.value[index]);
+        }
     }
 
     @Override
-    public ByteArrayTag copy() {
-        return new ByteArrayTag(this.getName(), this.getValue());
+    public LongArrayTag copy() {
+        return new LongArrayTag(this.getName(), this.getValue());
     }
 
     @Override
     public boolean equals(Object o) {
-        return super.equals(o) && Arrays.equals(value, ((ByteArrayTag) o).value);
+        return super.equals(o) && Arrays.equals(value, ((LongArrayTag) o).value);
     }
 
     @Override

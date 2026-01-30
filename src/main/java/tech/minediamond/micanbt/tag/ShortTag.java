@@ -1,23 +1,23 @@
-package tech.minediamond.micanbt.tag.builtin;
+package tech.minediamond.micanbt.tag;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * A tag containing an integer.
+ * A tag containing a short.
  */
-public class IntTag extends Tag {
-    public static final int ID = 3;
-    private int value;
+public class ShortTag extends Tag {
+    public static final int ID = 2;
+    private short value;
 
     /**
      * Creates a tag with the specified name.
      *
      * @param name The name of the tag.
      */
-    public IntTag(String name) {
-        this(name, 0);
+    public ShortTag(String name) {
+        this(name, (short) 0);
     }
 
     /**
@@ -26,13 +26,13 @@ public class IntTag extends Tag {
      * @param name  The name of the tag.
      * @param value The value of the tag.
      */
-    public IntTag(String name, int value) {
+    public ShortTag(String name, short value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public Integer getValue() {
+    public Short getValue() {
         return this.value;
     }
 
@@ -41,7 +41,7 @@ public class IntTag extends Tag {
      *
      * @param value New value of this tag.
      */
-    public void setValue(int value) {
+    public void setValue(short value) {
         this.value = value;
     }
 
@@ -52,26 +52,26 @@ public class IntTag extends Tag {
 
     @Override
     public void read(DataInput in) throws IOException {
-        this.value = in.readInt();
+        this.value = in.readShort();
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
-        out.writeInt(this.value);
+        out.writeShort(this.value);
     }
 
     @Override
-    public IntTag copy() {
-        return new IntTag(this.getName(), this.getValue());
+    public ShortTag copy() {
+        return new ShortTag(this.getName(), this.getValue());
     }
 
     @Override
     public boolean equals(Object o) {
-        return super.equals(o) && value == ((IntTag) o).value;
+        return super.equals(o) && value == ((ShortTag) o).value;
     }
 
     @Override
     public int hashCode() {
-        return 31 * super.hashCode() + this.value;
+        return 31 * super.hashCode() + Short.hashCode(value);
     }
 }

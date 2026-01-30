@@ -1,9 +1,8 @@
-package tech.minediamond.micanbt.tag.builtin;
+package tech.minediamond.micanbt.tag;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * A tag containing a byte.

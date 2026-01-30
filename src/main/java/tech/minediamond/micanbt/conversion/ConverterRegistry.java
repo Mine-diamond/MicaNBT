@@ -1,7 +1,7 @@
 package tech.minediamond.micanbt.conversion;
 
-import tech.minediamond.micanbt.conversion.builtin.*;
-import tech.minediamond.micanbt.tag.builtin.*;
+import tech.minediamond.micanbt.conversion.converter.*;
+import tech.minediamond.micanbt.tag.*;
 
 import java.io.Serializable;
 import java.util.*;

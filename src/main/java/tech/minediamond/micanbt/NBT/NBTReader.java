@@ -1,9 +1,7 @@
 package tech.minediamond.micanbt.NBT;
 
-import tech.minediamond.micanbt.tag.TagCreateException;
-import tech.minediamond.micanbt.tag.TagFactory;
-import tech.minediamond.micanbt.tag.builtin.CompoundTag;
-import tech.minediamond.micanbt.tag.builtin.Tag;
+import tech.minediamond.micanbt.tag.CompoundTag;
+import tech.minediamond.micanbt.tag.Tag;
 
 import java.io.*;
 import java.nio.file.Files;

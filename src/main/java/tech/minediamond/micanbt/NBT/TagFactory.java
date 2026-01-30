@@ -1,6 +1,6 @@
-package tech.minediamond.micanbt.tag;
+package tech.minediamond.micanbt.NBT;
 
-import tech.minediamond.micanbt.tag.builtin.*;
+import tech.minediamond.micanbt.tag.*;
 
 public class TagFactory {
 

@@ -1,11 +1,10 @@
 package tech.minediamond.micanbt.SNBT;
 
-import tech.minediamond.micanbt.tag.builtin.*;
+import tech.minediamond.micanbt.tag.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 public class SNBTWriter {
     private static final String[] INDENTS = new String[16];

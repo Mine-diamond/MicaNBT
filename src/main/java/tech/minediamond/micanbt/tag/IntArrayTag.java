@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.tag.builtin;
+package tech.minediamond.micanbt.tag;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -6,19 +6,19 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * A tag containing a long array.
+ * A tag containing an integer array.
  */
-public class LongArrayTag extends Tag {
-    public static final int ID = 12;
-    private long[] value;
+public class IntArrayTag extends Tag {
+    public static final int ID = 11;
+    private int[] value;
 
     /**
      * Creates a tag with the specified name.
      *
      * @param name The name of the tag.
      */
-    public LongArrayTag(String name) {
-        this(name, new long[0]);
+    public IntArrayTag(String name) {
+        this(name, new int[0]);
     }
 
     /**
@@ -27,13 +27,13 @@ public class LongArrayTag extends Tag {
      * @param name  The name of the tag.
      * @param value The value of the tag.
      */
-    public LongArrayTag(String name, long[] value) {
+    public IntArrayTag(String name, int[] value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public long[] getValue() {
+    public int[] getValue() {
         return this.value.clone();
     }
 
@@ -42,12 +42,17 @@ public class LongArrayTag extends Tag {
      *
      * @param value New value of this tag.
      */
-    public void setValue(long[] value) {
+    public void setValue(int[] value) {
         if (value == null) {
             return;
         }
 
         this.value = value.clone();
+    }
+
+    @Override
+    public int getTagId() {
+        return ID;
     }
 
     /**
@@ -56,7 +61,7 @@ public class LongArrayTag extends Tag {
      * @param index Index of the value.
      * @return The value at the given index.
      */
-    public long getValue(int index) {
+    public int getValue(int index) {
         return this.value[index];
     }
 
@@ -66,13 +71,8 @@ public class LongArrayTag extends Tag {
      * @param index Index of the value.
      * @param value Value to set.
      */
-    public void setValue(int index, long value) {
+    public void setValue(int index, int value) {
         this.value[index] = value;
-    }
-
-    @Override
-    public int getTagId() {
-        return ID;
     }
 
     /**
@@ -86,9 +86,9 @@ public class LongArrayTag extends Tag {
 
     @Override
     public void read(DataInput in) throws IOException {
-        this.value = new long[in.readInt()];
+        this.value = new int[in.readInt()];
         for (int index = 0; index < this.value.length; index++) {
-            this.value[index] = in.readLong();
+            this.value[index] = in.readInt();
         }
     }
 
@@ -96,18 +96,18 @@ public class LongArrayTag extends Tag {
     public void write(DataOutput out) throws IOException {
         out.writeInt(this.value.length);
         for (int index = 0; index < this.value.length; index++) {
-            out.writeLong(this.value[index]);
+            out.writeInt(this.value[index]);
         }
     }
 
     @Override
-    public LongArrayTag copy() {
-        return new LongArrayTag(this.getName(), this.getValue());
+    public IntArrayTag copy() {
+        return new IntArrayTag(this.getName(), this.getValue());
     }
 
     @Override
     public boolean equals(Object o) {
-        return super.equals(o) && Arrays.equals(value, ((LongArrayTag) o).value);
+        return super.equals(o) && Arrays.equals(value, ((IntArrayTag) o).value);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.tag.builtin;
+package tech.minediamond.micanbt.tag;
 
 import tech.minediamond.micanbt.SNBT.SNBT;
 import tech.minediamond.micanbt.SNBT.SNBTStyle;

@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.tag.builtin;
+package tech.minediamond.micanbt.tag;
 
 import tech.minediamond.micanbt.NBT.NBTReader;
 import tech.minediamond.micanbt.NBT.NBTWriter;

@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.tag.builtin;
+package tech.minediamond.micanbt.tag;
 
 import java.io.DataInput;
 import java.io.DataOutput;

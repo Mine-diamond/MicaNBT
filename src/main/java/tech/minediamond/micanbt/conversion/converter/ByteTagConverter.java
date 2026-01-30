@@ -1,7 +1,7 @@
-package tech.minediamond.micanbt.conversion.builtin;
+package tech.minediamond.micanbt.conversion.converter;
 
 import tech.minediamond.micanbt.conversion.TagConverter;
-import tech.minediamond.micanbt.tag.builtin.ByteTag;
+import tech.minediamond.micanbt.tag.ByteTag;
 
 /**
  * A converter that converts between ByteTag and byte.

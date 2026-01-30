@@ -1,6 +1,6 @@
 package tech.minediamond.micanbt.conversion;
 
-import tech.minediamond.micanbt.tag.builtin.Tag;
+import tech.minediamond.micanbt.tag.Tag;
 
 /**
  * A converter that converts between a tag type and a value type. A converted tag will have its value and all children converted to raw types and vice versa.

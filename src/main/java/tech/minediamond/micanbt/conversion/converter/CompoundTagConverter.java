@@ -1,9 +1,9 @@
-package tech.minediamond.micanbt.conversion.builtin;
+package tech.minediamond.micanbt.conversion.converter;
 
 import tech.minediamond.micanbt.conversion.ConverterRegistry;
 import tech.minediamond.micanbt.conversion.TagConverter;
-import tech.minediamond.micanbt.tag.builtin.CompoundTag;
-import tech.minediamond.micanbt.tag.builtin.Tag;
+import tech.minediamond.micanbt.tag.CompoundTag;
+import tech.minediamond.micanbt.tag.Tag;
 
 import java.util.HashMap;
 import java.util.Map;

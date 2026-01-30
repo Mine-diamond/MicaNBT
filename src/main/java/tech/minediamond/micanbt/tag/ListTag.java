@@ -1,7 +1,7 @@
-package tech.minediamond.micanbt.tag.builtin;
+package tech.minediamond.micanbt.tag;
 
-import tech.minediamond.micanbt.tag.TagCreateException;
-import tech.minediamond.micanbt.tag.TagFactory;
+import tech.minediamond.micanbt.NBT.TagCreateException;
+import tech.minediamond.micanbt.NBT.TagFactory;
 
 import java.io.DataInput;
 import java.io.DataOutput;

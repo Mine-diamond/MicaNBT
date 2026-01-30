@@ -1,7 +1,7 @@
-package tech.minediamond.micanbt.conversion.builtin;
+package tech.minediamond.micanbt.conversion.converter;
 
 import tech.minediamond.micanbt.conversion.TagConverter;
-import tech.minediamond.micanbt.tag.builtin.IntTag;
+import tech.minediamond.micanbt.tag.IntTag;
 
 /**
  * A converter that converts between IntTag and int.

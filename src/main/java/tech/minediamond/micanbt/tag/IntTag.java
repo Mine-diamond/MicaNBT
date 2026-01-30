@@ -1,22 +1,22 @@
-package tech.minediamond.micanbt.tag.builtin;
+package tech.minediamond.micanbt.tag;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
 /**
- * A tag containing a float.
+ * A tag containing an integer.
  */
-public class FloatTag extends Tag {
-    public static final int ID = 5;
-    private float value;
+public class IntTag extends Tag {
+    public static final int ID = 3;
+    private int value;
 
     /**
      * Creates a tag with the specified name.
      *
      * @param name The name of the tag.
      */
-    public FloatTag(String name) {
+    public IntTag(String name) {
         this(name, 0);
     }
 
@@ -26,13 +26,13 @@ public class FloatTag extends Tag {
      * @param name  The name of the tag.
      * @param value The value of the tag.
      */
-    public FloatTag(String name, float value) {
+    public IntTag(String name, int value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public Float getValue() {
+    public Integer getValue() {
         return this.value;
     }
 
@@ -41,7 +41,7 @@ public class FloatTag extends Tag {
      *
      * @param value New value of this tag.
      */
-    public void setValue(float value) {
+    public void setValue(int value) {
         this.value = value;
     }
 
@@ -52,26 +52,26 @@ public class FloatTag extends Tag {
 
     @Override
     public void read(DataInput in) throws IOException {
-        this.value = in.readFloat();
+        this.value = in.readInt();
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
-        out.writeFloat(this.value);
+        out.writeInt(this.value);
     }
 
     @Override
-    public FloatTag copy() {
-        return new FloatTag(this.getName(), this.getValue());
+    public IntTag copy() {
+        return new IntTag(this.getName(), this.getValue());
     }
 
     @Override
     public boolean equals(Object o) {
-        return super.equals(o) && Float.compare(value, ((FloatTag) o).value) == 0;
+        return super.equals(o) && value == ((IntTag) o).value;
     }
 
     @Override
     public int hashCode() {
-        return 31 * super.hashCode() + Float.hashCode(value);
+        return 31 * super.hashCode() + this.value;
     }
 }

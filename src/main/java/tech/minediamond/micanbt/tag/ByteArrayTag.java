@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.tag.builtin;
+package tech.minediamond.micanbt.tag;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -6,19 +6,19 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * A tag containing an integer array.
+ * A tag containing a byte array.
  */
-public class IntArrayTag extends Tag {
-    public static final int ID = 11;
-    private int[] value;
+public class ByteArrayTag extends Tag {
+    public static final int ID = 7;
+    private byte[] value;
 
     /**
      * Creates a tag with the specified name.
      *
      * @param name The name of the tag.
      */
-    public IntArrayTag(String name) {
-        this(name, new int[0]);
+    public ByteArrayTag(String name) {
+        this(name, new byte[0]);
     }
 
     /**
@@ -27,13 +27,13 @@ public class IntArrayTag extends Tag {
      * @param name  The name of the tag.
      * @param value The value of the tag.
      */
-    public IntArrayTag(String name, int[] value) {
+    public ByteArrayTag(String name, byte[] value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public int[] getValue() {
+    public byte[] getValue() {
         return this.value.clone();
     }
 
@@ -42,17 +42,12 @@ public class IntArrayTag extends Tag {
      *
      * @param value New value of this tag.
      */
-    public void setValue(int[] value) {
+    public void setValue(byte[] value) {
         if (value == null) {
             return;
         }
 
         this.value = value.clone();
-    }
-
-    @Override
-    public int getTagId() {
-        return ID;
     }
 
     /**
@@ -61,7 +56,7 @@ public class IntArrayTag extends Tag {
      * @param index Index of the value.
      * @return The value at the given index.
      */
-    public int getValue(int index) {
+    public byte getValue(int index) {
         return this.value[index];
     }
 
@@ -71,8 +66,13 @@ public class IntArrayTag extends Tag {
      * @param index Index of the value.
      * @param value Value to set.
      */
-    public void setValue(int index, int value) {
+    public void setValue(int index, byte value) {
         this.value[index] = value;
+    }
+
+    @Override
+    public int getTagId() {
+        return ID;
     }
 
     /**
@@ -86,28 +86,24 @@ public class IntArrayTag extends Tag {
 
     @Override
     public void read(DataInput in) throws IOException {
-        this.value = new int[in.readInt()];
-        for (int index = 0; index < this.value.length; index++) {
-            this.value[index] = in.readInt();
-        }
+        this.value = new byte[in.readInt()];
+        in.readFully(this.value);
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeInt(this.value.length);
-        for (int index = 0; index < this.value.length; index++) {
-            out.writeInt(this.value[index]);
-        }
+        out.write(this.value);
     }
 
     @Override
-    public IntArrayTag copy() {
-        return new IntArrayTag(this.getName(), this.getValue());
+    public ByteArrayTag copy() {
+        return new ByteArrayTag(this.getName(), this.getValue());
     }
 
     @Override
     public boolean equals(Object o) {
-        return super.equals(o) && Arrays.equals(value, ((IntArrayTag) o).value);
+        return super.equals(o) && Arrays.equals(value, ((ByteArrayTag) o).value);
     }
 
     @Override

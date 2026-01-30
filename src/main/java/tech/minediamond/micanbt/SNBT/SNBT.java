@@ -1,6 +1,6 @@
 package tech.minediamond.micanbt.SNBT;
 
-import tech.minediamond.micanbt.tag.builtin.Tag;
+import tech.minediamond.micanbt.tag.Tag;
 
 import java.io.IOException;
 import java.nio.file.Path;

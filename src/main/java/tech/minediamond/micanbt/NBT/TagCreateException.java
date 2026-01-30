@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.tag;
+package tech.minediamond.micanbt.NBT;
 
 import java.io.Serial;
 

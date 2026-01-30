@@ -1,23 +1,24 @@
-package tech.minediamond.micanbt.tag.builtin;
+package tech.minediamond.micanbt.tag;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
- * A tag containing a double.
+ * A tag containing a string.
  */
-public class DoubleTag extends Tag {
-    public static final int ID = 6;
-    private double value;
+public class StringTag extends Tag {
+    public static final int ID = 8;
+    private String value;
 
     /**
      * Creates a tag with the specified name.
      *
      * @param name The name of the tag.
      */
-    public DoubleTag(String name) {
-        this(name, 0);
+    public StringTag(String name) {
+        this(name, "");
     }
 
     /**
@@ -26,13 +27,13 @@ public class DoubleTag extends Tag {
      * @param name  The name of the tag.
      * @param value The value of the tag.
      */
-    public DoubleTag(String name, double value) {
+    public StringTag(String name, String value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public Double getValue() {
+    public String getValue() {
         return this.value;
     }
 
@@ -41,7 +42,7 @@ public class DoubleTag extends Tag {
      *
      * @param value New value of this tag.
      */
-    public void setValue(double value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -52,26 +53,26 @@ public class DoubleTag extends Tag {
 
     @Override
     public void read(DataInput in) throws IOException {
-        this.value = in.readDouble();
+        this.value = in.readUTF();
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
-        out.writeDouble(this.value);
+        out.writeUTF(this.value);
     }
 
     @Override
-    public DoubleTag copy() {
-        return new DoubleTag(this.getName(), this.getValue());
+    public StringTag copy() {
+        return new StringTag(this.getName(), this.getValue());
     }
 
     @Override
     public boolean equals(Object o) {
-        return super.equals(o) && Double.compare(value, ((DoubleTag) o).value) == 0;
+        return super.equals(o) && Objects.equals(value, ((StringTag) o).value);
     }
 
     @Override
     public int hashCode() {
-        return 31 * super.hashCode() + Double.hashCode(value);
+        return 31 * super.hashCode() + Objects.hashCode(value);
     }
 }
