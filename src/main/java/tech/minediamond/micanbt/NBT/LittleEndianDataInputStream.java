@@ -1,6 +1,7 @@
 package tech.minediamond.micanbt.NBT;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 class LittleEndianDataInputStream extends FilterInputStream implements DataInput {
     public LittleEndianDataInputStream(InputStream in) {
@@ -162,6 +163,6 @@ class LittleEndianDataInputStream extends FilterInputStream implements DataInput
         byte[] bytes = new byte[this.readUnsignedShort()];
         this.readFully(bytes);
 
-        return new String(bytes, "UTF-8");
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 }

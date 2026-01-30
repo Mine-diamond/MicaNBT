@@ -22,33 +22,21 @@ public class NBT {
         return NBTReader.read(path, compressed, littleEndian);
     }
 
-    public static Tag prase(InputStream in) throws IOException {
-        return NBTReader.read(in);
-    }
-
     public static CompoundTag read(InputStream in, boolean littleEndian) throws IOException {
         return NBTReader.read(in, littleEndian);
     }
 
-    public static Tag prase(InputStream in, boolean littleEndian) throws IOException {
+    public static Tag parse(InputStream in) throws IOException {
+        return NBTReader.read(in);
+    }
+
+    public static Tag parse(InputStream in, boolean littleEndian) throws IOException {
         return NBTReader.readTag(in, littleEndian);
     }
 
-    public static Tag prase(DataInput in) throws IOException {
+    public static Tag parse(DataInput in) throws IOException {
         return NBTReader.readTag(in);
     }
-
-//    public static Tag readAnyTag(InputStream in) throws IOException {
-//        return NBTReader.readAnyTag(in);
-//    }
-//
-//    public static Tag readAnyTag(InputStream in, boolean littleEndian) throws IOException {
-//        return NBTReader.readAnyTag(in, littleEndian);
-//    }
-//
-//    public static Tag readAnyTag(DataInput in) throws IOException {
-//        return NBTReader.readAnyTag(in);
-//    }
 
     public static void write(CompoundTag tag, Path path) throws IOException {
         NBTWriter.write(tag, path);
