@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.conversion;
+package tech.minediamond.micanbt.conversion.converter;
 
 import tech.minediamond.micanbt.tag.Tag;
 

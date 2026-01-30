@@ -1,7 +1,6 @@
 package tech.minediamond.micanbt.conversion.converter;
 
 import tech.minediamond.micanbt.conversion.ConverterRegistry;
-import tech.minediamond.micanbt.conversion.TagConverter;
 import tech.minediamond.micanbt.tag.ListTag;
 import tech.minediamond.micanbt.tag.Tag;
 

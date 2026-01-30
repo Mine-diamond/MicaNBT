@@ -1,6 +1,5 @@
 package tech.minediamond.micanbt.conversion.converter;
 
-import tech.minediamond.micanbt.conversion.TagConverter;
 import tech.minediamond.micanbt.tag.LongTag;
 
 /**
