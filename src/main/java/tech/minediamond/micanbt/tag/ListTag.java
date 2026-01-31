@@ -220,7 +220,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      * @return {@code true} if the tag is present.
      */
     public boolean contains(T tag) {
-        if (tag.getTagId() != this.typeId) {
+        if (tag != null && tag.getTagId() != this.typeId) {
             return false;
         }
         return this.value.contains(tag);
