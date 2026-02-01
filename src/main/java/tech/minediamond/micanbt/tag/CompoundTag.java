@@ -39,7 +39,7 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
 
     @Override
     public Map<String, Tag> getClonedValue() {
-        Map<String, Tag> clonedMap = new LinkedHashMap<>();
+        Map<String, Tag> clonedMap = new LinkedHashMap<>(Math.max(this.value.size(), 10));
         for (Map.Entry<String, Tag> entry : this.value.entrySet()) {
             clonedMap.put(entry.getKey(), entry.getValue().copy());
         }
