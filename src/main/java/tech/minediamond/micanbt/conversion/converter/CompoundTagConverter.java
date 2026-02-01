@@ -13,13 +13,11 @@ import java.util.Map;
 public class CompoundTagConverter implements TagConverter<CompoundTag, Map> {
     @Override
     public Map convert(CompoundTag tag) {
-        Map<String, Object> ret = new HashMap<String, Object>();
+        Map<String, Object> ret = new HashMap<>();
         Map<String, Tag> tags = tag.getClonedValue();
-        for(String name : tags.keySet()) {
-            Tag t = tags.get(name);
-            ret.put(t.getName(), ConverterRegistry.convertToValue(t));
+        for (Map.Entry<String, Tag> entry : tags.entrySet()) {
+            ret.put(entry.getKey(), ConverterRegistry.convertToValue(entry.getValue()));
         }
-
         return ret;
     }
 
