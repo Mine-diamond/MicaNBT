@@ -54,6 +54,10 @@ public abstract class Tag {
         return NBTFinder.get(this, nbtPath);
     }
 
+    public Tag at(String path) {
+        return at(NBTPath.of(path));
+    }
+
     public abstract int getTagId();
 
     /**
