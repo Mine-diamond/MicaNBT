@@ -2,6 +2,8 @@ package tech.minediamond.micanbt.tag;
 
 import tech.minediamond.micanbt.SNBT.SNBT;
 import tech.minediamond.micanbt.SNBT.SNBTStyle;
+import tech.minediamond.micanbt.path.NBTFinder;
+import tech.minediamond.micanbt.path.NBTPath;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -47,6 +49,14 @@ public abstract class Tag {
      * @return The value of this tag.
      */
     public abstract Object getRawValue();
+
+    public Tag at(NBTPath nbtPath) {
+        return NBTFinder.get(this, nbtPath);
+    }
+
+    public Tag at(String path) {
+        return at(NBTPath.of(path));
+    }
 
     public abstract int getTagId();
 
