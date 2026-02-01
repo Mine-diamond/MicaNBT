@@ -33,8 +33,13 @@ public class IntArrayTag extends Tag {
     }
 
     @Override
-    public int[] getValue() {
+    public int[] getClonedValue() {
         return this.value.clone();
+    }
+
+    @Override
+    public int[] getRawValue() {
+        return this.value;
     }
 
     /**
@@ -102,7 +107,7 @@ public class IntArrayTag extends Tag {
 
     @Override
     public IntArrayTag copy() {
-        return new IntArrayTag(this.getName(), this.getValue());
+        return new IntArrayTag(this.getName(), this.getClonedValue());
     }
 
     @Override

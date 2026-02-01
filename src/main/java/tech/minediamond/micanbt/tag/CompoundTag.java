@@ -38,8 +38,13 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
     }
 
     @Override
-    public Map<String, Tag> getValue() {
+    public Map<String, Tag> getClonedValue() {
         return new LinkedHashMap<>(this.value);
+    }
+
+    @Override
+    public Map<String, Tag> getRawValue() {
+        return this.value;
     }
 
     /**

@@ -63,17 +63,17 @@ public class SNBTWriter {
         } else if (tag instanceof LongArrayTag longArrayTag) {
             stringifyLongArrayTag(longArrayTag);
         } else if (tag instanceof ByteTag byteTag) {
-            builder.append(byteTag.getValue()).append(Tokens.TYPE_BYTE);
+            builder.append(byteTag.getRawValue()).append(Tokens.TYPE_BYTE);
         } else if (tag instanceof ShortTag shortTag) {
-            builder.append(shortTag.getValue()).append(Tokens.TYPE_SHORT);
+            builder.append(shortTag.getRawValue()).append(Tokens.TYPE_SHORT);
         } else if (tag instanceof IntTag intTag) {
-            builder.append(intTag.getValue());
+            builder.append(intTag.getRawValue());
         } else if (tag instanceof LongTag longTag) {
-            builder.append(longTag.getValue()).append(Tokens.TYPE_LONG_UPPER);
+            builder.append(longTag.getRawValue()).append(Tokens.TYPE_LONG_UPPER);
         } else if (tag instanceof FloatTag floatTag) {
-            builder.append(floatTag.getValue()).append(Tokens.TYPE_FLOAT);
+            builder.append(floatTag.getRawValue()).append(Tokens.TYPE_FLOAT);
         } else if (tag instanceof DoubleTag doubleTag) {
-            builder.append(doubleTag.getValue()).append(Tokens.TYPE_DOUBLE);
+            builder.append(doubleTag.getRawValue()).append(Tokens.TYPE_DOUBLE);
         }
     }
 
@@ -143,7 +143,7 @@ public class SNBTWriter {
     }
 
     private void stringifyStringTag(StringTag stringTag) {
-        stringifyString(stringTag.getValue());
+        stringifyString(stringTag.getRawValue());
     }
 
     private void stringifyString(String string) {
@@ -156,8 +156,8 @@ public class SNBTWriter {
         builder.append(Tokens.ARRAY_BEGIN)
                 .append(Tokens.TYPE_BYTE_UPPER)
                 .append(Tokens.ARRAY_SIGNATURE_SEPARATOR);
-        if (byteArrayTag.getValue().length != 0) {
-            for (byte b : byteArrayTag.getValue()) {
+        if (byteArrayTag.getRawValue().length != 0) {
+            for (byte b : byteArrayTag.getRawValue()) {
                 if (snbtStyle != SNBTStyle.COMPACT) {
                     builder.append(Tokens.SPACE);
                 }
@@ -174,8 +174,8 @@ public class SNBTWriter {
         builder.append(Tokens.ARRAY_BEGIN)
                 .append(Tokens.TYPE_INT_UPPER)
                 .append(Tokens.ARRAY_SIGNATURE_SEPARATOR);
-        if (intArrayTag.getValue().length != 0) {
-            for (int i : intArrayTag.getValue()) {
+        if (intArrayTag.getRawValue().length != 0) {
+            for (int i : intArrayTag.getRawValue()) {
                 if (snbtStyle != SNBTStyle.COMPACT) {
                     builder.append(Tokens.SPACE);
                 }
@@ -191,8 +191,8 @@ public class SNBTWriter {
         builder.append(Tokens.ARRAY_BEGIN)
                 .append(Tokens.TYPE_LONG_UPPER)
                 .append(Tokens.ARRAY_SIGNATURE_SEPARATOR);
-        if (longArrayTag.getValue().length != 0) {
-            for (long l : longArrayTag.getValue()) {
+        if (longArrayTag.getRawValue().length != 0) {
+            for (long l : longArrayTag.getRawValue()) {
                 if (snbtStyle != SNBTStyle.COMPACT) {
                     builder.append(Tokens.SPACE);
                 }

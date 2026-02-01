@@ -74,7 +74,7 @@ public class ConverterRegistry {
      * @throws ConversionException If a suitable converter could not be found.
      */
     public static <T extends Tag, V> V convertToValue(T tag) throws ConversionException {
-        if (tag == null || tag.getValue() == null) {
+        if (tag == null || tag.getClonedValue() == null) {
             return null;
         }
 

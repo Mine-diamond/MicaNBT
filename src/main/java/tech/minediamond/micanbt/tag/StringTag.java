@@ -33,7 +33,12 @@ public class StringTag extends Tag {
     }
 
     @Override
-    public String getValue() {
+    public String getClonedValue() {
+        return this.value;
+    }
+
+    @Override
+    public String getRawValue() {
         return this.value;
     }
 
@@ -63,7 +68,7 @@ public class StringTag extends Tag {
 
     @Override
     public StringTag copy() {
-        return new StringTag(this.getName(), this.getValue());
+        return new StringTag(this.getName(), this.getClonedValue());
     }
 
     @Override

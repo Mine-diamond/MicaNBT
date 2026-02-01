@@ -35,11 +35,18 @@ public abstract class Tag {
     }
 
     /**
+     * Gets the copied value of this tag.
+     *
+     * @return The copied value of this tag.
+     */
+    public abstract Object getClonedValue();
+
+    /**
      * Gets the value of this tag.
      *
      * @return The value of this tag.
      */
-    public abstract Object getValue();
+    public abstract Object getRawValue();
 
     public abstract int getTagId();
 

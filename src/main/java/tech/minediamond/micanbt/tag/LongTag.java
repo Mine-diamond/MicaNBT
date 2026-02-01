@@ -32,7 +32,12 @@ public class LongTag extends Tag {
     }
 
     @Override
-    public Long getValue() {
+    public Long getClonedValue() {
+        return this.value;
+    }
+
+    @Override
+    public Long getRawValue() {
         return this.value;
     }
 
@@ -62,7 +67,7 @@ public class LongTag extends Tag {
 
     @Override
     public LongTag copy() {
-        return new LongTag(this.getName(), this.getValue());
+        return new LongTag(this.getName(), this.getClonedValue());
     }
 
     @Override

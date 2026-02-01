@@ -32,7 +32,12 @@ public class FloatTag extends Tag {
     }
 
     @Override
-    public Float getValue() {
+    public Float getClonedValue() {
+        return this.value;
+    }
+
+    @Override
+    public Float getRawValue() {
         return this.value;
     }
 
@@ -62,7 +67,7 @@ public class FloatTag extends Tag {
 
     @Override
     public FloatTag copy() {
-        return new FloatTag(this.getName(), this.getValue());
+        return new FloatTag(this.getName(), this.getClonedValue());
     }
 
     @Override

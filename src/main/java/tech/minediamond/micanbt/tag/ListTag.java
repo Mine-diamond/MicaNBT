@@ -7,6 +7,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  */
 public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     public static final int ID = 9;
-    /** The NBT Tag ID of the elements contained within this list. Defaults to 0 (TAG_End) for empty lists. */
+    /**
+     * The NBT Tag ID of the elements contained within this list. Defaults to 0 (TAG_End) for empty lists.
+     */
     private int typeId = 0;
     private final List<T> value;
 
@@ -59,14 +62,15 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
         this.setValue(value);
     }
 
-    /**
-     * Returns a copy of the list of tags.
-     *
-     * @return A new ArrayList containing the tags in this ListTag.
-     */
     @Override
-    public List<T> getValue() {
-        return new ArrayList<>(this.value);
+    @SuppressWarnings("unchecked") // Safe cast: tag.copy() returns a Tag of the same concrete type
+    public List<T> getClonedValue() {
+        return this.value.stream().map(tag -> (T) tag.copy()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<T> getRawValue() {
+        return this.value;
     }
 
     /**

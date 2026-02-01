@@ -8,7 +8,7 @@ import tech.minediamond.micanbt.tag.IntArrayTag;
 public class IntArrayTagConverter implements TagConverter<IntArrayTag, int[]> {
     @Override
     public int[] convert(IntArrayTag tag) {
-        return tag.getValue();
+        return tag.getClonedValue();
     }
 
     @Override
