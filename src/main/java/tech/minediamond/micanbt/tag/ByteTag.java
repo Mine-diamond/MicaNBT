@@ -32,7 +32,12 @@ public class ByteTag extends Tag {
     }
 
     @Override
-    public Byte getValue() {
+    public Byte getClonedValue() {
+        return this.value;
+    }
+
+    @Override
+    public Byte getRawValue() {
         return this.value;
     }
 
@@ -62,7 +67,7 @@ public class ByteTag extends Tag {
 
     @Override
     public ByteTag copy() {
-        return new ByteTag(this.getName(), this.getValue());
+        return new ByteTag(this.getName(), this.getClonedValue());
     }
 
     @Override

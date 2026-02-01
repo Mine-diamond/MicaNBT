@@ -8,7 +8,7 @@ import tech.minediamond.micanbt.tag.StringTag;
 public class StringTagConverter implements TagConverter<StringTag, String> {
     @Override
     public String convert(StringTag tag) {
-        return tag.getValue();
+        return tag.getClonedValue();
     }
 
     @Override

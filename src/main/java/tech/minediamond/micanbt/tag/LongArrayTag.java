@@ -33,8 +33,13 @@ public class LongArrayTag extends Tag {
     }
 
     @Override
-    public long[] getValue() {
+    public long[] getClonedValue() {
         return this.value.clone();
+    }
+
+    @Override
+    public long[] getRawValue() {
+        return this.value;
     }
 
     /**
@@ -102,7 +107,7 @@ public class LongArrayTag extends Tag {
 
     @Override
     public LongArrayTag copy() {
-        return new LongArrayTag(this.getName(), this.getValue());
+        return new LongArrayTag(this.getName(), this.getClonedValue());
     }
 
     @Override

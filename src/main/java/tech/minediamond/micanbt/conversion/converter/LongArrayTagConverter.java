@@ -8,7 +8,7 @@ import tech.minediamond.micanbt.tag.LongArrayTag;
 public class LongArrayTagConverter implements TagConverter<LongArrayTag, long[]> {
     @Override
     public long[] convert(LongArrayTag tag) {
-        return tag.getValue();
+        return tag.getClonedValue();
     }
 
     @Override

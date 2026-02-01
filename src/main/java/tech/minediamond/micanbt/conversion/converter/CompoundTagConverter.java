@@ -14,7 +14,7 @@ public class CompoundTagConverter implements TagConverter<CompoundTag, Map> {
     @Override
     public Map convert(CompoundTag tag) {
         Map<String, Object> ret = new HashMap<String, Object>();
-        Map<String, Tag> tags = tag.getValue();
+        Map<String, Tag> tags = tag.getClonedValue();
         for(String name : tags.keySet()) {
             Tag t = tags.get(name);
             ret.put(t.getName(), ConverterRegistry.convertToValue(t));

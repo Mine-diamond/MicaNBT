@@ -32,7 +32,12 @@ public class ShortTag extends Tag {
     }
 
     @Override
-    public Short getValue() {
+    public Short getClonedValue() {
+        return this.value;
+    }
+
+    @Override
+    public Short getRawValue() {
         return this.value;
     }
 
@@ -62,7 +67,7 @@ public class ShortTag extends Tag {
 
     @Override
     public ShortTag copy() {
-        return new ShortTag(this.getName(), this.getValue());
+        return new ShortTag(this.getName(), this.getClonedValue());
     }
 
     @Override

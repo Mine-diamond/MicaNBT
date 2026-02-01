@@ -8,7 +8,7 @@ import tech.minediamond.micanbt.tag.ShortTag;
 public class ShortTagConverter implements TagConverter<ShortTag, Short> {
     @Override
     public Short convert(ShortTag tag) {
-        return tag.getValue();
+        return tag.getClonedValue();
     }
 
     @Override

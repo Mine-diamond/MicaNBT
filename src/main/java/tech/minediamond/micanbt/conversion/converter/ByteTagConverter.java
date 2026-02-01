@@ -8,7 +8,7 @@ import tech.minediamond.micanbt.tag.ByteTag;
 public class ByteTagConverter implements TagConverter<ByteTag, Byte> {
     @Override
     public Byte convert(ByteTag tag) {
-        return tag.getValue();
+        return tag.getClonedValue();
     }
 
     @Override

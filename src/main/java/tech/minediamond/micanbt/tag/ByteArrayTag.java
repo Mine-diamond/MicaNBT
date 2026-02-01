@@ -33,8 +33,13 @@ public class ByteArrayTag extends Tag {
     }
 
     @Override
-    public byte[] getValue() {
+    public byte[] getClonedValue() {
         return this.value.clone();
+    }
+
+    @Override
+    public byte[] getRawValue() {
+        return this.value;
     }
 
     /**
@@ -98,7 +103,7 @@ public class ByteArrayTag extends Tag {
 
     @Override
     public ByteArrayTag copy() {
-        return new ByteArrayTag(this.getName(), this.getValue());
+        return new ByteArrayTag(this.getName(), this.getClonedValue());
     }
 
     @Override

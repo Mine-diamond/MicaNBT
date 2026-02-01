@@ -32,7 +32,12 @@ public class DoubleTag extends Tag {
     }
 
     @Override
-    public Double getValue() {
+    public Double getClonedValue() {
+        return this.value;
+    }
+
+    @Override
+    public Double getRawValue() {
         return this.value;
     }
 
@@ -62,7 +67,7 @@ public class DoubleTag extends Tag {
 
     @Override
     public DoubleTag copy() {
-        return new DoubleTag(this.getName(), this.getValue());
+        return new DoubleTag(this.getName(), this.getClonedValue());
     }
 
     @Override

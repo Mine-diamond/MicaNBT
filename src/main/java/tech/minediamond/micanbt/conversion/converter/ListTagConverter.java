@@ -14,7 +14,7 @@ public class ListTagConverter implements TagConverter<ListTag, List> {
     @Override
     public List convert(ListTag tag) {
         List<Object> ret = new ArrayList<Object>();
-        List<? extends Tag> tags = tag.getValue();
+        List<? extends Tag> tags = tag.getClonedValue();
         for(Tag t : tags) {
             ret.add(ConverterRegistry.convertToValue(t));
         }

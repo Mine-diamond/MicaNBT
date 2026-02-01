@@ -8,7 +8,7 @@ import tech.minediamond.micanbt.tag.DoubleTag;
 public class DoubleTagConverter implements TagConverter<DoubleTag, Double> {
     @Override
     public Double convert(DoubleTag tag) {
-        return tag.getValue();
+        return tag.getClonedValue();
     }
 
     @Override

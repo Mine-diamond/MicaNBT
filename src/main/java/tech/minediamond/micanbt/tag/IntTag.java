@@ -32,7 +32,12 @@ public class IntTag extends Tag {
     }
 
     @Override
-    public Integer getValue() {
+    public Integer getClonedValue() {
+        return this.value;
+    }
+
+    @Override
+    public Integer getRawValue() {
         return this.value;
     }
 
@@ -62,7 +67,7 @@ public class IntTag extends Tag {
 
     @Override
     public IntTag copy() {
-        return new IntTag(this.getName(), this.getValue());
+        return new IntTag(this.getName(), this.getClonedValue());
     }
 
     @Override

@@ -8,7 +8,7 @@ import tech.minediamond.micanbt.tag.FloatTag;
 public class FloatTagConverter implements TagConverter<FloatTag, Float> {
     @Override
     public Float convert(FloatTag tag) {
-        return tag.getValue();
+        return tag.getClonedValue();
     }
 
     @Override
