@@ -56,7 +56,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      * @param value The initial list of tags to add.
      * @throws IllegalArgumentException If the tags in the provided list are not of the same type.
      */
-    public ListTag(String name, List<T> value) throws IllegalArgumentException {
+    public ListTag(String name, List<T> value) {
         this(name);
 
         this.setValue(value);
@@ -83,7 +83,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      * @param value The new list of tags.
      * @throws IllegalArgumentException If the tags in the list are not of the same type or a tag is null.
      */
-    public void setValue(List<T> value) throws IllegalArgumentException {
+    public void setValue(List<T> value) {
         this.value.clear();
         for (T tag : value) {
             checkType(tag);
@@ -112,7 +112,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      * @param tag The tag to add. Must not be null.
      * @throws IllegalArgumentException If the tag's type does not match the list's element type.
      */
-    public void add(T tag) throws IllegalArgumentException {
+    public void add(T tag) {
         checkType(tag);
         this.value.add(tag);
     }
