@@ -8,5 +8,7 @@ public abstract class AbstractCompoundTag extends Tag implements Iterable<Tag> {
 
     public abstract void put(Tag tag);
 
+    public abstract Tag get(String tagName);
+
     public abstract boolean isEmpty();
 }
