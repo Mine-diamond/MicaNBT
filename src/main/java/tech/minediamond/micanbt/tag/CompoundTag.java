@@ -9,9 +9,8 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.function.BiConsumer;
 
-public class CompoundTag extends Compound {
+public class CompoundTag extends AbstractCompoundTag {
     public static final int ID = 10;
     private Map<String, Tag> value;
 
@@ -28,8 +27,8 @@ public class CompoundTag extends Compound {
         this.value = new LinkedHashMap<>(value);
     }
 
-    public Tag put(Tag tag) {
-        return this.value.put(tag.getName(), tag);
+    public void put(Tag tag) {
+        this.value.put(tag.getName(), tag);
     }
 
     public void putAll(CompoundTag other) {

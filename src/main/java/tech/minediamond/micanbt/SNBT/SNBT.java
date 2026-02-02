@@ -40,7 +40,11 @@ public class SNBT {
      * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail
      */
     public static Tag parse(String SNBTText) {
-        return new SNBTReader(SNBTText).getTag();
+        return new SNBTReader(SNBTText, false).getTag();
+    }
+
+    public static Tag parse(String SNBTText, boolean isOrderedCompoundTag) {
+        return new SNBTReader(SNBTText, isOrderedCompoundTag).getTag();
     }
 
     /**
@@ -52,6 +56,10 @@ public class SNBT {
      * @throws IOException        If an I/O error occurs during file writing.
      */
     public static Tag read(Path path) throws IOException {
-        return new SNBTReader(path).getTag();
+        return new SNBTReader(path, false).getTag();
+    }
+
+    public static Tag read(Path path, boolean isOrderedCompoundTag) throws IOException {
+        return new SNBTReader(path, isOrderedCompoundTag).getTag();
     }
 }

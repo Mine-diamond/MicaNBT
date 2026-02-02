@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 
-public class OrderedCompoundTag extends Compound {
+public class OrderedCompoundTag extends AbstractCompoundTag {
     public static final int ID = 10;
     OrderedListMap<String, Tag> value;
 
