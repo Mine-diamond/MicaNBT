@@ -12,14 +12,14 @@ import java.nio.file.Path;
 public class SNBTReader {
     private final SNBTBuffer snbtBuffer;
     private final Tag tag;
-    private final boolean isOrderedCompoundTag;
+    private final boolean useOrderedCompound;
 
     private int depth = 0;
     private final StringBuilder reusableBuilder = new StringBuilder();
 
-    public SNBTReader(String SNBTText, boolean isOrderedCompoundTag) {
+    public SNBTReader(String SNBTText, boolean useOrderedCompound) {
         this.snbtBuffer = new SNBTBuffer(SNBTText);
-        this.isOrderedCompoundTag = isOrderedCompoundTag;
+        this.useOrderedCompound = useOrderedCompound;
         try {
             tag = readRoot();
         } catch (Exception e) {
@@ -27,9 +27,9 @@ public class SNBTReader {
         }
     }
 
-    public SNBTReader(Path path, boolean isOrderedCompoundTag) throws IOException {
+    public SNBTReader(Path path, boolean useOrderedCompound) throws IOException {
         this.snbtBuffer = new SNBTBuffer(Files.readString(path));
-        this.isOrderedCompoundTag = isOrderedCompoundTag;
+        this.useOrderedCompound = useOrderedCompound;
         try {
             tag = readRoot();
         } catch (Exception e) {
@@ -84,7 +84,7 @@ public class SNBTReader {
         if (depth > Tokens.MAX_NESTING_DEPTH) {
             throw new SNBTParseException("max nesting depth exceeded");
         }
-        AbstractCompoundTag compoundTag = isOrderedCompoundTag ? new OrderedCompoundTag(name) : new CompoundTag(name);
+        AbstractCompoundTag compoundTag = useOrderedCompound ? new OrderedCompoundTag(name) : new CompoundTag(name);
         snbtBuffer.skipOrThrow(Tokens.COMPOUND_BEGIN); // `{`
         snbtBuffer.skipEmptyChar();
         if (snbtBuffer.peekOrConsume(Tokens.COMPOUND_END)) { // `}`

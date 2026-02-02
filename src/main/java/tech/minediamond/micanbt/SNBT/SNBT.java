@@ -43,8 +43,8 @@ public class SNBT {
         return new SNBTReader(SNBTText, false).getTag();
     }
 
-    public static Tag parse(String SNBTText, boolean isOrderedCompoundTag) {
-        return new SNBTReader(SNBTText, isOrderedCompoundTag).getTag();
+    public static Tag parse(String SNBTText, boolean useOrderedCompound) {
+        return new SNBTReader(SNBTText, useOrderedCompound).getTag();
     }
 
     /**
@@ -59,7 +59,7 @@ public class SNBT {
         return new SNBTReader(path, false).getTag();
     }
 
-    public static Tag read(Path path, boolean isOrderedCompoundTag) throws IOException {
-        return new SNBTReader(path, isOrderedCompoundTag).getTag();
+    public static Tag read(Path path, boolean useOrderedCompound) throws IOException {
+        return new SNBTReader(path, useOrderedCompound).getTag();
     }
 }

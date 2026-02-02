@@ -62,6 +62,7 @@ public class OrderedCompoundTag extends AbstractCompoundTag {
     }
 
     public Tag replaceAt(Tag oldTag, Tag newTag) {
+        Objects.requireNonNull(oldTag, "tag to replace is null");
         return this.value.replaceAt(oldTag.getName(), newTag.getName(), newTag);
     }
 
@@ -120,7 +121,7 @@ public class OrderedCompoundTag extends AbstractCompoundTag {
     }
 
     @Override
-    public Object getRawValue() {
+    public OrderedListMap<String, Tag> getRawValue() {
         return value;
     }
 
