@@ -9,13 +9,14 @@ import java.io.DataOutput;
 import java.io.EOFException;
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Function;
 
-public class OrderedCompoundTag extends Tag implements Iterable<Tag> {
+public class OrderedCompoundTag extends Compound {
     public static final int ID = 10;
     OrderedListMap<String, Tag> value;
 
     public OrderedCompoundTag(String name) {
-        super(name);
+        this(name, new OrderedListMap<>());
     }
 
     public OrderedCompoundTag(String name, OrderedListMap<String, Tag> map) {
@@ -36,20 +37,44 @@ public class OrderedCompoundTag extends Tag implements Iterable<Tag> {
         this.value.put(tag.getName(), tag, index);
     }
 
-    public boolean isEmpty() {
-        return this.value.isEmpty();
-    }
-
-    public boolean contains(String tagName) {
-        return this.value.containsKey(tagName);
+    public void putAll(OrderedListMap<String, Tag> map) {
+        this.value.putAll(map);
     }
 
     public Tag get(String tagName) {
         return this.value.get(tagName);
     }
 
+    public Tag get(int index) {
+        return this.value.get(index);
+    }
+
+    public Tag getOrDefault(String tagName, Tag defaultTag) {
+        return this.value.getOrDefault(tagName, defaultTag);
+    }
+
+    public Tag computeIfAbsent(String key, Function<? super String, ? extends Tag> mappingFunction) {
+        return this.value.computeIfAbsent(key, mappingFunction);
+    }
+
+    public Tag replaceAt(int index, Tag tag) {
+        return this.value.replaceAt(index, tag.getName(), tag);
+    }
+
+    public Tag replaceAt(Tag oldTag, Tag newTag) {
+        return this.value.replaceAt(oldTag.getName(), newTag.getName(), newTag);
+    }
+
     public Tag remove(String tagName) {
         return this.value.remove(tagName);
+    }
+
+    public boolean contains(String tagName) {
+        return this.value.containsKey(tagName);
+    }
+
+    public boolean isEmpty() {
+        return this.value.isEmpty();
     }
 
     public void swap(int fromIndex, int toIndex) {
@@ -68,8 +93,16 @@ public class OrderedCompoundTag extends Tag implements Iterable<Tag> {
         this.value.sort(comparator);
     }
 
-    public int getIndexOf(String tagName) {
+    public int indexOf(String tagName) {
         return this.value.indexOf(tagName);
+    }
+
+    public int size() {
+        return this.value.size();
+    }
+
+    public void clear() {
+        this.value.clear();
     }
 
     @Override

@@ -9,70 +9,23 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 
-/**
- * A compound tag containing other tags.
- */
-public class CompoundTag extends Tag implements Iterable<Tag> {
+public class CompoundTag extends Compound {
     public static final int ID = 10;
     private Map<String, Tag> value;
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name The name of the tag.
-     */
     public CompoundTag(String name) {
         this(name, new LinkedHashMap<>());
     }
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name  The name of the tag.
-     * @param value The value of the tag.
-     */
     public CompoundTag(String name, Map<String, Tag> value) {
         super(name);
         this.value = new LinkedHashMap<>(value);
     }
 
-    /**
-     * Sets the value of this tag.
-     *
-     * @param value New value of this tag.
-     */
     public void setValue(Map<String, Tag> value) {
         this.value = new LinkedHashMap<>(value);
-    }
-
-    public boolean isEmpty() {
-        return this.value.isEmpty();
-    }
-
-    public boolean contains(String tagName) {
-        return this.value.containsKey(tagName);
-    }
-
-    public boolean contains(String key, Class<? extends Tag> type) {
-        Tag t = get(key);
-        return t != null && type.isInstance(t);
-    }
-
-    public Tag get(String tagName) {
-        return this.value.get(tagName);
-    }
-
-    public Tag getOrDefault(String key, Tag defaultValue) {
-        return this.value.getOrDefault(key, defaultValue);
-    }
-
-    public void forEach(java.util.function.BiConsumer<? super String, ? super Tag> action) {
-        this.value.forEach(action);
-    }
-
-    public Tag computeIfAbsent(String key, java.util.function.Function<? super String, ? extends Tag> mappingFunction) {
-        return this.value.computeIfAbsent(key, mappingFunction);
     }
 
     public Tag put(Tag tag) {
@@ -83,12 +36,28 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
         this.value.putAll(other.getRawValue());
     }
 
+    public Tag get(String tagName) {
+        return this.value.get(tagName);
+    }
+
+    public Tag getOrDefault(String key, Tag defaultValue) {
+        return this.value.getOrDefault(key, defaultValue);
+    }
+
+    public Tag computeIfAbsent(String key, java.util.function.Function<? super String, ? extends Tag> mappingFunction) {
+        return this.value.computeIfAbsent(key, mappingFunction);
+    }
+
     public Tag remove(String tagName) {
         return this.value.remove(tagName);
     }
 
-    public Set<String> keySet() {
-        return this.value.keySet();
+    public boolean isEmpty() {
+        return this.value.isEmpty();
+    }
+
+    public boolean contains(String tagName) {
+        return this.value.containsKey(tagName);
     }
 
     public Collection<Tag> values() {
