@@ -1,30 +1,30 @@
-package tech.minediamond.micanbt.SNBT.primitiveArray;
+package tech.minediamond.micanbt.util.primitiveArray;
 
 import java.util.Arrays;
 
-public class IntArray {
-    private int[] data;
+public class LongArray {
+    private long[] data;
     private int size;
     private static final int INITIAL_CAPACITY = 10;
 
-    public IntArray() {
-        data = new int[INITIAL_CAPACITY];
+    public LongArray() {
+        data = new long[INITIAL_CAPACITY];
         size = 0;
     }
 
-    public void add(int value) {
+    public void add(long value) {
         if (size >= data.length) {
             data = Arrays.copyOf(data, size + (size >> 1));
         }
         data[size++] = value;
     }
 
-    public int get(int index) {
+    public long get(int index) {
         if (index >= size || index < 0) throw new IndexOutOfBoundsException();
         return data[index];
     }
 
-    public void set(int index, int value) {
+    public void set(int index, long value) {
         if (index >= size || index < 0) throw new IndexOutOfBoundsException();
         data[index] = value;
     }
@@ -37,7 +37,7 @@ public class IntArray {
         size = 0;
     }
 
-    public int[] toArray() {
+    public long[] toArray() {
         return Arrays.copyOf(data, size);
     }
 }

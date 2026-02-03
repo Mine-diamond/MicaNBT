@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.SNBT;
+package tech.minediamond.micanbt.core;
 
 import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.ReorderableCompoundTag;

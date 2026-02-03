@@ -1,6 +1,6 @@
 package tech.minediamond.micanbt.tag;
 
-import tech.minediamond.micanbt.tag.map.OrderedListMap;
+import tech.minediamond.micanbt.util.map.OrderedListMap;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -35,7 +35,7 @@ public class ReorderableCompoundTag extends CompoundTag {
     }
 
     /**
-     * Sets the internal map to the provided {@link OrderedListMap}.
+     * Sets the util map to the provided {@link OrderedListMap}.
      *
      * @param map The new ordered map.
      */
