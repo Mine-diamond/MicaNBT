@@ -50,7 +50,7 @@ public class SNBTWriter {
     // For primitive data types, do not care the surrounding tabs;
     // CompoundTag/ListTag/ArrayTag should pay attention and fill in appropriate new lines and tabs for their subTags.
     private void stringify(Tag tag) {
-        if (tag instanceof AbstractCompoundTag compound) {
+        if (tag instanceof CompoundTag compound) {
             stringifyCompoundTag(compound);
         } else if (tag instanceof ListTag<?> listTag) {
             stringifyListTag(listTag);
@@ -77,7 +77,7 @@ public class SNBTWriter {
         }
     }
 
-    private void stringifyCompoundTag(AbstractCompoundTag compound) {
+    private void stringifyCompoundTag(CompoundTag compound) {
         builder.append(Tokens.COMPOUND_BEGIN);
         if (compound.isEmpty()) {
             builder.append(Tokens.COMPOUND_END);

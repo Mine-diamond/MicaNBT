@@ -1,114 +1,71 @@
 package tech.minediamond.micanbt.tag;
 
-import java.util.*;
-import java.util.Map.Entry;
+import tech.minediamond.micanbt.NBT.NBTReader;
+import tech.minediamond.micanbt.NBT.NBTWriter;
 
-public class CompoundTag extends AbstractCompoundTag {
-    private Map<String, Tag> value;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.EOFException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public abstract class CompoundTag extends Tag implements Iterable<Tag> {
+    public static final int ID = 10;
 
     public CompoundTag(String name) {
-        this(name, new LinkedHashMap<>());
-    }
-
-    public CompoundTag(String name, Map<String, Tag> value) {
         super(name);
-        this.value = new LinkedHashMap<>(value);
+    }
+
+    public abstract void setValue(Map<String, Tag> map);
+
+    public abstract void put(Tag tag);
+
+    public abstract Tag get(String tagName);
+
+    public abstract Tag getOrDefault(String key, Tag defaultValue);
+
+    public abstract Tag computeIfAbsent(String key, java.util.function.Function<? super String, ? extends Tag> mappingFunction);
+
+    public abstract Tag remove(String tagName);
+
+    public abstract boolean contains(String tagName);
+
+    public abstract boolean isEmpty();
+
+    public abstract int size();
+
+    public abstract void clear();
+
+    @Override
+    public int getTagId() {
+        return ID;
     }
 
     @Override
-    public void setValue(Map<String, Tag> value) {
-        this.value = new LinkedHashMap<>(value);
-    }
-
-    @Override
-    public void put(Tag tag) {
-        this.value.put(tag.getName(), tag);
-    }
-
-    public void putAll(CompoundTag other) {
-        this.value.putAll(other.getRawValue());
-    }
-
-    @Override
-    public Tag get(String tagName) {
-        return this.value.get(tagName);
-    }
-
-    @Override
-    public Tag getOrDefault(String key, Tag defaultValue) {
-        return this.value.getOrDefault(key, defaultValue);
-    }
-
-    @Override
-    public Tag computeIfAbsent(String key, java.util.function.Function<? super String, ? extends Tag> mappingFunction) {
-        return this.value.computeIfAbsent(key, mappingFunction);
-    }
-
-    @Override
-    public Tag remove(String tagName) {
-        return this.value.remove(tagName);
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return this.value.isEmpty();
-    }
-
-    @Override
-    public boolean contains(String tagName) {
-        return this.value.containsKey(tagName);
-    }
-
-    public Collection<Tag> values() {
-        return this.value.values();
-    }
-
-    @Override
-    public int size() {
-        return this.value.size();
-    }
-
-    @Override
-    public void clear() {
-        this.value.clear();
-    }
-
-    @Override
-    public Iterator<Tag> iterator() {
-        return this.values().iterator();
-    }
-
-    @Override
-    public Map<String, Tag> getClonedValue() {
-        Map<String, Tag> clonedMap = new LinkedHashMap<>(Math.max((int) (this.value.size() / .75f) + 1, 16));
-        for (Map.Entry<String, Tag> entry : this.value.entrySet()) {
-            clonedMap.put(entry.getKey(), entry.getValue().copy());
-        }
-        return clonedMap;
-    }
-
-    @Override
-    public Map<String, Tag> getRawValue() {
-        return this.value;
-    }
-
-    @Override
-    public CompoundTag copy() {
-        Map<String, Tag> newMap = new LinkedHashMap<>(Math.max((int) (this.value.size() / .75f) + 1, 16));
-        for (Entry<String, Tag> entry : this.value.entrySet()) {
-            newMap.put(entry.getKey(), entry.getValue().copy());
+    public void read(DataInput in) throws IOException {
+        List<Tag> tags = new ArrayList<>();
+        try {
+            Tag tag;
+            while ((tag = NBTReader.readTag(in)) != null) {
+                tags.add(tag);
+            }
+        } catch (EOFException e) {
+            throw new IOException("Closing EndTag was not found!");
         }
 
-        return new CompoundTag(this.getName(), newMap);
+        for (Tag tag : tags) {
+            this.put(tag);
+        }
     }
 
     @Override
-    public boolean equals(Object o) {
-        return super.equals(o) && value.equals(((CompoundTag) o).value);
-    }
+    public void write(DataOutput out) throws IOException {
+        for (Tag tag : this) {
+            NBTWriter.writeTag(out, tag);
+        }
 
-    @Override
-    public int hashCode() {
-        return 31 * super.hashCode() + Objects.hashCode(value);
+        out.writeByte(0);
     }
 }

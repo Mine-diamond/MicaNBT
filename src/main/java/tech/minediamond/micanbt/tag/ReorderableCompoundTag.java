@@ -8,19 +8,19 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
-public class OrderedCompoundTag extends AbstractCompoundTag {
+public class ReorderableCompoundTag extends CompoundTag {
     OrderedListMap<String, Tag> value;
 
-    public OrderedCompoundTag(String name) {
+    public ReorderableCompoundTag(String name) {
         this(name, new OrderedListMap<>());
     }
 
-    public OrderedCompoundTag(String name, OrderedListMap<String, Tag> map) {
+    public ReorderableCompoundTag(String name, OrderedListMap<String, Tag> map) {
         super(name);
         this.value = map;
     }
 
-    public OrderedCompoundTag(String name, Map<String, Tag> map) {
+    public ReorderableCompoundTag(String name, Map<String, Tag> map) {
         super(name);
         this.value = new OrderedListMap<>(map);
     }
@@ -43,7 +43,7 @@ public class OrderedCompoundTag extends AbstractCompoundTag {
         this.value.put(tag.getName(), tag, index);
     }
 
-    public void putAll(OrderedCompoundTag other) {
+    public void putAll(ReorderableCompoundTag other) {
         this.value.putAll(other.getRawValue());
     }
 
@@ -141,6 +141,6 @@ public class OrderedCompoundTag extends AbstractCompoundTag {
 
     @Override
     public Tag copy() {
-        return new OrderedCompoundTag(getName(), getClonedValue());
+        return new ReorderableCompoundTag(getName(), getClonedValue());
     }
 }

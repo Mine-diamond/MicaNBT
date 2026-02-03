@@ -26,7 +26,7 @@ public class TagFactory {
             case 7 -> new ByteArrayTag(tagName);
             case 8 -> new StringTag(tagName);
             case 9 -> new ListTag<>(tagName);
-            case 10 -> new CompoundTag(tagName);
+            case 10 -> new CommonCompoundTag(tagName);
             case 11 -> new IntArrayTag(tagName);
             case 12 -> new LongArrayTag(tagName);
             default -> throw new TagCreateException("Could not find tag with ID \"" + id + "\".");

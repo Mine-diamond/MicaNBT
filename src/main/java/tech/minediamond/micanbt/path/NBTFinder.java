@@ -1,6 +1,6 @@
 package tech.minediamond.micanbt.path;
 
-import tech.minediamond.micanbt.tag.AbstractCompoundTag;
+import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.ListTag;
 import tech.minediamond.micanbt.tag.Tag;
 
@@ -16,7 +16,7 @@ public final class NBTFinder {
         String[] tokens = path.getTokens();
 
         for (String token : tokens) {
-            if (current instanceof AbstractCompoundTag compound) {
+            if (current instanceof CompoundTag compound) {
                 current = compound.get(token);
             } else if (current instanceof ListTag<?> list) {
                 Integer index = tryParseInt(token);

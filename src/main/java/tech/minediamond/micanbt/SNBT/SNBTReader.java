@@ -84,7 +84,7 @@ public class SNBTReader {
         if (depth > Tokens.MAX_NESTING_DEPTH) {
             throw new SNBTParseException("max nesting depth exceeded");
         }
-        AbstractCompoundTag compoundTag = useOrderedCompound ? new OrderedCompoundTag(name) : new CompoundTag(name);
+        CompoundTag compoundTag = useOrderedCompound ? new ReorderableCompoundTag(name) : new CommonCompoundTag(name);
         snbtBuffer.skipOrThrow(Tokens.COMPOUND_BEGIN); // `{`
         snbtBuffer.skipEmptyChar();
         if (snbtBuffer.peekOrConsume(Tokens.COMPOUND_END)) { // `}`

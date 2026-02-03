@@ -26,7 +26,7 @@ public class RoundTripTest {
     public void testSNBTRoundTrip() {
         Tag tag = buildTag();
         Tag newTag = SNBT.parse(SNBT.stringify(tag, true, SNBTStyle.COMPACT));
-        assertInstanceOf(CompoundTag.class, newTag);
+        assertInstanceOf(CommonCompoundTag.class, newTag);
 
         assertEquals(tag, newTag);
     }
@@ -80,8 +80,8 @@ public class RoundTripTest {
         assertEquals(originalString, parsedString);
     }
 
-    public static CompoundTag buildTag() {
-        CompoundTag tag = new CompoundTag("tag");
+    public static CommonCompoundTag buildTag() {
+        CommonCompoundTag tag = new CommonCompoundTag("tag");
         tag.put(new ByteArrayTag("ByteArrayTag", new byte[]{1, 0, 3}));
         tag.put(new ByteTag("ByteTag", (byte) 2));
         tag.put(new DoubleTag("DoubleTag", 1.0));
@@ -93,7 +93,7 @@ public class RoundTripTest {
         tag.put(new ShortTag("ShortTag", (short) 2));
         tag.put(new StringTag("StringTag", "str"));
 
-        CompoundTag subCompoundTag = new CompoundTag("subCompoundTag");
+        CommonCompoundTag subCompoundTag = new CommonCompoundTag("subCompoundTag");
         subCompoundTag.put(new ByteArrayTag("ByteArrayTag", new byte[]{1, 0, 3}));
         subCompoundTag.put(new ByteTag("ByteTag", (byte) 2));
 
@@ -102,7 +102,7 @@ public class RoundTripTest {
         listWithItem.add(new StringTag("", "str1"));
         listWithItem.add(new StringTag("", "str2"));
 
-        tag.put(new CompoundTag("subEmptyCompoundTag"));
+        tag.put(new CommonCompoundTag("subEmptyCompoundTag"));
         tag.put(subCompoundTag);
         tag.put(listWithItem);
         tag.put(new StringTag("Name With Space", "add a \" here "));
