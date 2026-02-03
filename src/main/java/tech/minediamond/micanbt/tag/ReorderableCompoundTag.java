@@ -35,7 +35,7 @@ public class ReorderableCompoundTag extends CompoundTag {
     }
 
     /**
-     * Sets the util map to the provided {@link OrderedListMap}.
+     * Sets the internal map to the provided {@link OrderedListMap}.
      *
      * @param map The new ordered map.
      */
