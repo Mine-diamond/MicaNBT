@@ -8,6 +8,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
+/**
+ * A specialized {@link CompoundTag} that allows elements to be reordered,
+ * accessed by index, or sorted explicitly.
+ */
 public class ReorderableCompoundTag extends CompoundTag {
     OrderedListMap<String, Tag> value;
 
@@ -30,6 +34,11 @@ public class ReorderableCompoundTag extends CompoundTag {
         this.value = new OrderedListMap<>(map);
     }
 
+    /**
+     * Sets the internal map to the provided {@link OrderedListMap}.
+     *
+     * @param map The new ordered map.
+     */
     public void setValue(OrderedListMap<String, Tag> map) {
         this.value = map;
     }
@@ -39,10 +48,21 @@ public class ReorderableCompoundTag extends CompoundTag {
         this.value.put(tag.getName(), tag);
     }
 
+    /**
+     * Inserts a tag at a specific index.
+     *
+     * @param index The target position.
+     * @param tag   The tag to insert.
+     */
     public void put(int index, Tag tag) {
         this.value.put(tag.getName(), tag, index);
     }
 
+    /**
+     * Adds all tags from another reorderable compound tag.
+     *
+     * @param other The source tag.
+     */
     public void putAll(ReorderableCompoundTag other) {
         this.value.putAll(other.getRawValue());
     }
@@ -52,6 +72,12 @@ public class ReorderableCompoundTag extends CompoundTag {
         return this.value.get(tagName);
     }
 
+    /**
+     * Retrieves the tag at the specified index.
+     *
+     * @param index The index of the tag.
+     * @return The tag at that index.
+     */
     public Tag get(int index) {
         return this.value.get(index);
     }
@@ -66,10 +92,24 @@ public class ReorderableCompoundTag extends CompoundTag {
         return this.value.computeIfAbsent(key, mappingFunction);
     }
 
+    /**
+     * Replaces the tag at a specific index with a new tag.
+     *
+     * @param index The index to replace.
+     * @param tag   The new tag.
+     * @return The old tag that was replaced.
+     */
     public Tag replaceAt(int index, Tag tag) {
         return this.value.replaceAt(index, tag.getName(), tag);
     }
 
+    /**
+     * Replaces an existing tag with a new one based on the old tag's identity. The index of tag will not change
+     *
+     * @param oldTag The tag to be replaced.
+     * @param newTag The new tag.
+     * @return The old tag that was replaced.
+     */
     public Tag replaceAt(Tag oldTag, Tag newTag) {
         Objects.requireNonNull(oldTag, "tag to replace is null");
         return this.value.replaceAt(oldTag.getName(), newTag.getName(), newTag);
@@ -90,22 +130,51 @@ public class ReorderableCompoundTag extends CompoundTag {
         return this.value.isEmpty();
     }
 
+    /**
+     * Swaps the positions of two tags within the compound.
+     *
+     * @param fromIndex The first index.
+     * @param toIndex   The second index.
+     */
     public void swap(int fromIndex, int toIndex) {
         this.value.swap(fromIndex, toIndex);
     }
 
+    /**
+     * Moves a tag from one index to another.
+     *
+     * @param fromIndex The current index.
+     * @param toIndex   The target index.
+     */
     public void moveTo(int fromIndex, int toIndex) {
         this.value.moveTo(fromIndex, toIndex);
     }
 
+    /**
+     * Moves a tag with a specific name to a new index.
+     *
+     * @param tagName The name of the tag to move.
+     * @param toIndex The target index.
+     */
     public void moveTo(String tagName, int toIndex) {
         this.value.moveTo(tagName, toIndex);
     }
 
+    /**
+     * Sorts the tags in this compound using the provided comparator for the tag names.
+     *
+     * @param comparator The comparator to define the order.
+     */
     public void sort(Comparator<String> comparator) {
         this.value.sort(comparator);
     }
 
+    /**
+     * Finds the index of a tag by its name.
+     *
+     * @param tagName The name of the tag.
+     * @return The index, or -1 if not found.
+     */
     public int indexOf(String tagName) {
         return this.value.indexOf(tagName);
     }
