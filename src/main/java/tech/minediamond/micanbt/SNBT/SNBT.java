@@ -40,11 +40,19 @@ public class SNBT {
      * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail
      */
     public static Tag parse(String SNBTText) {
-        return new SNBTReader(SNBTText, false).getTag();
+        return new SNBTReader(SNBTText, CompoundSelection.COMMON_MAP).getTag();
     }
 
-    public static Tag parse(String SNBTText, boolean useOrderedCompound) {
-        return new SNBTReader(SNBTText, useOrderedCompound).getTag();
+    /**
+     * Parses an SNBT-formatted string back into a {@link Tag} object with a specific map implementation.
+     *
+     * @param SNBTText          A string conforming to the SNBT specification.
+     * @param compoundSelection The map implementation to use for compounds.
+     * @return The parsed NBT tag.
+     * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail.
+     */
+    public static Tag parse(String SNBTText, CompoundSelection compoundSelection) {
+        return new SNBTReader(SNBTText, compoundSelection).getTag();
     }
 
     /**
@@ -56,10 +64,19 @@ public class SNBT {
      * @throws IOException        If an I/O error occurs during file writing.
      */
     public static Tag read(Path path) throws IOException {
-        return new SNBTReader(path, false).getTag();
+        return new SNBTReader(path, CompoundSelection.COMMON_MAP).getTag();
     }
 
-    public static Tag read(Path path, boolean useOrderedCompound) throws IOException {
-        return new SNBTReader(path, useOrderedCompound).getTag();
+    /**
+     * Parses an SNBT-formatted string from a file back into a {@link Tag} object with a specific map implementation.
+     *
+     * @param path              The file path storing SNBT data.
+     * @param compoundSelection The map implementation to use for compounds.
+     * @return The parsed NBT tag.
+     * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail.
+     * @throws IOException        If an I/O error occurs during file reading.
+     */
+    public static Tag read(Path path, CompoundSelection compoundSelection) throws IOException {
+        return new SNBTReader(path, compoundSelection).getTag();
     }
 }
