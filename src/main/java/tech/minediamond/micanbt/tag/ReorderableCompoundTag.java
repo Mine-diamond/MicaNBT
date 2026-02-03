@@ -1,6 +1,6 @@
 package tech.minediamond.micanbt.tag;
 
-import tech.minediamond.micanbt.tag.map.OrderedListMap;
+import tech.minediamond.micanbt.util.map.OrderedListMap;
 
 import java.util.Comparator;
 import java.util.Iterator;

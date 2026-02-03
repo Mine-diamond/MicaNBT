@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.SNBT;
 
+import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.Tag;
 
 import java.io.IOException;

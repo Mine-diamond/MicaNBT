@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.tag.map;
+package tech.minediamond.micanbt.util.map;
 
 import tech.minediamond.micanbt.tag.Tag;
 
