@@ -104,7 +104,7 @@ public class ReorderableCompoundTag extends CompoundTag {
     }
 
     /**
-     * Replaces an existing tag with a new one based on the old tag's identity. The index of tag will not change
+     * Replaces an existing tag with a new one. The tag to be replaced is identified by the name of oldTag. The position of the tag remains unchanged.
      *
      * @param oldTag The tag to be replaced.
      * @param newTag The new tag.
