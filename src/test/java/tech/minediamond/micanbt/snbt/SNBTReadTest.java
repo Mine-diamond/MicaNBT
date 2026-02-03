@@ -3,6 +3,7 @@ package tech.minediamond.micanbt.snbt;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import tech.minediamond.micanbt.SNBT.SNBT;
+import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 

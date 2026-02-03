@@ -7,156 +7,103 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.EOFException;
 import java.io.IOException;
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
- * A compound tag containing other tags.
+ * Represents an NBT Compound tag, which serves as a container for a named collection of other tags.
  */
-public class CompoundTag extends Tag implements Iterable<Tag> {
+public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     public static final int ID = 10;
-    private Map<String, Tag> value;
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name The name of the tag.
-     */
     public CompoundTag(String name) {
-        this(name, new LinkedHashMap<>());
-    }
-
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name  The name of the tag.
-     * @param value The value of the tag.
-     */
-    public CompoundTag(String name, Map<String, Tag> value) {
         super(name);
-        this.value = new LinkedHashMap<>(value);
-    }
-
-    @Override
-    public Map<String, Tag> getClonedValue() {
-        Map<String, Tag> clonedMap = new LinkedHashMap<>(Math.max((int) (this.value.size() / .75f) + 1, 16));
-        for (Map.Entry<String, Tag> entry : this.value.entrySet()) {
-            clonedMap.put(entry.getKey(), entry.getValue().copy());
-        }
-        return clonedMap;
-    }
-
-    @Override
-    public Map<String, Tag> getRawValue() {
-        return this.value;
     }
 
     /**
-     * Sets the value of this tag.
+     * Replaces the current content of this compound tag with the provided map.
      *
-     * @param value New value of this tag.
+     * @param map The map containing the new tags.
      */
-    public void setValue(Map<String, Tag> value) {
-        this.value = new LinkedHashMap<>(value);
-    }
+    public abstract void setValue(Map<String, Tag> map);
+
+    /**
+     * Adds a tag to this compound.
+     *
+     * @param tag The tag to add.
+     */
+    public abstract void put(Tag tag);
+
+    /**
+     * Retrieves a tag by its name.
+     *
+     * @param tagName The name of the tag to find.
+     * @return The tag associated with the name, or {@code null} if not found.
+     */
+    public abstract Tag get(String tagName);
+
+    /**
+     * Retrieves a tag by its name, or returns a default value if the tag is missing.
+     *
+     * @param key          The name of the tag.
+     * @param defaultValue The value to return if the key is not found.
+     * @return The tag associated with the key, or the default value.
+     */
+    public abstract Tag getOrDefault(String key, Tag defaultValue);
+
+    /**
+     * Computes a tag value if the specified name is not already associated with a value.
+     *
+     * @param key             The name of the tag.
+     * @param mappingFunction The function to compute the value.
+     * @return The current (existing or computed) tag.
+     */
+    public abstract Tag computeIfAbsent(String key, java.util.function.Function<? super String, ? extends Tag> mappingFunction);
+
+    /**
+     * Removes a tag from this compound by its name.
+     *
+     * @param tagName The name of the tag to remove.
+     * @return The removed tag, or {@code null} if no tag was found with that name.
+     */
+    public abstract Tag remove(String tagName);
+
+    /**
+     * Checks if this compound contains a tag with the specified name.
+     *
+     * @param tagName The name to check.
+     * @return {@code true} if the tag exists, {@code false} otherwise.
+     */
+    public abstract boolean contains(String tagName);
+
+    /**
+     * Checks if the compound tag contains no tags.
+     *
+     * @return {@code true} if empty.
+     */
+    public abstract boolean isEmpty();
+
+    /**
+     * Returns the number of tags inside this compound.
+     *
+     * @return The size of the compound.
+     */
+    public abstract int size();
+
+    /**
+     * Removes all tags from this compound.
+     */
+    public abstract void clear();
 
     @Override
     public int getTagId() {
         return ID;
     }
 
-    /**
-     * Checks whether the compound tag is empty.
-     *
-     * @return Whether the compound tag is empty.
-     */
-    public boolean isEmpty() {
-        return this.value.isEmpty();
-    }
-
-    /**
-     * Checks whether the compound tag contains a tag with the specified name.
-     *
-     * @param tagName Name of the tag to check for.
-     * @return Whether the compound tag contains a tag with the specified name.
-     */
-    public boolean contains(String tagName) {
-        return this.value.containsKey(tagName);
-    }
-
-    /**
-     * Gets the tag with the specified name.
-     *
-     * @param tagName Name of the tag.
-     * @return The tag with the specified name.
-     */
-    public Tag get(String tagName) {
-        return this.value.get(tagName);
-    }
-
-    /**
-     * Puts the tag into this compound tag.
-     *
-     * @param tag Tag to put into this compound tag.
-     * @return The previous tag associated with its name, or null if there wasn't one.
-     * The returned tag may be of a different type than the one being put.
-     */
-    public Tag put(Tag tag) {
-        return this.value.put(tag.getName(), tag);
-    }
-
-    /**
-     * Removes a tag from this compound tag.
-     *
-     * @param tagName Name of the tag to remove.
-     * @return The removed tag.
-     */
-    public Tag remove(String tagName) {
-        return this.value.remove(tagName);
-    }
-
-    /**
-     * Gets a set of keys in this compound tag.
-     *
-     * @return The compound tag's key set.
-     */
-    public Set<String> keySet() {
-        return this.value.keySet();
-    }
-
-    /**
-     * Gets a collection of tags in this compound tag.
-     *
-     * @return This compound tag's tags.
-     */
-    public Collection<Tag> values() {
-        return this.value.values();
-    }
-
-    /**
-     * Gets the number of tags in this compound tag.
-     *
-     * @return This compound tag's size.
-     */
-    public int size() {
-        return this.value.size();
-    }
-
-    /**
-     * Clears all tags from this compound tag.
-     */
-    public void clear() {
-        this.value.clear();
-    }
-
-    @Override
-    public Iterator<Tag> iterator() {
-        return this.values().iterator();
-    }
-
     @Override
     public void read(DataInput in) throws IOException {
-        List<Tag> tags = new ArrayList<Tag>();
+        List<Tag> tags = new ArrayList<>();
         try {
             Tag tag;
             while ((tag = NBTReader.readTag(in)) != null) {
@@ -173,30 +120,10 @@ public class CompoundTag extends Tag implements Iterable<Tag> {
 
     @Override
     public void write(DataOutput out) throws IOException {
-        for (Tag tag : this.value.values()) {
+        for (Tag tag : this) {
             NBTWriter.writeTag(out, tag);
         }
 
         out.writeByte(0);
-    }
-
-    @Override
-    public CompoundTag copy() {
-        Map<String, Tag> newMap = new LinkedHashMap<String, Tag>();
-        for (Entry<String, Tag> entry : this.value.entrySet()) {
-            newMap.put(entry.getKey(), entry.getValue().copy());
-        }
-
-        return new CompoundTag(this.getName(), newMap);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o) && value.equals(((CompoundTag) o).value);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31 * super.hashCode() + Objects.hashCode(value);
     }
 }

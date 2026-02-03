@@ -12,12 +12,14 @@ import java.nio.file.Path;
 public class SNBTReader {
     private final SNBTBuffer snbtBuffer;
     private final Tag tag;
+    private final boolean useReorderableCompoundTag;
 
     private int depth = 0;
     private final StringBuilder reusableBuilder = new StringBuilder();
 
-    public SNBTReader(String SNBTText) {
+    public SNBTReader(String SNBTText, CompoundSelection compoundSelection) {
         this.snbtBuffer = new SNBTBuffer(SNBTText);
+        this.useReorderableCompoundTag = compoundSelection == CompoundSelection.REORDERABLE_MAP;
         try {
             tag = readRoot();
         } catch (Exception e) {
@@ -25,8 +27,9 @@ public class SNBTReader {
         }
     }
 
-    public SNBTReader(Path path) throws IOException {
+    public SNBTReader(Path path, CompoundSelection compoundSelection) throws IOException {
         this.snbtBuffer = new SNBTBuffer(Files.readString(path));
+        this.useReorderableCompoundTag = compoundSelection == CompoundSelection.REORDERABLE_MAP;
         try {
             tag = readRoot();
         } catch (Exception e) {
@@ -81,7 +84,7 @@ public class SNBTReader {
         if (depth > Tokens.MAX_NESTING_DEPTH) {
             throw new SNBTParseException("max nesting depth exceeded");
         }
-        CompoundTag compoundTag = new CompoundTag(name);
+        CompoundTag compoundTag = useReorderableCompoundTag ? new ReorderableCompoundTag(name) : new CommonCompoundTag(name);
         snbtBuffer.skipOrThrow(Tokens.COMPOUND_BEGIN); // `{`
         snbtBuffer.skipEmptyChar();
         if (snbtBuffer.peekOrConsume(Tokens.COMPOUND_END)) { // `}`

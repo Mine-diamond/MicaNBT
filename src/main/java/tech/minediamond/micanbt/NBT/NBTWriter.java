@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.NBT;
 
+import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 

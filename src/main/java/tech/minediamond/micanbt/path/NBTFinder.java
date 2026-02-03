@@ -16,18 +16,16 @@ public final class NBTFinder {
         String[] tokens = path.getTokens();
 
         for (String token : tokens) {
-            if (current instanceof CompoundTag compound) {
-                current = compound.get(token);
-            }
-            else if (current instanceof ListTag<?> list) {
+            if (current instanceof CompoundTag compoundTag) {
+                current = compoundTag.get(token);
+            } else if (current instanceof ListTag<?> list) {
                 Integer index = tryParseInt(token);
                 if (index != null && index >= 0 && index < list.size()) {
                     current = list.get(index);
                 } else {
                     return null;
                 }
-            }
-            else {
+            } else {
                 return null;
             }
 
