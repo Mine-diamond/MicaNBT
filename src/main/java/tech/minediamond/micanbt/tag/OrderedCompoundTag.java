@@ -1,18 +1,14 @@
 package tech.minediamond.micanbt.tag;
 
-import tech.minediamond.micanbt.NBT.NBTReader;
-import tech.minediamond.micanbt.NBT.NBTWriter;
 import tech.minediamond.micanbt.tag.map.OrderedListMap;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.EOFException;
-import java.io.IOException;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class OrderedCompoundTag extends AbstractCompoundTag {
-    public static final int ID = 10;
     OrderedListMap<String, Tag> value;
 
     public OrderedCompoundTag(String name) {
@@ -29,6 +25,16 @@ public class OrderedCompoundTag extends AbstractCompoundTag {
         this.value = new OrderedListMap<>(map);
     }
 
+    @Override
+    public void setValue(Map<String, Tag> map) {
+        this.value = new OrderedListMap<>(map);
+    }
+
+    public void setValue(OrderedListMap<String, Tag> map) {
+        this.value = map;
+    }
+
+    @Override
     public void put(Tag tag) {
         this.value.put(tag.getName(), tag);
     }
@@ -37,10 +43,11 @@ public class OrderedCompoundTag extends AbstractCompoundTag {
         this.value.put(tag.getName(), tag, index);
     }
 
-    public void putAll(OrderedListMap<String, Tag> map) {
-        this.value.putAll(map);
+    public void putAll(OrderedCompoundTag other) {
+        this.value.putAll(other.getRawValue());
     }
 
+    @Override
     public Tag get(String tagName) {
         return this.value.get(tagName);
     }
@@ -49,10 +56,12 @@ public class OrderedCompoundTag extends AbstractCompoundTag {
         return this.value.get(index);
     }
 
+    @Override
     public Tag getOrDefault(String tagName, Tag defaultTag) {
         return this.value.getOrDefault(tagName, defaultTag);
     }
 
+    @Override
     public Tag computeIfAbsent(String key, Function<? super String, ? extends Tag> mappingFunction) {
         return this.value.computeIfAbsent(key, mappingFunction);
     }
@@ -66,14 +75,17 @@ public class OrderedCompoundTag extends AbstractCompoundTag {
         return this.value.replaceAt(oldTag.getName(), newTag.getName(), newTag);
     }
 
+    @Override
     public Tag remove(String tagName) {
         return this.value.remove(tagName);
     }
 
+    @Override
     public boolean contains(String tagName) {
         return this.value.containsKey(tagName);
     }
 
+    @Override
     public boolean isEmpty() {
         return this.value.isEmpty();
     }
@@ -98,17 +110,14 @@ public class OrderedCompoundTag extends AbstractCompoundTag {
         return this.value.indexOf(tagName);
     }
 
+    @Override
     public int size() {
         return this.value.size();
     }
 
+    @Override
     public void clear() {
         this.value.clear();
-    }
-
-    @Override
-    public int getTagId() {
-        return ID;
     }
 
     @Override
@@ -123,32 +132,6 @@ public class OrderedCompoundTag extends AbstractCompoundTag {
     @Override
     public OrderedListMap<String, Tag> getRawValue() {
         return value;
-    }
-
-    @Override
-    public void read(DataInput in) throws IOException {
-        List<Tag> tags = new ArrayList<>();
-        try {
-            Tag tag;
-            while ((tag = NBTReader.readTag(in)) != null) {
-                tags.add(tag);
-            }
-        } catch (EOFException e) {
-            throw new IOException("Closing EndTag was not found!");
-        }
-
-        for (Tag tag : tags) {
-            this.put(tag);
-        }
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        for (Tag tag : this.value) {
-            NBTWriter.writeTag(out, tag);
-        }
-
-        out.writeByte(0);
     }
 
     @Override

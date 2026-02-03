@@ -1,17 +1,9 @@
 package tech.minediamond.micanbt.tag;
 
-import tech.minediamond.micanbt.NBT.NBTReader;
-import tech.minediamond.micanbt.NBT.NBTWriter;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.EOFException;
-import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
 public class CompoundTag extends AbstractCompoundTag {
-    public static final int ID = 10;
     private Map<String, Tag> value;
 
     public CompoundTag(String name) {
@@ -23,10 +15,12 @@ public class CompoundTag extends AbstractCompoundTag {
         this.value = new LinkedHashMap<>(value);
     }
 
+    @Override
     public void setValue(Map<String, Tag> value) {
         this.value = new LinkedHashMap<>(value);
     }
 
+    @Override
     public void put(Tag tag) {
         this.value.put(tag.getName(), tag);
     }
@@ -35,26 +29,32 @@ public class CompoundTag extends AbstractCompoundTag {
         this.value.putAll(other.getRawValue());
     }
 
+    @Override
     public Tag get(String tagName) {
         return this.value.get(tagName);
     }
 
+    @Override
     public Tag getOrDefault(String key, Tag defaultValue) {
         return this.value.getOrDefault(key, defaultValue);
     }
 
+    @Override
     public Tag computeIfAbsent(String key, java.util.function.Function<? super String, ? extends Tag> mappingFunction) {
         return this.value.computeIfAbsent(key, mappingFunction);
     }
 
+    @Override
     public Tag remove(String tagName) {
         return this.value.remove(tagName);
     }
 
+    @Override
     public boolean isEmpty() {
         return this.value.isEmpty();
     }
 
+    @Override
     public boolean contains(String tagName) {
         return this.value.containsKey(tagName);
     }
@@ -63,10 +63,12 @@ public class CompoundTag extends AbstractCompoundTag {
         return this.value.values();
     }
 
+    @Override
     public int size() {
         return this.value.size();
     }
 
+    @Override
     public void clear() {
         this.value.clear();
     }
@@ -74,11 +76,6 @@ public class CompoundTag extends AbstractCompoundTag {
     @Override
     public Iterator<Tag> iterator() {
         return this.values().iterator();
-    }
-
-    @Override
-    public int getTagId() {
-        return ID;
     }
 
     @Override
@@ -93,32 +90,6 @@ public class CompoundTag extends AbstractCompoundTag {
     @Override
     public Map<String, Tag> getRawValue() {
         return this.value;
-    }
-
-    @Override
-    public void read(DataInput in) throws IOException {
-        List<Tag> tags = new ArrayList<Tag>();
-        try {
-            Tag tag;
-            while ((tag = NBTReader.readTag(in)) != null) {
-                tags.add(tag);
-            }
-        } catch (EOFException e) {
-            throw new IOException("Closing EndTag was not found!");
-        }
-
-        for (Tag tag : tags) {
-            this.put(tag);
-        }
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        for (Tag tag : this.value.values()) {
-            NBTWriter.writeTag(out, tag);
-        }
-
-        out.writeByte(0);
     }
 
     @Override
