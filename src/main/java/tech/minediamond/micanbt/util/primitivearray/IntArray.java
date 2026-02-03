@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.util.primitiveArray;
+package tech.minediamond.micanbt.util.primitivearray;
 
 import java.util.Arrays;
 

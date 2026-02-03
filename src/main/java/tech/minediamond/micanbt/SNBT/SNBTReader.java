@@ -1,9 +1,9 @@
 package tech.minediamond.micanbt.SNBT;
 
 import tech.minediamond.micanbt.core.CompoundSelection;
-import tech.minediamond.micanbt.util.primitiveArray.ByteArray;
-import tech.minediamond.micanbt.util.primitiveArray.IntArray;
-import tech.minediamond.micanbt.util.primitiveArray.LongArray;
+import tech.minediamond.micanbt.util.primitivearray.ByteArray;
+import tech.minediamond.micanbt.util.primitivearray.IntArray;
+import tech.minediamond.micanbt.util.primitivearray.LongArray;
 import tech.minediamond.micanbt.tag.*;
 
 import java.io.IOException;

@@ -1,30 +1,30 @@
-package tech.minediamond.micanbt.util.primitiveArray;
+package tech.minediamond.micanbt.util.primitivearray;
 
 import java.util.Arrays;
 
-public class LongArray {
-    private long[] data;
+public class ByteArray {
+    private byte[] data;
     private int size;
     private static final int INITIAL_CAPACITY = 10;
 
-    public LongArray() {
-        data = new long[INITIAL_CAPACITY];
+    public ByteArray() {
+        data = new byte[INITIAL_CAPACITY];
         size = 0;
     }
 
-    public void add(long value) {
+    public void add(byte value) {
         if (size >= data.length) {
             data = Arrays.copyOf(data, size + (size >> 1));
         }
         data[size++] = value;
     }
 
-    public long get(int index) {
+    public byte get(int index) {
         if (index >= size || index < 0) throw new IndexOutOfBoundsException();
         return data[index];
     }
 
-    public void set(int index, long value) {
+    public void set(int index, byte value) {
         if (index >= size || index < 0) throw new IndexOutOfBoundsException();
         data[index] = value;
     }
@@ -37,7 +37,7 @@ public class LongArray {
         size = 0;
     }
 
-    public long[] toArray() {
+    public byte[] toArray() {
         return Arrays.copyOf(data, size);
     }
 }
