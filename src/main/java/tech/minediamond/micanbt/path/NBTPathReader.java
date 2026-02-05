@@ -36,9 +36,9 @@ public class NBTPathReader {
     private void parsePath() {
         while (reader.hasRemaining()) {
             switch (reader.peek()) {
-                case '.' -> reader.skip();
-                case '[' -> parseIndex();
-                case '"', '\'' -> parseQuoted();
+                case Tokens.DOT -> reader.skip();
+                case Tokens.ARRAY_BEGIN -> parseIndex();
+                case Tokens.DOUBLE_QUOTE, Tokens.SINGLE_QUOTE -> parseQuoted();
                 default -> parseUnquoted();
             }
         }
@@ -88,7 +88,7 @@ public class NBTPathReader {
 
             if (c == Tokens.ESCAPE_MARKER) {
                 if (!reader.hasRemaining()) {
-                    throw new RuntimeException("Unexpected end of NBTPath: trailing backslash");
+                    throw new NBTPathParseException("Unexpected end of NBTPath: trailing backslash");
                 }
                 char next = reader.consume();
 

@@ -5,7 +5,7 @@ public final class Tokens {
     }
 
     // Constraints
-    public static final int MAX_NESTING_DEPTH = 512;
+    public static final int MAX_NBT_NESTING_DEPTH = 512;
 
     // Structural Delimiters
     public static final char COMPOUND_BEGIN = '{';

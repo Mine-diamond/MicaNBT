@@ -84,7 +84,7 @@ public class SNBTReader {
 
     private Tag parseCompound(String name) {
         depth++;
-        if (depth > Tokens.MAX_NESTING_DEPTH) {
+        if (depth > Tokens.MAX_NBT_NESTING_DEPTH) {
             throw new SNBTParseException("max nesting depth exceeded");
         }
         CompoundTag compoundTag = useReorderableCompoundTag ? new ReorderableCompoundTag(name) : new CommonCompoundTag(name);
@@ -183,7 +183,7 @@ public class SNBTReader {
 
     private ListTag<? extends Tag> parseList(String name) {
         depth++;
-        if (depth > Tokens.MAX_NESTING_DEPTH) {
+        if (depth > Tokens.MAX_NBT_NESTING_DEPTH) {
             throw new SNBTParseException("max nesting depth exceeded");
         }
         ListTag<Tag> listTag = new ListTag<>(name);
