@@ -15,7 +15,7 @@ public class NBTPathTest {
         assertPath("\"id\":\"minecraft:black_shulker_box\"", "id");
         assertPath("\"Name\":\"{\\\"text\\\":\\\"维度递归核心\\\",\\\"color\\\":\\\"gold\\\",\\\"italic\\\":false}\"", "tag.display.Name");
         assertPath("\"\":{id:\"minecraft:protection\",lvl:10s}","tag.Enchantments[0]");
-        assertPath("\"\":1", "tag.CustomData.RootLayer.Level1.Level2.Level3.Parameters.Level4.Security.Level5.Matrix.0.0");
+        assertPath("\"\":1", "tag.CustomData.RootLayer.Level1.Level2.Level3.Parameters.Level4.Security.Level5.Matrix[0][0]");
         assertPathNull("tag.tagNotExist");
     }
 

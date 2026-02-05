@@ -4,6 +4,7 @@ import tech.minediamond.micanbt.SNBT.SNBT;
 import tech.minediamond.micanbt.SNBT.SNBTStyle;
 import tech.minediamond.micanbt.path.NBTFinder;
 import tech.minediamond.micanbt.path.NBTPath;
+import tech.minediamond.micanbt.path.NBTPathParseException;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -50,10 +51,29 @@ public abstract class Tag {
      */
     public abstract Object getRawValue();
 
+    /**
+     * Navigates the NBT tree starting from this tag and retrieves the tag located at
+     * the specified {@link NBTPath}.
+     *
+     * @param nbtPath The pre-parsed path object.
+     * @return The {@link Tag} at the specified path, or {@code null} if the path cannot be resolved.
+     * @throws NBTPathParseException If the path format is invalid.
+     */
     public Tag at(NBTPath nbtPath) {
         return NBTFinder.get(this, nbtPath);
     }
 
+    /**
+     * Navigates the NBT tree starting from this tag and retrieves the tag located at
+     * the specified string path.
+     * <p>
+     * This is a convenience method that internally calls {@link NBTPath#of(String)}.
+     * Note that only static paths are supported (e.g., "Data.Level.Seed").
+     *
+     * @param path The NBT path string to resolve.
+     * @return The {@link Tag} at the specified path, or {@code null} if the path cannot be resolved.
+     * @throws NBTPathParseException If the path format is invalid.
+     */
     public Tag at(String path) {
         return at(NBTPath.of(path));
     }
@@ -110,10 +130,8 @@ public abstract class Tag {
      * get SNBT present of this tag.
      *
      * @param stringifyRootTagName does snbt include tag names
-     * @param snbtStyle The format of SNBT
-     *
+     * @param snbtStyle            The format of SNBT
      * @return the SNBT present of this tag.
-     *
      * @see SNBTStyle
      */
     public String toString(boolean stringifyRootTagName, SNBTStyle snbtStyle) {
