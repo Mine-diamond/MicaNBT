@@ -1,17 +1,19 @@
-package tech.minediamond.micanbt.SNBT;
+package tech.minediamond.micanbt.core;
 
-public class SNBTBuffer {
+import tech.minediamond.micanbt.SNBT.SNBTParseException;
+
+public class CharReader {
     private final char[] buffer;
     private final int length;
     private int cursor;
 
-    public SNBTBuffer(String text) {
+    public CharReader(String text) {
         this.buffer = text.toCharArray();
         this.length = buffer.length;
         this.cursor = 0;
     }
 
-    public SNBTBuffer(char[] chars) {
+    public CharReader(char[] chars) {
         this.buffer = chars;
         this.length = chars.length;
         this.cursor = 0;
@@ -87,17 +89,17 @@ public class SNBTBuffer {
         return new String(buffer, start, count);
     }
 
-    public String getErrorContext() {
+    public String getErrorContext(String message) {
         if (cursor > length) {
             cursor = length;
         }
         int start = Math.max(0, cursor - 49);
-        int count = cursor - start + 1;
+        int count = cursor == buffer.length ? cursor - start : cursor - start + 1;
 
         if (cursor >= 50) {
-            return "Error while parsing SNBTText\n..." + new String(buffer, start, count) + " <- here";
+            return message + "\n..." + new String(buffer, start, count) + " <- here";
         } else {
-            return "Error while parsing SNBTText\n" + new String(buffer, start, count) + " <- here";
+            return message + "\n" + new String(buffer, start, count) + " <- here";
         }
     }
 }
