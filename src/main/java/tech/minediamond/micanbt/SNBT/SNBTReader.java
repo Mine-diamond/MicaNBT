@@ -1,17 +1,19 @@
 package tech.minediamond.micanbt.SNBT;
 
+import tech.minediamond.micanbt.core.CharReader;
 import tech.minediamond.micanbt.core.CompoundSelection;
+import tech.minediamond.micanbt.core.Tokens;
+import tech.minediamond.micanbt.tag.*;
 import tech.minediamond.micanbt.util.primitivearray.ByteArray;
 import tech.minediamond.micanbt.util.primitivearray.IntArray;
 import tech.minediamond.micanbt.util.primitivearray.LongArray;
-import tech.minediamond.micanbt.tag.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class SNBTReader {
-    private final SNBTBuffer snbtBuffer;
+    private final CharReader snbtBuffer;
     private final Tag tag;
     private final boolean useReorderableCompoundTag;
 
@@ -19,22 +21,22 @@ public class SNBTReader {
     private final StringBuilder reusableBuilder = new StringBuilder();
 
     public SNBTReader(String SNBTText, CompoundSelection compoundSelection) {
-        this.snbtBuffer = new SNBTBuffer(SNBTText);
+        this.snbtBuffer = new CharReader(SNBTText);
         this.useReorderableCompoundTag = compoundSelection == CompoundSelection.REORDERABLE_MAP;
         try {
             tag = readRoot();
         } catch (Exception e) {
-            throw new SNBTParseException(snbtBuffer.getErrorContext(), e);
+            throw new SNBTParseException(snbtBuffer.getErrorContext("Error while parsing SNBTText"), e);
         }
     }
 
     public SNBTReader(Path path, CompoundSelection compoundSelection) throws IOException {
-        this.snbtBuffer = new SNBTBuffer(Files.readString(path));
+        this.snbtBuffer = new CharReader(Files.readString(path));
         this.useReorderableCompoundTag = compoundSelection == CompoundSelection.REORDERABLE_MAP;
         try {
             tag = readRoot();
         } catch (Exception e) {
-            throw new SNBTParseException(snbtBuffer.getErrorContext(), e);
+            throw new SNBTParseException(snbtBuffer.getErrorContext("Error while parsing SNBTText"), e);
         }
     }
 
@@ -82,7 +84,7 @@ public class SNBTReader {
 
     private Tag parseCompound(String name) {
         depth++;
-        if (depth > Tokens.MAX_NESTING_DEPTH) {
+        if (depth > Tokens.MAX_NBT_NESTING_DEPTH) {
             throw new SNBTParseException("max nesting depth exceeded");
         }
         CompoundTag compoundTag = useReorderableCompoundTag ? new ReorderableCompoundTag(name) : new CommonCompoundTag(name);
@@ -181,7 +183,7 @@ public class SNBTReader {
 
     private ListTag<? extends Tag> parseList(String name) {
         depth++;
-        if (depth > Tokens.MAX_NESTING_DEPTH) {
+        if (depth > Tokens.MAX_NBT_NESTING_DEPTH) {
             throw new SNBTParseException("max nesting depth exceeded");
         }
         ListTag<Tag> listTag = new ListTag<>(name);

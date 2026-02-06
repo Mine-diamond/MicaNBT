@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.SNBT;
 
+import tech.minediamond.micanbt.core.Tokens;
 import tech.minediamond.micanbt.tag.*;
 
 import java.io.IOException;

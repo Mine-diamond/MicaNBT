@@ -13,14 +13,17 @@ public final class NBTFinder {
         if (root == null || path == null) return null;
 
         Tag current = root;
-        String[] tokens = path.getTokens();
+        Object[] tokens = path.getTokens();
 
-        for (String token : tokens) {
+        for (Object token : tokens) {
             if (current instanceof CompoundTag compoundTag) {
-                current = compoundTag.get(token);
+                current = compoundTag.get((String) token);
             } else if (current instanceof ListTag<?> list) {
-                Integer index = tryParseInt(token);
-                if (index != null && index >= 0 && index < list.size()) {
+                Integer index = (Integer) token;
+                if (index < 0) {
+                    index = list.size() + index;
+                }
+                if (index >= 0 && index < list.size()) {
                     current = list.get(index);
                 } else {
                     return null;
@@ -33,13 +36,5 @@ public final class NBTFinder {
         }
 
         return current;
-    }
-
-    private static Integer tryParseInt(String s) {
-        try {
-            return Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            return null;
-        }
     }
 }
