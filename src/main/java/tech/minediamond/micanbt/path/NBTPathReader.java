@@ -8,7 +8,7 @@ import java.util.List;
 
 public class NBTPathReader {
     private final CharReader reader;
-    private final List<String> tokens = new ArrayList<>();
+    private final List<Object> tokens = new ArrayList<>();
 
     private final StringBuilder reusableBuilder = new StringBuilder();
 
@@ -21,16 +21,16 @@ public class NBTPathReader {
         }
     }
 
-    public static String[] read(String path) {
+    public static Object[] read(String path) {
         return new NBTPathReader(path).getTokensArray();
     }
 
-    public List<String> getTokens() {
+    public List<Object> getTokens() {
         return tokens;
     }
 
-    public String[] getTokensArray() {
-        return tokens.toArray(new String[0]);
+    public Object[] getTokensArray() {
+        return tokens.toArray(new Object[0]);
     }
 
     private void parsePath() {
@@ -56,27 +56,18 @@ public class NBTPathReader {
         tokens.add(parseUnquotedToken());
     }
 
-    private String parseIntToken() {
-        reader.skipOrThrow(Tokens.ARRAY_BEGIN); //[
+    private int parseIntToken() {
+        reader.skipOrThrow(Tokens.ARRAY_BEGIN); // [
         int index = reader.position();
         int count = 0;
         while (reader.isAvailable(index + count) && reader.get(index + count) != Tokens.ARRAY_END) {
             count++;
         }
         reader.skip(count);
-        reader.skipOrThrow(Tokens.ARRAY_END);
+        reader.skipOrThrow(Tokens.ARRAY_END); // ]
 
         String value = reader.substring(index, count);
-        tryParseInt(value);
-        return value;
-    }
-
-    private void tryParseInt(String token) {
-        try {
-            Integer.parseInt(token);
-        } catch (NumberFormatException e) {
-            throw new NBTPathParseException("Token " + token + " is not an integer", e);
-        }
+        return Integer.parseInt(value);
     }
 
     private String parseQuotedToken() {

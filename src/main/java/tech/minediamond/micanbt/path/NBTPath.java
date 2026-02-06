@@ -9,16 +9,16 @@ import java.util.List;
  * <p>
  * This class breaks down a hierarchical path into discrete tokens (segments).
  * For example, a path represented by {@code Player.Inventory[0].id} is parsed into
- * the tokens {@code ["Player", "Inventory", "0", "id"]}.
+ * the tokens {@code ["Player", "Inventory", 0, "id"]}.
  * <p>
  * To use {@code NBTPath}, you can use {@link NBTFinder} Through method {@link NBTFinder#get(Tag, NBTPath)}, or Directly use {@link Tag#at(String)} or {@link Tag#at(NBTPath)} in {@link Tag}
  *
  * @see NBTFinder
  */
 public class NBTPath {
-    private final String[] tokens;
+    private final Object[] tokens;
 
-    private NBTPath(String[] tokens) {
+    private NBTPath(Object[] tokens) {
         this.tokens = tokens;
     }
 
@@ -48,7 +48,7 @@ public class NBTPath {
      * @param paths The array of raw path tokens.
      * @return A new {@code NBTPath} instance.
      */
-    public static NBTPath fromParts(String... paths) {
+    public static NBTPath fromParts(Object... paths) {
         if (paths == null || paths.length == 0) return new NBTPath(new String[0]);
         return new NBTPath(paths.clone());
     }
@@ -56,14 +56,14 @@ public class NBTPath {
     /**
      * Creates an {@code NBTPath} from a list of raw path segments.
      * <p>
-     * This is a collection-based alternative to {@link #fromParts(String...)}.
+     * This is a collection-based alternative to {@link #fromParts(Object...)}.
      *
      * @param path A list containing the raw path tokens.
      * @return A new {@code NBTPath} instance.
      */
-    public static NBTPath fromParts(List<String> path) {
+    public static NBTPath fromParts(List<Object> path) {
         if (path == null || path.isEmpty()) return new NBTPath(new String[0]);
-        return new NBTPath(path.toArray(new String[0]));
+        return new NBTPath(path.toArray(new Object[0]));
     }
 
     /**
@@ -71,7 +71,7 @@ public class NBTPath {
      *
      * @return An array of strings representing the path segments.
      */
-    public String[] getTokens() {
+    public Object[] getTokens() {
         return tokens.clone();
     }
 }
