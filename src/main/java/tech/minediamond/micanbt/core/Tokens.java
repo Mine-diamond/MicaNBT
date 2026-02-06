@@ -66,18 +66,23 @@ public final class Tokens {
     private static final int FLAG_IS_DIGIT_EXT = 1;  // 0-9, -, .
     private static final int FLAG_MAY_NUMBER = 2;   // 0-9, -, ., e, E, +
 
-    private static final boolean[] ALLOWED_CHARS = new boolean[128];
+    private static final boolean[] ALLOWED_UNQUOTE_CHARS_IN_SNBT = new boolean[128];
+    private static final boolean[] NOT_ALLOWED_UNQUOTE_CHARS_IN_NBT_PATH = new boolean[128];
     private static final byte[] CHAR_FLAGS = new byte[128];
     private static final long FORMAT_CHARS_MASK = (1L << EOF) | (1L << TAB) | (1L << NEWLINE) | (1L << CARRIAGE_RETURN) | (1L << SPACE);
 
     static {
-        for (char c = 'a'; c <= 'z'; c++) ALLOWED_CHARS[c] = true;
-        for (char c = 'A'; c <= 'Z'; c++) ALLOWED_CHARS[c] = true;
-        for (char c = '0'; c <= '9'; c++) ALLOWED_CHARS[c] = true;
-        ALLOWED_CHARS['-'] = true;
-        ALLOWED_CHARS['_'] = true;
-        ALLOWED_CHARS['.'] = true;
-        ALLOWED_CHARS['+'] = true;
+        for (char c = 'a'; c <= 'z'; c++) ALLOWED_UNQUOTE_CHARS_IN_SNBT[c] = true;
+        for (char c = 'A'; c <= 'Z'; c++) ALLOWED_UNQUOTE_CHARS_IN_SNBT[c] = true;
+        for (char c = '0'; c <= '9'; c++) ALLOWED_UNQUOTE_CHARS_IN_SNBT[c] = true;
+        ALLOWED_UNQUOTE_CHARS_IN_SNBT['-'] = true;
+        ALLOWED_UNQUOTE_CHARS_IN_SNBT['_'] = true;
+        ALLOWED_UNQUOTE_CHARS_IN_SNBT['.'] = true;
+        ALLOWED_UNQUOTE_CHARS_IN_SNBT['+'] = true;
+
+        NOT_ALLOWED_UNQUOTE_CHARS_IN_NBT_PATH['['] = true;
+        NOT_ALLOWED_UNQUOTE_CHARS_IN_NBT_PATH[']'] = true;
+        NOT_ALLOWED_UNQUOTE_CHARS_IN_NBT_PATH['.'] = true;
 
         for (char c = '0'; c <= '9'; c++) {
             CHAR_FLAGS[c] |= FLAG_IS_DIGIT_EXT | FLAG_MAY_NUMBER;
@@ -97,7 +102,7 @@ public final class Tokens {
      * @return True if the character is allowed without quotes.
      */
     public static boolean isAllowedInUnquotedString(final char c) {
-        return c < 128 && ALLOWED_CHARS[c];
+        return c < 128 && ALLOWED_UNQUOTE_CHARS_IN_SNBT[c];
     }
 
     /**
@@ -114,6 +119,24 @@ public final class Tokens {
         for (int i = 0; i < len; i++) {
             char c = s.charAt(i);
             if (!isAllowedInUnquotedString(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isAllowedInUnquotedNBTPathString(final char c) {
+        return c < 128 && !NOT_ALLOWED_UNQUOTE_CHARS_IN_NBT_PATH[c];
+    }
+
+    public static boolean needQuotationInNBTPath(String s) {
+        if (s == null || s.isEmpty()) {
+            return true;
+        }
+        int len = s.length();
+        for (int i = 0; i < len; i++) {
+            char c = s.charAt(i);
+            if (!isAllowedInUnquotedNBTPathString(c)) {
                 return true;
             }
         }

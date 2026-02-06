@@ -2,6 +2,7 @@ package tech.minediamond.micanbt.path;
 
 import tech.minediamond.micanbt.tag.Tag;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -73,5 +74,10 @@ public class NBTPath {
      */
     public Object[] getTokens() {
         return tokens.clone();
+    }
+
+    @Override
+    public String toString() {
+        return NBTPathWriter.getNBTPathString(this);
     }
 }

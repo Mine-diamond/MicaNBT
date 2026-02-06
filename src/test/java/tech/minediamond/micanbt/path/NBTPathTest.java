@@ -26,6 +26,17 @@ public class NBTPathTest {
         assertRawToken("\"Frequency.in.last.hour\":440.0d", "tag","CustomData","RootLayer","Level1","Level2","Level3","Parameters","Frequency.in.last.hour");
 
         assertPathNull("tag.tagNotExist");
+
+        assertToString("id", "id");
+        assertToString("tag.sub_tag", "tag.sub_tag");
+        assertToString("tag.sub_tag", "tag.\"sub_tag\"");
+        assertToString("tag.list[2].id", "tag.list[2].id");
+        assertToString("tag.\"sub.tag\"", "tag.\"sub.tag\"");
+
+        assertToStringFromRawToken("a.b.c", "a", "b", "c");
+        assertToStringFromRawToken("tag.list[2].id", "tag", "list", 2, "id");
+        assertToStringFromRawToken("tag.\"sub.tag\"", "tag", "sub.tag");
+        assertToStringFromRawToken("tag.\"list[1]\"[1]", "tag", "list[1]", 1);
     }
 
     public void assertPath(String expected, String path) {
@@ -38,6 +49,14 @@ public class NBTPathTest {
 
     public void assertPathNull(String path) {
         assertNull(tag.at(path));
+    }
+
+    public void assertToString(String expected, String path) {
+        assertEquals(expected, NBTPath.of(path).toString());
+    }
+
+    public void assertToStringFromRawToken(String expected, Object... path) {
+        assertEquals(expected, NBTPath.fromParts(path).toString());
     }
 
     public static Tag initTag() {
