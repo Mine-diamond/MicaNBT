@@ -46,10 +46,6 @@ public class NBTWriter {
     }
 
     public static void writeAnonymousTag(DataOutput out, Tag tag) throws IOException {
-        if (tag != null) {
-            tag.write(out);
-        } else {
-            out.writeByte(0);
-        }
+        tag.write(out);
     }
 }

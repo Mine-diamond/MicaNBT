@@ -2,14 +2,11 @@ package tech.minediamond.micanbt.tag;
 
 import tech.minediamond.micanbt.NBT.NBTReader;
 import tech.minediamond.micanbt.NBT.NBTWriter;
-import tech.minediamond.micanbt.NBT.TagCreateException;
-import tech.minediamond.micanbt.NBT.TagFactory;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
