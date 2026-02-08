@@ -81,14 +81,6 @@ public abstract class Tag {
     public abstract int getTagId();
 
     /**
-     * Reads this tag from an input stream.
-     *
-     * @param in Stream to read from.
-     * @throws java.io.IOException If an I/O error occurs.
-     */
-    public abstract void read(DataInput in) throws IOException;
-
-    /**
      * Writes this tag to an output stream.
      *
      * @param out Stream to write to.

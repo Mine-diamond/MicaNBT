@@ -31,6 +31,12 @@ public class LongTag extends Tag {
         this.value = value;
     }
 
+    public LongTag(String name, DataInput in) throws IOException {
+        super(name);
+        // read dataInput
+        this.value = in.readLong();
+    }
+
     @Override
     public Long getClonedValue() {
         return this.value;
@@ -53,11 +59,6 @@ public class LongTag extends Tag {
     @Override
     public int getTagId() {
         return ID;
-    }
-
-    @Override
-    public void read(DataInput in) throws IOException {
-        this.value = in.readLong();
     }
 
     @Override

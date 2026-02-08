@@ -1,6 +1,5 @@
 package tech.minediamond.micanbt.NBT;
 
-import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 
@@ -36,7 +35,7 @@ public class NBT {
     }
 
     public static Tag parse(DataInput in) throws IOException {
-        return NBTReader.readTag(in);
+        return NBTReader.readNamedTag(in);
     }
 
     public static void write(CompoundTag tag, Path path) throws IOException {

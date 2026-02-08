@@ -1,6 +1,5 @@
 package tech.minediamond.micanbt.NBT;
 
-import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 
@@ -54,25 +53,29 @@ public class NBTReader {
     }
 
     public static Tag readTag(InputStream in, boolean littleEndian) throws IOException {
-        return readTag(littleEndian ? new LittleEndianDataInputStream(in) : new DataInputStream(in));
+        return readNamedTag(littleEndian ? new LittleEndianDataInputStream(in) : new DataInputStream(in));
     }
 
-    public static Tag readTag(DataInput in) throws IOException {
+    public static Tag readNamedTag(DataInput in) throws IOException {
         int id = in.readUnsignedByte();
         if (id == 0) {
             return null;
         }
 
         String name = in.readUTF();
-        Tag tag;
 
         try {
-            tag = TagFactory.createInstance(id, name);
+            return TagFactory.createInstance(id, name, in);
         } catch (TagCreateException e) {
             throw new IOException("Failed to create tag.", e);
         }
+    }
 
-        tag.read(in);
-        return tag;
+    public static Tag readAnonymousTag(DataInput in, int id) throws IOException {
+        try {
+            return TagFactory.createInstance(id, "", in);
+        } catch (TagCreateException e) {
+            throw new IOException("Failed to create tag with ID: " + id, e);
+        }
     }
 }

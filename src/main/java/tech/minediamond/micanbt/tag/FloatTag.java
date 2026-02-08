@@ -31,6 +31,12 @@ public class FloatTag extends Tag {
         this.value = value;
     }
 
+    public FloatTag(String name, DataInput in) throws IOException {
+        super(name);
+        // read dataInput
+        this.value = in.readFloat();
+    }
+
     @Override
     public Float getClonedValue() {
         return this.value;
@@ -53,11 +59,6 @@ public class FloatTag extends Tag {
     @Override
     public int getTagId() {
         return ID;
-    }
-
-    @Override
-    public void read(DataInput in) throws IOException {
-        this.value = in.readFloat();
     }
 
     @Override

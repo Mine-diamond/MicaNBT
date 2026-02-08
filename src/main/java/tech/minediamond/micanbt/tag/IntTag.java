@@ -31,6 +31,12 @@ public class IntTag extends Tag {
         this.value = value;
     }
 
+    public IntTag(String name, DataInput in) throws IOException {
+        super(name);
+        // read dataInput
+        this.value = in.readInt();
+    }
+
     @Override
     public Integer getClonedValue() {
         return this.value;
@@ -53,11 +59,6 @@ public class IntTag extends Tag {
     @Override
     public int getTagId() {
         return ID;
-    }
-
-    @Override
-    public void read(DataInput in) throws IOException {
-        this.value = in.readInt();
     }
 
     @Override

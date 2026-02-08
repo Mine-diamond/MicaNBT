@@ -31,6 +31,12 @@ public class ByteTag extends Tag {
         this.value = value;
     }
 
+    public ByteTag(String name, DataInput in) throws IOException {
+        super(name);
+        // read dataInput
+        this.value = in.readByte();
+    }
+
     @Override
     public Byte getClonedValue() {
         return this.value;
@@ -53,11 +59,6 @@ public class ByteTag extends Tag {
     @Override
     public int getTagId() {
         return ID;
-    }
-
-    @Override
-    public void read(DataInput in) throws IOException {
-        this.value = in.readByte();
     }
 
     @Override

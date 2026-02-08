@@ -32,6 +32,15 @@ public class LongArrayTag extends Tag {
         this.value = value;
     }
 
+    public LongArrayTag(String name, DataInput in) throws IOException {
+        super(name);
+        // read dataInput
+        this.value = new long[in.readInt()];
+        for (int index = 0; index < this.value.length; index++) {
+            this.value[index] = in.readLong();
+        }
+    }
+
     @Override
     public long[] getClonedValue() {
         return this.value.clone();
@@ -87,14 +96,6 @@ public class LongArrayTag extends Tag {
      */
     public int length() {
         return this.value.length;
-    }
-
-    @Override
-    public void read(DataInput in) throws IOException {
-        this.value = new long[in.readInt()];
-        for (int index = 0; index < this.value.length; index++) {
-            this.value[index] = in.readLong();
-        }
     }
 
     @Override

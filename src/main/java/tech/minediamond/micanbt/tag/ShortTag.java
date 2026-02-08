@@ -31,6 +31,12 @@ public class ShortTag extends Tag {
         this.value = value;
     }
 
+    public ShortTag(String name, DataInput in) throws IOException {
+        super(name);
+        // read dataInput
+        this.value = in.readShort();
+    }
+
     @Override
     public Short getClonedValue() {
         return this.value;
@@ -53,11 +59,6 @@ public class ShortTag extends Tag {
     @Override
     public int getTagId() {
         return ID;
-    }
-
-    @Override
-    public void read(DataInput in) throws IOException {
-        this.value = in.readShort();
     }
 
     @Override
