@@ -61,6 +61,22 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
         this.setValue(value);
     }
 
+    @SuppressWarnings("unchecked") // Safe cast: typeId guarantees all tags in the list are of type T
+    public ListTag(String name, DataInput in) throws IOException {
+        super(name);
+        // read dataInput
+        this.typeId = in.readUnsignedByte();
+        int count = in.readInt();
+        this.value = new ArrayList<>(count);
+
+        if (count > 0 && this.typeId == 0) {
+            throw new IOException("ListTag type is TAG_End but count is > 0");
+        }
+        for (int index = 0; index < count; index++) {
+            this.value.add((T) NBTReader.readAnonymousTag(in, typeId));
+        }
+    }
+
     @Override
     @SuppressWarnings("unchecked") // Safe cast: tag.copy() returns a Tag of the same concrete type
     public List<T> getClonedValue() {
@@ -263,21 +279,6 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
             this.typeId = incomingId;
         } else if (this.typeId != incomingId) {
             throw new IllegalArgumentException(String.format("Tag type mismatch. Expected ID: %d, got: %d", this.typeId, incomingId));
-        }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked") // Safe cast: typeId guarantees all tags in the list are of type T
-    public void read(DataInput in) throws IOException {
-        this.value.clear();
-        this.typeId = in.readUnsignedByte();
-        int count = in.readInt();
-
-        if (count > 0 && this.typeId == 0) {
-            throw new IOException("ListTag type is TAG_End but count is > 0");
-        }
-        for (int index = 0; index < count; index++) {
-            this.value.add((T) NBTReader.readAnonymousTag(in, typeId));
         }
     }
 

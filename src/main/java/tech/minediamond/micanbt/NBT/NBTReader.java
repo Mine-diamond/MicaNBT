@@ -63,23 +63,17 @@ public class NBTReader {
         }
 
         String name = in.readUTF();
-        Tag tag;
 
         try {
-            tag = TagFactory.createInstance(id, name);
+            return TagFactory.createInstance(id, name, in);
         } catch (TagCreateException e) {
             throw new IOException("Failed to create tag.", e);
         }
-
-        tag.read(in);
-        return tag;
     }
 
     public static Tag readAnonymousTag(DataInput in, int id) throws IOException {
         try {
-            Tag tag = TagFactory.createInstance(id, "");
-            tag.read(in);
-            return tag;
+            return TagFactory.createInstance(id, "", in);
         } catch (TagCreateException e) {
             throw new IOException("Failed to create tag with ID: " + id, e);
         }

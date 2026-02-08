@@ -1,5 +1,10 @@
 package tech.minediamond.micanbt.tag;
 
+import tech.minediamond.micanbt.NBT.NBTReader;
+
+import java.io.DataInput;
+import java.io.EOFException;
+import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -17,6 +22,24 @@ public class CommonCompoundTag extends CompoundTag {
     public CommonCompoundTag(String name, Map<String, Tag> value) {
         super(name);
         this.value = new LinkedHashMap<>(value);
+    }
+
+    public CommonCompoundTag(String name, DataInput in) throws IOException {
+        this(name);
+        // read dataInput
+        List<Tag> tags = new ArrayList<>();
+        try {
+            Tag tag;
+            while ((tag = NBTReader.readNamedTag(in)) != null) {
+                tags.add(tag);
+            }
+        } catch (EOFException e) {
+            throw new IOException("Closing EndTag was not found!");
+        }
+
+        for (Tag tag : tags) {
+            this.put(tag);
+        }
     }
 
     @Override

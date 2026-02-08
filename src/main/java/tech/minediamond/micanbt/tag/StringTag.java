@@ -32,6 +32,12 @@ public class StringTag extends Tag {
         this.value = value;
     }
 
+    public StringTag(String name, DataInput in) throws IOException {
+        super(name);
+        // read dataInput
+        this.value = in.readUTF();
+    }
+
     @Override
     public String getClonedValue() {
         return this.value;
@@ -54,11 +60,6 @@ public class StringTag extends Tag {
     @Override
     public int getTagId() {
         return ID;
-    }
-
-    @Override
-    public void read(DataInput in) throws IOException {
-        this.value = in.readUTF();
     }
 
     @Override
