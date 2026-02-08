@@ -1,6 +1,5 @@
 package tech.minediamond.micanbt.NBT;
 
-import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 
@@ -33,13 +32,21 @@ public class NBTWriter {
     }
 
     public static void writeTag(OutputStream out, Tag tag, boolean littleEndian) throws IOException {
-        writeTag((DataOutput) (littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out)), tag);
+        writeNamedTag((DataOutput) (littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out)), tag);
     }
 
-    public static void writeTag(DataOutput out, Tag tag) throws IOException {
+    public static void writeNamedTag(DataOutput out, Tag tag) throws IOException {
         if (tag != null) {
             out.writeByte(tag.getTagId());
             out.writeUTF(tag.getName());
+            tag.write(out);
+        } else {
+            out.writeByte(0);
+        }
+    }
+
+    public static void writeAnonymousTag(DataOutput out, Tag tag) throws IOException {
+        if (tag != null) {
             tag.write(out);
         } else {
             out.writeByte(0);

@@ -1,5 +1,7 @@
 package tech.minediamond.micanbt.tag;
 
+import tech.minediamond.micanbt.NBT.NBTReader;
+import tech.minediamond.micanbt.NBT.NBTWriter;
 import tech.minediamond.micanbt.NBT.TagCreateException;
 import tech.minediamond.micanbt.NBT.TagFactory;
 
@@ -278,14 +280,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
             throw new IOException("ListTag type is TAG_End but count is > 0");
         }
         for (int index = 0; index < count; index++) {
-
-            try {
-                Tag tag = TagFactory.createInstance(this.typeId, "");
-                tag.read(in);
-                this.value.add((T) tag);
-            } catch (TagCreateException e) {
-                throw new IOException("Failed to create tag with ID: " + this.typeId, e);
-            }
+            this.value.add((T) NBTReader.readAnonymousTag(in, typeId));
         }
     }
 
@@ -294,7 +289,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
         out.writeByte(this.typeId);
         out.writeInt(this.value.size());
         for (T tag : this.value) {
-            tag.write(out);
+            NBTWriter.writeAnonymousTag(out, tag);
         }
     }
 

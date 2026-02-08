@@ -106,7 +106,7 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
         List<Tag> tags = new ArrayList<>();
         try {
             Tag tag;
-            while ((tag = NBTReader.readTag(in)) != null) {
+            while ((tag = NBTReader.readNamedTag(in)) != null) {
                 tags.add(tag);
             }
         } catch (EOFException e) {
@@ -121,7 +121,7 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     @Override
     public void write(DataOutput out) throws IOException {
         for (Tag tag : this) {
-            NBTWriter.writeTag(out, tag);
+            NBTWriter.writeNamedTag(out, tag);
         }
 
         out.writeByte(0);
