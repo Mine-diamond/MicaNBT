@@ -2,6 +2,7 @@ package tech.minediamond.micanbt.tag;
 
 import tech.minediamond.micanbt.NBT.NBTReader;
 import tech.minediamond.micanbt.NBT.NBTWriter;
+import tech.minediamond.micanbt.core.CompoundSelection;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -99,22 +100,6 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     @Override
     public int getTagId() {
         return ID;
-    }
-
-    public void read(DataInput in) throws IOException {
-        List<Tag> tags = new ArrayList<>();
-        try {
-            Tag tag;
-            while ((tag = NBTReader.readNamedTag(in)) != null) {
-                tags.add(tag);
-            }
-        } catch (EOFException e) {
-            throw new IOException("Closing EndTag was not found!");
-        }
-
-        for (Tag tag : tags) {
-            this.put(tag);
-        }
     }
 
     @Override

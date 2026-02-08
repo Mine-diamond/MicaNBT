@@ -31,12 +31,6 @@ public class IntTag extends Tag {
         this.value = value;
     }
 
-    public IntTag(String name, DataInput in) throws IOException {
-        super(name);
-        // read dataInput
-        this.value = in.readInt();
-    }
-
     @Override
     public Integer getClonedValue() {
         return this.value;

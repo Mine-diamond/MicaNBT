@@ -1,6 +1,7 @@
 package tech.minediamond.micanbt.tag;
 
 import tech.minediamond.micanbt.NBT.NBTReader;
+import tech.minediamond.micanbt.core.CompoundSelection;
 
 import java.io.DataInput;
 import java.io.EOFException;
@@ -22,12 +23,6 @@ public class CommonCompoundTag extends CompoundTag {
     public CommonCompoundTag(String name, Map<String, Tag> value) {
         super(name);
         this.value = new LinkedHashMap<>(value);
-    }
-
-    public CommonCompoundTag(String name, DataInput in) throws IOException {
-        this(name);
-        // read dataInput
-        read(in);
     }
 
     @Override

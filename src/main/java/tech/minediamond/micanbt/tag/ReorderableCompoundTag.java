@@ -1,6 +1,7 @@
 package tech.minediamond.micanbt.tag;
 
 import tech.minediamond.micanbt.NBT.NBTReader;
+import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.util.map.OrderedListMap;
 
 import java.io.DataInput;
@@ -28,12 +29,6 @@ public class ReorderableCompoundTag extends CompoundTag {
     public ReorderableCompoundTag(String name, Map<String, Tag> map) {
         super(name);
         this.value = new OrderedListMap<>(map);
-    }
-
-    public ReorderableCompoundTag(String name, DataInput in) throws IOException {
-        this(name);
-        // read dataInput
-        read(in);
     }
 
     @Override

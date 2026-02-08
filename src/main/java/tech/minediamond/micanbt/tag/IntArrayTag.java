@@ -32,15 +32,6 @@ public class IntArrayTag extends Tag {
         this.value = value;
     }
 
-    public IntArrayTag(String name, DataInput in) throws IOException {
-        super(name);
-        // read dataInput
-        this.value = new int[in.readInt()];
-        for (int index = 0; index < this.value.length; index++) {
-            this.value[index] = in.readInt();
-        }
-    }
-
     @Override
     public int[] getClonedValue() {
         return this.value.clone();

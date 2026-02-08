@@ -31,12 +31,6 @@ public class FloatTag extends Tag {
         this.value = value;
     }
 
-    public FloatTag(String name, DataInput in) throws IOException {
-        super(name);
-        // read dataInput
-        this.value = in.readFloat();
-    }
-
     @Override
     public Float getClonedValue() {
         return this.value;

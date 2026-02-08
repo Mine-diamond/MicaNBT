@@ -32,13 +32,6 @@ public class ByteArrayTag extends Tag {
         this.value = value;
     }
 
-    public ByteArrayTag(String name, DataInput in) throws IOException {
-        super(name);
-        // read dataInput
-        this.value = new byte[in.readInt()];
-        in.readFully(this.value);
-    }
-
     @Override
     public byte[] getClonedValue() {
         return this.value.clone();

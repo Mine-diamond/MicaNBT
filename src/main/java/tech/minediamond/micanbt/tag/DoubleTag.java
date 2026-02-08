@@ -31,12 +31,6 @@ public class DoubleTag extends Tag {
         this.value = value;
     }
 
-    public DoubleTag(String name, DataInput in) throws IOException {
-        super(name);
-        // read dataInput
-        this.value = in.readDouble();
-    }
-
     @Override
     public Double getClonedValue() {
         return this.value;
