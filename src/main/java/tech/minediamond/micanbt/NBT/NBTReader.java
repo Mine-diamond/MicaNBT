@@ -10,10 +10,10 @@ import java.util.zip.GZIPInputStream;
 
 public class NBTReader {
     private final Path path;
+    private DataInput in;
     private final Boolean compressed;
     private final boolean littleEndian;
     private final CompoundSelection compoundSelection;
-    private DataInput in;
 
     private final Tag tag;
 
@@ -22,30 +22,20 @@ public class NBTReader {
         this.compressed = builder.compressed;
         this.littleEndian = builder.littleEndian;
         this.compoundSelection = builder.compoundSelection;
-
-        tag = read();
-    }
-
-    public NBTReader(DataInput in, CompoundSelection compoundSelection) throws IOException {
-        this.path = null;
-        this.compressed = false;
-        this.littleEndian = false;
-        this.compoundSelection = compoundSelection;
-        this.in = in;
-
-        tag = readNamedTag();
+        this.in = builder.dataInput;
+        if (in != null) {
+            tag = readNamedTag();
+        } else {
+            tag = read();
+        }
     }
 
     public static Builder builder(Path path) {
         return new Builder(path);
     }
 
-    public static Tag getTag(Path path) throws IOException {
-        return builder(path).getTag();
-    }
-
-    public static Tag getTag(Path path, boolean compressed, boolean littleEndian, CompoundSelection compoundSelection) throws IOException {
-        return builder(path).compressed(compressed).littleEndian(littleEndian).compoundSelection(compoundSelection).getTag();
+    public static Builder builder(DataInput dataInput) {
+        return new Builder(dataInput);
     }
 
     public Tag getTag() {
@@ -169,13 +159,20 @@ public class NBTReader {
     }
 
     public static class Builder {
-        private final Path path;
-        private Boolean compressed;
+        // Either path or dataInput must be provided, and this is ensured through the constructor.
+        private Path path;
+        private DataInput dataInput;
+        // compressed and littleEndian are only required when using path, not needed when using dataInput
+        private Boolean compressed; // When not specified, it is automatically inferred; otherwise, the specified value is used.
         private boolean littleEndian = false;
         private CompoundSelection compoundSelection = CompoundSelection.COMMON_MAP;
 
         private Builder(Path path) {
             this.path = path;
+        }
+
+        private Builder(DataInput dataInput) {
+            this.dataInput = dataInput;
         }
 
         public Builder compressed(boolean compressed) {
