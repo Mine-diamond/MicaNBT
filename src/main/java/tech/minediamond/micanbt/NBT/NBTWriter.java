@@ -41,11 +41,15 @@ public class NBTWriter {
             out.writeUTF(tag.getName());
             tag.write(out);
         } else {
-            out.writeByte(0);
+            throw new IOException("tag is null");
         }
     }
 
     public static void writeAnonymousTag(DataOutput out, Tag tag) throws IOException {
-        tag.write(out);
+        if (tag != null) {
+            tag.write(out);
+        } else {
+            throw new IOException("tag is null");
+        }
     }
 }
