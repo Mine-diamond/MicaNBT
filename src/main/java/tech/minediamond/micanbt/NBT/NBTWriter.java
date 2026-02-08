@@ -32,7 +32,7 @@ public class NBTWriter {
     }
 
     public static void writeTag(OutputStream out, Tag tag, boolean littleEndian) throws IOException {
-        writeNamedTag((DataOutput) (littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out)), tag);
+        writeNamedTag(littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out), tag);
     }
 
     public static void writeNamedTag(DataOutput out, Tag tag) throws IOException {
