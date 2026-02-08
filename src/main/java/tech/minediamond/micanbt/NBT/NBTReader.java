@@ -59,7 +59,7 @@ public class NBTReader {
             bis.reset();
 
             try (InputStream in = (header[0] == 0x1f && header[1] == (byte) 0x8b && header[2] == 0x08)
-                    ? new GZIPInputStream(bis) : bis) {
+                    ? new GZIPInputStream(bis, 64 * 1024) : bis) {
                 return inferenceLittleEndian(in, littleEndian);
             }
         } else {
