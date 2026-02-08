@@ -27,19 +27,7 @@ public class CommonCompoundTag extends CompoundTag {
     public CommonCompoundTag(String name, DataInput in) throws IOException {
         this(name);
         // read dataInput
-        List<Tag> tags = new ArrayList<>();
-        try {
-            Tag tag;
-            while ((tag = NBTReader.readNamedTag(in)) != null) {
-                tags.add(tag);
-            }
-        } catch (EOFException e) {
-            throw new IOException("Closing EndTag was not found!");
-        }
-
-        for (Tag tag : tags) {
-            this.put(tag);
-        }
+        read(in);
     }
 
     @Override
