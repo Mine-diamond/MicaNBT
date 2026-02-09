@@ -1,49 +1,44 @@
 package tech.minediamond.micanbt.NBT;
 
-import tech.minediamond.micanbt.tag.CommonCompoundTag;
+import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 
 import java.io.DataInput;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 
 public class NBT {
 
-    public static CompoundTag read(Path path) throws IOException {
-        return NBTReader.read(path);
+    public static Tag read(Path path) throws IOException {
+        return NBTReader.builder(path).getTag();
     }
 
-    public static CompoundTag read(Path path, boolean littleEndian) throws IOException {
-        return NBTReader.read(path, littleEndian);
+    public static NBTReader.Builder fromPath(Path path) throws IOException {
+        return NBTReader.builder(path);
     }
 
-    public static CompoundTag read(Path path, boolean compressed, boolean littleEndian) throws IOException {
-        return NBTReader.read(path, compressed, littleEndian);
+    public static Tag read(Path path, boolean compressed, boolean littleEndian, CompoundSelection compoundSelection) throws IOException {
+        return fromPath(path).compressed(compressed).littleEndian(littleEndian).compoundSelection(compoundSelection).getTag();
     }
 
-    public static CompoundTag read(InputStream in, boolean littleEndian) throws IOException {
-        return NBTReader.read(in, littleEndian);
+    public static NBTReader.Builder fromDataInput(DataInput input) throws IOException {
+        return NBTReader.builder(input);
     }
 
-    public static Tag parse(InputStream in) throws IOException {
-        return NBTReader.read(in);
+    public static Tag parse(DataInput dataInput) throws IOException {
+        return fromDataInput(dataInput).getTag();
     }
 
-    public static Tag parse(InputStream in, boolean littleEndian) throws IOException {
-        return NBTReader.readTag(in, littleEndian);
-    }
-
-    public static Tag parse(DataInput in) throws IOException {
-        return NBTReader.readTag(in);
+    public static Tag parse(DataInput dataInput, CompoundSelection compoundSelection) throws IOException {
+        return fromDataInput(dataInput).compoundSelection(compoundSelection).getTag();
     }
 
     public static void write(CompoundTag tag, Path path) throws IOException {
-        NBTWriter.write(tag, path);
+        new NBTWriter(tag, path, false, false);
     }
 
     public static void write(CompoundTag tag, Path path, boolean compressed, boolean littleEndian) throws IOException {
-        NBTWriter.write(tag, path, compressed, littleEndian);
+        new NBTWriter(tag, path, compressed, littleEndian);
     }
 }

@@ -1,8 +1,6 @@
 package tech.minediamond.micanbt.NBT;
 
-import tech.minediamond.micanbt.tag.CommonCompoundTag;
-import tech.minediamond.micanbt.tag.CompoundTag;
-import tech.minediamond.micanbt.tag.Tag;
+import tech.minediamond.micanbt.tag.*;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -10,12 +8,23 @@ import java.nio.file.Path;
 import java.util.zip.GZIPOutputStream;
 
 public class NBTWriter {
+    CompoundTag tag;
+    Path path;
+    boolean compressed;
+    boolean littleEndian;
 
-    public static void write(CompoundTag tag, Path path) throws IOException {
-        write(tag, path, true, false);
+    DataOutput dataOutput;
+
+    public NBTWriter(CompoundTag tag, Path path, boolean compressed, boolean littleEndian) throws IOException {
+        this.tag = tag;
+        this.path = path;
+        this.compressed = compressed;
+        this.littleEndian = littleEndian;
+
+        write();
     }
 
-    public static void write(CompoundTag tag, Path path, boolean compressed, boolean littleEndian) throws IOException {
+    public void write() throws IOException {
         Path parent = path.getParent();
         if (parent != null && Files.notExists(parent)) {
             Files.createDirectories(parent);
@@ -23,26 +32,83 @@ public class NBTWriter {
 
         try (OutputStream fos = Files.newOutputStream(path);
              BufferedOutputStream bos = new BufferedOutputStream(fos);
-             OutputStream out = compressed ? new GZIPOutputStream(bos) : bos) {
-            writeTag(out, tag, littleEndian);
+             OutputStream out = compressed ? new GZIPOutputStream(bos) : bos;
+             DataOutputStream dos = new DataOutputStream(out)) {
+            this.dataOutput = dos;
+            writeNamedTag(this.tag);
         }
     }
 
-    public static void writeTag(OutputStream out, Tag tag) throws IOException {
-        writeTag(out, tag, false);
+    public void writeNamedTag(Tag tag) throws IOException {
+        dataOutput.writeByte(tag.getTagId());
+        dataOutput.writeUTF(tag.getName());
+        writeTagValue(tag);
     }
 
-    public static void writeTag(OutputStream out, Tag tag, boolean littleEndian) throws IOException {
-        writeTag((DataOutput) (littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out)), tag);
+    public void writeAnonymousTag(Tag tag) throws IOException {
+        writeTagValue(tag);
     }
 
-    public static void writeTag(DataOutput out, Tag tag) throws IOException {
-        if (tag != null) {
-            out.writeByte(tag.getTagId());
-            out.writeUTF(tag.getName());
-            tag.write(out);
-        } else {
-            out.writeByte(0);
+    public void writeTagValue(Tag tag) throws IOException {
+        if (tag instanceof CompoundTag compoundTag) {
+            writeCompoundTag(compoundTag);
+        } else if (tag instanceof ListTag<?> listTag) {
+            writeListTag(listTag);
+        } else if (tag instanceof StringTag stringTag) {
+            dataOutput.writeUTF(stringTag.getRawValue());
+        } else if (tag instanceof ByteArrayTag byteArrayTag) {
+            writeByteArrayTag(byteArrayTag);
+        } else if (tag instanceof IntArrayTag intArrayTag) {
+            writeIntArray(intArrayTag);
+        } else if (tag instanceof LongArrayTag longArrayTag) {
+            writeLongArray(longArrayTag);
+        } else if (tag instanceof ByteTag byteTag) {
+            dataOutput.writeByte(byteTag.getRawValue());
+        } else if (tag instanceof ShortTag shortTag) {
+            dataOutput.writeShort(shortTag.getRawValue());
+        } else if (tag instanceof IntTag intTag) {
+            dataOutput.writeInt(intTag.getRawValue());
+        } else if (tag instanceof LongTag longTag) {
+            dataOutput.writeLong(longTag.getRawValue());
+        } else if (tag instanceof FloatTag floatTag) {
+            dataOutput.writeFloat(floatTag.getRawValue());
+        } else if (tag instanceof DoubleTag doubleTag) {
+            dataOutput.writeDouble(doubleTag.getRawValue());
+        }
+    }
+
+    public void writeCompoundTag(CompoundTag tag) throws IOException {
+        for (Tag subTag : tag) {
+            writeNamedTag(subTag);
+        }
+
+        dataOutput.writeByte(0);
+    }
+
+    public void writeListTag(ListTag<?> listTag) throws IOException {
+        dataOutput.writeByte(listTag.getElementTypeId());
+        dataOutput.writeInt(listTag.size());
+        for (Tag tag : listTag.getRawValue()) {
+            writeAnonymousTag(tag);
+        }
+    }
+
+    public void writeByteArrayTag(ByteArrayTag byteArrayTag) throws IOException {
+        dataOutput.writeInt(byteArrayTag.length());
+        dataOutput.write(byteArrayTag.getRawValue());
+    }
+
+    public void writeIntArray(IntArrayTag intArrayTag) throws IOException {
+        dataOutput.writeInt(intArrayTag.length());
+        for (int i : intArrayTag.getRawValue()) {
+            dataOutput.writeInt(i);
+        }
+    }
+
+    public void writeLongArray(LongArrayTag longArrayTag) throws IOException {
+        dataOutput.writeInt(longArrayTag.length());
+        for (long l : longArrayTag.getRawValue()) {
+            dataOutput.writeLong(l);
         }
     }
 }

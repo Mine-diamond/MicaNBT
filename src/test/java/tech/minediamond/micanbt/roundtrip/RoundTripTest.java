@@ -8,6 +8,7 @@ import tech.minediamond.micanbt.SNBT.SNBTStyle;
 import tech.minediamond.micanbt.tag.*;
 
 import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -37,7 +38,7 @@ public class RoundTripTest {
 
         CompoundTag tag = buildTag();
         NBT.write(tag, filePath);
-        CompoundTag read = NBT.read(filePath);
+        CompoundTag read = (CompoundTag) NBT.fromPath(filePath).getTag();
         assertInstanceOf(CompoundTag.class, read);
 
         assertEquals(tag, read);
@@ -57,8 +58,9 @@ public class RoundTripTest {
 
         try (InputStream inputStream = this.getClass().getResourceAsStream("/level.dat")
              ; InputStream buffer = new BufferedInputStream(inputStream)
-             ; GZIPInputStream gzipInputStream = new GZIPInputStream(buffer)) {
-            parsed = NBT.parse(gzipInputStream);
+             ; GZIPInputStream gzipInputStream = new GZIPInputStream(buffer)
+             ; DataInputStream dataInput = new DataInputStream(gzipInputStream)) {
+            parsed = NBT.fromDataInput(dataInput).getTag();
         }
         NBT.write((CompoundTag) parsed, filePath, false, false);
         parsedBytes = Files.readAllBytes(filePath);

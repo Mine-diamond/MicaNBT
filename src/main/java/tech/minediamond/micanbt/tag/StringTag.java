@@ -1,8 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -54,16 +51,6 @@ public class StringTag extends Tag {
     @Override
     public int getTagId() {
         return ID;
-    }
-
-    @Override
-    public void read(DataInput in) throws IOException {
-        this.value = in.readUTF();
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        out.writeUTF(this.value);
     }
 
     @Override

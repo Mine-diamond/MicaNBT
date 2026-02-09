@@ -1,13 +1,6 @@
 package tech.minediamond.micanbt.tag;
 
-import tech.minediamond.micanbt.NBT.TagCreateException;
-import tech.minediamond.micanbt.NBT.TagFactory;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -264,37 +257,6 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
             this.typeId = incomingId;
         } else if (this.typeId != incomingId) {
             throw new IllegalArgumentException(String.format("Tag type mismatch. Expected ID: %d, got: %d", this.typeId, incomingId));
-        }
-    }
-
-    @Override
-    @SuppressWarnings("unchecked") // Safe cast: typeId guarantees all tags in the list are of type T
-    public void read(DataInput in) throws IOException {
-        this.value.clear();
-        this.typeId = in.readUnsignedByte();
-        int count = in.readInt();
-
-        if (count > 0 && this.typeId == 0) {
-            throw new IOException("ListTag type is TAG_End but count is > 0");
-        }
-        for (int index = 0; index < count; index++) {
-
-            try {
-                Tag tag = TagFactory.createInstance(this.typeId, "");
-                tag.read(in);
-                this.value.add((T) tag);
-            } catch (TagCreateException e) {
-                throw new IOException("Failed to create tag with ID: " + this.typeId, e);
-            }
-        }
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        out.writeByte(this.typeId);
-        out.writeInt(this.value.size());
-        for (T tag : this.value) {
-            tag.write(out);
         }
     }
 

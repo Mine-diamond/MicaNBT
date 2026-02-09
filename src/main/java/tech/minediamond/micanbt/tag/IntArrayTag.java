@@ -1,8 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -87,22 +84,6 @@ public class IntArrayTag extends Tag {
      */
     public int length() {
         return this.value.length;
-    }
-
-    @Override
-    public void read(DataInput in) throws IOException {
-        this.value = new int[in.readInt()];
-        for (int index = 0; index < this.value.length; index++) {
-            this.value[index] = in.readInt();
-        }
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        out.writeInt(this.value.length);
-        for (int index = 0; index < this.value.length; index++) {
-            out.writeInt(this.value[index]);
-        }
     }
 
     @Override

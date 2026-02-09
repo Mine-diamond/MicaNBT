@@ -1,9 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
 /**
  * A tag containing a double.
  */
@@ -53,16 +49,6 @@ public class DoubleTag extends Tag {
     @Override
     public int getTagId() {
         return ID;
-    }
-
-    @Override
-    public void read(DataInput in) throws IOException {
-        this.value = in.readDouble();
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        out.writeDouble(this.value);
     }
 
     @Override
