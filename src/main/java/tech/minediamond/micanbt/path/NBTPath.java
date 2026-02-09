@@ -68,12 +68,59 @@ public class NBTPath {
     }
 
     /**
+     * Resolves the given {@code NBTPath} against this path, effectively appending
+     * the second path to the end of the current one.
+     *
+     * @param path The path to be appended.
+     * @return A new {@code NBTPath} representing the combined sequence of tokens.
+     */
+    public NBTPath resolve(NBTPath path) {
+        return MergeToken(this.getTokens(), path.getTokens());
+    }
+
+    /**
+     * Parses the provided path string and resolves it against this path.
+     *
+     * @param path The string representation of the path to append.
+     * @return A new {@code NBTPath} representing the combined path.
+     * @see #of(String)
+     */
+    public NBTPath resolve(String path) {
+        return MergeToken(this.getTokens(), NBTPath.of(path).getTokens());
+    }
+
+    /**
+     * Resolves the given raw tokens against this path.
+     *
+     * @param parts The raw path segments (e.g., String for keys, Integer for indices) to append.
+     * @return A new {@code NBTPath} containing the merged tokens.
+     */
+    public NBTPath resolveFromParts(Object... parts) {
+        return MergeToken(this.getTokens(), parts);
+    }
+
+    private static NBTPath MergeToken(Object[] first, Object[] second) {
+        Object[] mergedTokens = new Object[first.length + second.length];
+        System.arraycopy(first, 0, mergedTokens, 0, first.length);
+        System.arraycopy(second, 0, mergedTokens, first.length, second.length);
+        return NBTPath.fromParts(mergedTokens);
+    }
+
+    /**
      * Returns a copy of the tokens that make up this path.
      *
      * @return An array of strings representing the path segments.
      */
     public Object[] getTokens() {
         return tokens.clone();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NBTPath that = (NBTPath) o;
+        return Arrays.equals(tokens, that.tokens);
     }
 
     @Override

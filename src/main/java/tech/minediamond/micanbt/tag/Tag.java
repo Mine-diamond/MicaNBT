@@ -74,6 +74,21 @@ public abstract class Tag {
         return at(NBTPath.of(path));
     }
 
+    /**
+     * Navigates the NBT tree starting from this tag and retrieves the tag located at
+     * the specified path token.
+     * <p>
+     * This is a convenience method that internally calls {@link NBTPath#fromParts(Object...)}.
+     * Note that only static paths are supported (e.g., "Data.Level.Seed").
+     *
+     * @param parts The NBT path token string to resolve.
+     * @return The {@link Tag} at the specified path, or {@code null} if the path cannot be resolved.
+     * @throws NBTPathParseException If the path format is invalid.
+     */
+    public Tag atParts(Object... parts) {
+        return at(NBTPath.fromParts(parts));
+    }
+
     public abstract int getTagId();
 
     /**

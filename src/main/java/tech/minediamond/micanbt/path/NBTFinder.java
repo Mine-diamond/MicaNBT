@@ -9,6 +9,14 @@ public final class NBTFinder {
     private NBTFinder() {
     }
 
+    public static Tag get(Tag root, String path) {
+        return get(root, NBTPath.of(path));
+    }
+
+    public static Tag getFromParts(Tag root, Object... parts) {
+        return get(root, NBTPath.fromParts(parts));
+    }
+
     public static Tag get(Tag root, NBTPath path) {
         if (root == null || path == null) return null;
 
