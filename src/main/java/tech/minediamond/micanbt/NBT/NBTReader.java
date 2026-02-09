@@ -101,7 +101,7 @@ public class NBTReader {
             case 10 -> readCompoundTag(name);
             case 11 -> readIntArrayTag(name);
             case 12 -> readLongArrayTag(name);
-            default -> throw new IOException("Could not find tag with ID \"" + id + "\".");
+            default -> throw new NBTParseException("Could not find tag with ID \"" + id + "\".");
         };
     }
 
@@ -116,7 +116,7 @@ public class NBTReader {
                 compoundTag.put(tag);
             }
         } catch (EOFException e) {
-            throw new IOException("Closing EndTag was not found!");
+            throw new NBTParseException("Closing EndTag was not found!");
         }
 
         return compoundTag;
@@ -128,7 +128,7 @@ public class NBTReader {
         int count = in.readInt();
 
         if (count > 0 && typeId == 0) {
-            throw new IOException("ListTag type is TAG_End but count is > 0");
+            throw new NBTParseException("ListTag type is TAG_End but count is > 0");
         }
         for (int index = 0; index < count; index++) {
             listTag.add(readAnonymousTag(typeId));
