@@ -1,9 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
 /**
  * A tag containing a short.
  */
@@ -53,11 +49,6 @@ public class ShortTag extends Tag {
     @Override
     public int getTagId() {
         return ID;
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        out.writeShort(this.value);
     }
 
     @Override

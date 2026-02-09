@@ -1,11 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import tech.minediamond.micanbt.NBT.NBTReader;
-import tech.minediamond.micanbt.core.CompoundSelection;
-
-import java.io.DataInput;
-import java.io.EOFException;
-import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 

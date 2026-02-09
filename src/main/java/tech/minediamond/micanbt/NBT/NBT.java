@@ -6,7 +6,6 @@ import tech.minediamond.micanbt.tag.Tag;
 
 import java.io.DataInput;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Path;
 
 public class NBT {
@@ -36,10 +35,10 @@ public class NBT {
     }
 
     public static void write(CompoundTag tag, Path path) throws IOException {
-        NBTWriter.write(tag, path);
+        new NBTWriter(tag, path, false, false);
     }
 
     public static void write(CompoundTag tag, Path path, boolean compressed, boolean littleEndian) throws IOException {
-        NBTWriter.write(tag, path, compressed, littleEndian);
+        new NBTWriter(tag, path, compressed, littleEndian);
     }
 }

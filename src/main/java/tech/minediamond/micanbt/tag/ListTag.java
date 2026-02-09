@@ -1,12 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import tech.minediamond.micanbt.NBT.NBTReader;
-import tech.minediamond.micanbt.NBT.NBTWriter;
-import tech.minediamond.micanbt.core.CompoundSelection;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -264,15 +257,6 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
             this.typeId = incomingId;
         } else if (this.typeId != incomingId) {
             throw new IllegalArgumentException(String.format("Tag type mismatch. Expected ID: %d, got: %d", this.typeId, incomingId));
-        }
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        out.writeByte(this.typeId);
-        out.writeInt(this.value.size());
-        for (T tag : this.value) {
-            NBTWriter.writeAnonymousTag(out, tag);
         }
     }
 

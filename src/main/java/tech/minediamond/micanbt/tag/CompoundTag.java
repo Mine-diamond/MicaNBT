@@ -1,15 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import tech.minediamond.micanbt.NBT.NBTReader;
-import tech.minediamond.micanbt.NBT.NBTWriter;
-import tech.minediamond.micanbt.core.CompoundSelection;
-
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.EOFException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -100,14 +90,5 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     @Override
     public int getTagId() {
         return ID;
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        for (Tag tag : this) {
-            NBTWriter.writeNamedTag(out, tag);
-        }
-
-        out.writeByte(0);
     }
 }

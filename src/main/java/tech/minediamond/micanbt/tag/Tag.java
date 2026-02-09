@@ -6,10 +6,6 @@ import tech.minediamond.micanbt.path.NBTFinder;
 import tech.minediamond.micanbt.path.NBTPath;
 import tech.minediamond.micanbt.path.NBTPathParseException;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
-
 /**
  * Represents an NBT tag.
  * <p>
@@ -79,14 +75,6 @@ public abstract class Tag {
     }
 
     public abstract int getTagId();
-
-    /**
-     * Writes this tag to an output stream.
-     *
-     * @param out Stream to write to.
-     * @throws java.io.IOException If an I/O error occurs.
-     */
-    public abstract void write(DataOutput out) throws IOException;
 
     /**
      * Creates and returns a copy of this tag.

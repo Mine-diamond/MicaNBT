@@ -1,8 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -87,12 +84,6 @@ public class ByteArrayTag extends Tag {
      */
     public int length() {
         return this.value.length;
-    }
-
-    @Override
-    public void write(DataOutput out) throws IOException {
-        out.writeInt(this.value.length);
-        out.write(this.value);
     }
 
     @Override
