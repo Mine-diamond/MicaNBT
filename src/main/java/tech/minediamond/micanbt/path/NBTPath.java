@@ -4,6 +4,7 @@ import tech.minediamond.micanbt.tag.Tag;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a logical path used to navigate and locate specific tags within an NBT structure.
@@ -16,11 +17,11 @@ import java.util.List;
  *
  * @see NBTFinder
  */
-public class NBTPath {
-    private final Object[] tokens;
+public record NBTPath(Object[] tokens) {
 
-    private NBTPath(Object[] tokens) {
-        this.tokens = tokens;
+    public NBTPath {
+        Objects.requireNonNull(tokens, "tokens cannot be null");
+        tokens = tokens.clone();
     }
 
     /**
@@ -51,7 +52,7 @@ public class NBTPath {
      */
     public static NBTPath fromParts(Object... paths) {
         if (paths == null || paths.length == 0) return new NBTPath(new String[0]);
-        return new NBTPath(paths.clone());
+        return new NBTPath(paths);
     }
 
     /**
@@ -75,7 +76,7 @@ public class NBTPath {
      * @return A new {@code NBTPath} representing the combined sequence of tokens.
      */
     public NBTPath resolve(NBTPath path) {
-        return MergeToken(this.getTokens(), path.getTokens());
+        return MergeToken(this.tokens(), path.tokens());
     }
 
     /**
@@ -86,7 +87,7 @@ public class NBTPath {
      * @see #of(String)
      */
     public NBTPath resolve(String path) {
-        return MergeToken(this.getTokens(), NBTPath.of(path).getTokens());
+        return MergeToken(this.tokens(), NBTPath.of(path).tokens());
     }
 
     /**
@@ -96,7 +97,7 @@ public class NBTPath {
      * @return A new {@code NBTPath} containing the merged tokens.
      */
     public NBTPath resolveFromParts(Object... parts) {
-        return MergeToken(this.getTokens(), parts);
+        return MergeToken(this.tokens(), parts);
     }
 
     private static NBTPath MergeToken(Object[] first, Object[] second) {
@@ -109,9 +110,10 @@ public class NBTPath {
     /**
      * Returns a copy of the tokens that make up this path.
      *
-     * @return An array of strings representing the path segments.
+     * @return An array of tokens representing the path segments.
      */
-    public Object[] getTokens() {
+    @Override
+    public Object[] tokens() {
         return tokens.clone();
     }
 
@@ -121,6 +123,11 @@ public class NBTPath {
         if (o == null || getClass() != o.getClass()) return false;
         NBTPath that = (NBTPath) o;
         return Arrays.equals(tokens, that.tokens);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(tokens);
     }
 
     @Override

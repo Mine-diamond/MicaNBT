@@ -21,13 +21,12 @@ public final class NBTFinder {
         if (root == null || path == null) return null;
 
         Tag current = root;
-        Object[] tokens = path.getTokens();
+        Object[] tokens = path.tokens();
 
         for (Object token : tokens) {
-            if (current instanceof CompoundTag compoundTag) {
-                current = compoundTag.get((String) token);
-            } else if (current instanceof ListTag<?> list) {
-                Integer index = (Integer) token;
+            if (current instanceof CompoundTag compoundTag && token instanceof String string) {
+                current = compoundTag.get(string);
+            } else if (current instanceof ListTag<?> list && token instanceof Integer index) {
                 if (index < 0) {
                     index = list.size() + index;
                 }
