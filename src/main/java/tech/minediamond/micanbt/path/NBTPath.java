@@ -103,7 +103,7 @@ public final class NBTPath {
         Object[] mergedTokens = new Object[first.length + second.length];
         System.arraycopy(first, 0, mergedTokens, 0, first.length);
         System.arraycopy(second, 0, mergedTokens, first.length, second.length);
-        return NBTPath.fromParts(mergedTokens);
+        return new NBTPath(mergedTokens);
     }
 
     /**
