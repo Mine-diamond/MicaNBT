@@ -24,7 +24,7 @@ public class NBTWriter {
         write();
     }
 
-    public void write() throws IOException {
+    private void write() throws IOException {
         Path parent = path.getParent();
         if (parent != null && Files.notExists(parent)) {
             Files.createDirectories(parent);
@@ -33,23 +33,24 @@ public class NBTWriter {
         try (OutputStream fos = Files.newOutputStream(path);
              BufferedOutputStream bos = new BufferedOutputStream(fos);
              OutputStream out = compressed ? new GZIPOutputStream(bos) : bos;
-             DataOutputStream dos = new DataOutputStream(out)) {
-            this.dataOutput = dos;
+             FilterOutputStream dos = littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out)) {
+
+            this.dataOutput = (DataOutput) dos;
             writeNamedTag(this.tag);
         }
     }
 
-    public void writeNamedTag(Tag tag) throws IOException {
+    private void writeNamedTag(Tag tag) throws IOException {
         dataOutput.writeByte(tag.getTagId());
         dataOutput.writeUTF(tag.getName());
         writeTagValue(tag);
     }
 
-    public void writeAnonymousTag(Tag tag) throws IOException {
+    private void writeAnonymousTag(Tag tag) throws IOException {
         writeTagValue(tag);
     }
 
-    public void writeTagValue(Tag tag) throws IOException {
+    private void writeTagValue(Tag tag) throws IOException {
         if (tag instanceof CompoundTag compoundTag) {
             writeCompoundTag(compoundTag);
         } else if (tag instanceof ListTag<?> listTag) {
@@ -74,10 +75,12 @@ public class NBTWriter {
             dataOutput.writeFloat(floatTag.getRawValue());
         } else if (tag instanceof DoubleTag doubleTag) {
             dataOutput.writeDouble(doubleTag.getRawValue());
+        } else {
+            throw new IOException("Unsupported tag type: " + tag.getClass().getName());
         }
     }
 
-    public void writeCompoundTag(CompoundTag tag) throws IOException {
+    private void writeCompoundTag(CompoundTag tag) throws IOException {
         for (Tag subTag : tag) {
             writeNamedTag(subTag);
         }
@@ -85,7 +88,7 @@ public class NBTWriter {
         dataOutput.writeByte(0);
     }
 
-    public void writeListTag(ListTag<?> listTag) throws IOException {
+    private void writeListTag(ListTag<?> listTag) throws IOException {
         dataOutput.writeByte(listTag.getElementTypeId());
         dataOutput.writeInt(listTag.size());
         for (Tag tag : listTag.getRawValue()) {
@@ -93,19 +96,19 @@ public class NBTWriter {
         }
     }
 
-    public void writeByteArrayTag(ByteArrayTag byteArrayTag) throws IOException {
+    private void writeByteArrayTag(ByteArrayTag byteArrayTag) throws IOException {
         dataOutput.writeInt(byteArrayTag.length());
         dataOutput.write(byteArrayTag.getRawValue());
     }
 
-    public void writeIntArray(IntArrayTag intArrayTag) throws IOException {
+    private void writeIntArray(IntArrayTag intArrayTag) throws IOException {
         dataOutput.writeInt(intArrayTag.length());
         for (int i : intArrayTag.getRawValue()) {
             dataOutput.writeInt(i);
         }
     }
 
-    public void writeLongArray(LongArrayTag longArrayTag) throws IOException {
+    private void writeLongArray(LongArrayTag longArrayTag) throws IOException {
         dataOutput.writeInt(longArrayTag.length());
         for (long l : longArrayTag.getRawValue()) {
             dataOutput.writeLong(l);
