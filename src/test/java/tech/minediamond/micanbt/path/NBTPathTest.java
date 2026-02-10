@@ -37,9 +37,17 @@ public class NBTPathTest {
         assertToStringFromRawToken("tag.list[2].id", "tag", "list", 2, "id");
         assertToStringFromRawToken("tag.\"sub.tag\"", "tag", "sub.tag");
         assertToStringFromRawToken("tag.\"list[1]\"[1]", "tag", "list[1]", 1);
+
+        assertPath("\"Name\":\"{\\\"text\\\":\\\"维度递归核心\\\",\\\"color\\\":\\\"gold\\\",\\\"italic\\\":false}\"", NBTPath.of("tag.display").resolve("Name"));
+        assertPath("\"\":{id:\"minecraft:protection\",lvl:10s}", NBTPath.of("tag.Enchantments").resolve(NBTPath.of("[0]")));
+        assertPath("\"\":1", NBTPath.of("tag.CustomData.RootLayer.Level1.Level2.Level3.Parameters.Level4.Security").resolveFromParts("Level5","Matrix",0,0));
     }
 
     public void assertPath(String expected, String path) {
+        assertEquals(expected, tag.at(path).toString());
+    }
+
+    public void assertPath(String expected, NBTPath path) {
         assertEquals(expected, tag.at(path).toString());
     }
 
