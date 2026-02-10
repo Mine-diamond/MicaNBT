@@ -76,7 +76,7 @@ public record NBTPath(Object[] tokens) {
      * @return A new {@code NBTPath} representing the combined sequence of tokens.
      */
     public NBTPath resolve(NBTPath path) {
-        return MergeToken(this.tokens(), path.tokens());
+        return mergeToken(this.tokens, path.tokens);
     }
 
     /**
@@ -87,7 +87,7 @@ public record NBTPath(Object[] tokens) {
      * @see #of(String)
      */
     public NBTPath resolve(String path) {
-        return MergeToken(this.tokens(), NBTPath.of(path).tokens());
+        return mergeToken(this.tokens, NBTPath.of(path).tokens);
     }
 
     /**
@@ -97,10 +97,10 @@ public record NBTPath(Object[] tokens) {
      * @return A new {@code NBTPath} containing the merged tokens.
      */
     public NBTPath resolveFromParts(Object... parts) {
-        return MergeToken(this.tokens(), parts);
+        return mergeToken(this.tokens, parts);
     }
 
-    private static NBTPath MergeToken(Object[] first, Object[] second) {
+    private static NBTPath mergeToken(Object[] first, Object[] second) {
         Object[] mergedTokens = new Object[first.length + second.length];
         System.arraycopy(first, 0, mergedTokens, 0, first.length);
         System.arraycopy(second, 0, mergedTokens, first.length, second.length);
