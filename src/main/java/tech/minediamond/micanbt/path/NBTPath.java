@@ -4,7 +4,6 @@ import tech.minediamond.micanbt.tag.Tag;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Represents a logical path used to navigate and locate specific tags within an NBT structure.
@@ -17,11 +16,11 @@ import java.util.Objects;
  *
  * @see NBTFinder
  */
-public record NBTPath(Object[] tokens) {
+public final class NBTPath {
+    private final Object[] tokens;
 
-    public NBTPath {
-        Objects.requireNonNull(tokens, "tokens cannot be null");
-        tokens = tokens.clone();
+    private NBTPath(Object[] tokens) {
+        this.tokens = tokens;
     }
 
     /**
@@ -51,8 +50,8 @@ public record NBTPath(Object[] tokens) {
      * @return A new {@code NBTPath} instance.
      */
     public static NBTPath fromParts(Object... paths) {
-        if (paths == null || paths.length == 0) return new NBTPath(new String[0]);
-        return new NBTPath(paths);
+        if (paths == null || paths.length == 0) return new NBTPath(new Object[0]);
+        return new NBTPath(paths.clone());
     }
 
     /**
@@ -64,7 +63,7 @@ public record NBTPath(Object[] tokens) {
      * @return A new {@code NBTPath} instance.
      */
     public static NBTPath fromParts(List<Object> path) {
-        if (path == null || path.isEmpty()) return new NBTPath(new String[0]);
+        if (path == null || path.isEmpty()) return new NBTPath(new Object[0]);
         return new NBTPath(path.toArray(new Object[0]));
     }
 
@@ -112,8 +111,7 @@ public record NBTPath(Object[] tokens) {
      *
      * @return An array of tokens representing the path segments.
      */
-    @Override
-    public Object[] tokens() {
+    public Object[] getTokens() {
         return tokens.clone();
     }
 

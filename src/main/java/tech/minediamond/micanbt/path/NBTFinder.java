@@ -21,7 +21,7 @@ public final class NBTFinder {
         if (root == null || path == null) return null;
 
         Tag current = root;
-        Object[] tokens = path.tokens();
+        Object[] tokens = path.getTokens();
 
         for (Object token : tokens) {
             if (current instanceof CompoundTag compoundTag && token instanceof String string) {

@@ -22,7 +22,7 @@ public class NBTPathWriter {
     }
 
     public void WriteTokens() {
-        for (Object token : path.tokens()) {
+        for (Object token : path.getTokens()) {
             if (token instanceof String stringToken) {
                 writeStringToken(stringToken);
             } else if (token instanceof Integer integerToken) {
