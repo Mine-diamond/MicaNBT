@@ -1,12 +1,15 @@
 package tech.minediamond.micanbt.chunk;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 
@@ -25,13 +28,24 @@ public class Region {
         chunkLocations = getChunkLocations(Arrays.copyOfRange(data, 0, SECTOR_LENGTH));
         timestamps = getTimestamps(Arrays.copyOfRange(data, SECTOR_LENGTH, SECTOR_LENGTH * 2));
         if (preLoadChunk) {
-            IntStream.range(0, 1024).parallel().forEach(i -> {
-                try {
-                    chunks[i] = parseChunk(i);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+
+            int threads = Runtime.getRuntime().availableProcessors() / 2;
+            ForkJoinPool customPool = new ForkJoinPool(threads);
+            try {
+                customPool.submit(() -> {
+                    IntStream.range(0, 1024).parallel().forEach(i -> {
+                        try {
+                            chunks[i] = parseChunk(i);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e); // 之后再改
+                        }
+                    });
+                }).get();
+            } catch (Exception e) {
+                throw new IOException(e);
+            } finally {
+                customPool.shutdown();
+            }
         }
         System.out.println("Region initialled");
     }
@@ -80,7 +94,9 @@ public class Region {
                 + ((chunkHeader[2] & 0xff) << 8)
                 + (chunkHeader[3] & 0xff);
         //System.out.println("offset: " + offset + ", offset sector: " + offset/SECTOR_LENGTH + ", chunkLength: " + chunkLength + ", (offset + chunkLength - 1): " + (offset + chunkLength - 1));
-        InputStream input = new ByteArrayInputStream(Arrays.copyOfRange(data, offset + 5, offset + chunkLength + 4));
+        int payloadOffset = offset + 5;
+        int payloadLength = chunkLength - 1;
+        InputStream input = new ByteArrayInputStream(data, payloadOffset, payloadLength);
         switch (chunkHeader[4]) {
             case 0x01 -> // GZip
                     input = new GZIPInputStream(input);
