@@ -100,9 +100,8 @@ public class Region {
         switch (chunkHeader[4]) {
             case 0x01 -> // GZip
                     input = new GZIPInputStream(input);
-            case 0x02 -> { // Zlib
-                input = new InflaterInputStream(input);
-            }
+            case 0x02 -> // Zlib
+                    input = new InflaterInputStream(input);
             case 0x03 -> { // Uncompressed
             }
             default ->
