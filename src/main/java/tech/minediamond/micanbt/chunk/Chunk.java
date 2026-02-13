@@ -9,9 +9,16 @@ import java.io.DataInput;
 import java.io.IOException;
 
 public class Chunk {
-    CompoundTag chunkTag;
+    boolean chunkInitialized = false;
 
-    Chunk(DataInput dataInput) throws IOException {
+    CompoundTag chunkTag;
+    int timestamp;
+    ChunkPos chunkPos;
+
+    public Chunk(DataInput dataInput, int timestamp, ChunkPos chunkPos, boolean chunkInitialized) throws IOException {
+        this.timestamp = timestamp;
+        this.chunkPos = chunkPos;
+        this.chunkInitialized = chunkInitialized;
         Tag parsed = NBT.parse(dataInput);
         if (parsed instanceof CompoundTag compoundTag) {
             chunkTag = compoundTag;
@@ -20,16 +27,30 @@ public class Chunk {
         }
     }
 
-    private Chunk(CompoundTag compoundTag) {
+    private Chunk(CompoundTag compoundTag, boolean chunkInitialized) {
         this.chunkTag = compoundTag;
     }
 
-    public static Chunk ofEmptyChunk () {
-        return new Chunk(new CommonCompoundTag("") {
-        });
+    public static Chunk ofEmptyChunk() {
+        return new Chunk(new CommonCompoundTag(""), false);
+    }
+
+    public boolean isChunkInitialized() {
+        return chunkInitialized;
     }
 
     public CompoundTag getChunkTag() {
         return chunkTag;
+    }
+
+    public int getTimestamp() {
+        return timestamp;
+    }
+
+    public ChunkPos getChunkPos() {
+        return chunkPos;
+    }
+
+    public record ChunkPos(int x, int z) {
     }
 }

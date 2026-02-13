@@ -7,9 +7,11 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 
@@ -22,17 +24,18 @@ public class Region {
     int[] timestamps;
     Chunk[] chunks = new Chunk[1024];
 
+    private static final ThreadLocal<Inflater> INFLATER_HOLDER =
+            ThreadLocal.withInitial(Inflater::new);
+    private static final ForkJoinPool SHARED_POOL = new ForkJoinPool(Runtime.getRuntime().availableProcessors() / 2);
+
     public Region(Path path, boolean preLoadChunk) throws IOException {
         this.path = path;
         data = Files.readAllBytes(path);
         chunkLocations = getChunkLocations(Arrays.copyOfRange(data, 0, SECTOR_LENGTH));
         timestamps = getTimestamps(Arrays.copyOfRange(data, SECTOR_LENGTH, SECTOR_LENGTH * 2));
         if (preLoadChunk) {
-
-            int threads = Runtime.getRuntime().availableProcessors() / 2;
-            ForkJoinPool customPool = new ForkJoinPool(threads);
             try {
-                customPool.submit(() -> {
+                SHARED_POOL.submit(() -> {
                     IntStream.range(0, 1024).parallel().forEach(i -> {
                         try {
                             chunks[i] = parseChunk(i);
@@ -41,10 +44,8 @@ public class Region {
                         }
                     });
                 }).get();
-            } catch (Exception e) {
-                throw new IOException(e);
-            } finally {
-                customPool.shutdown();
+            } catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e); // 之后再改
             }
         }
         System.out.println("Region initialled");
@@ -100,19 +101,21 @@ public class Region {
         switch (chunkHeader[4]) {
             case 0x01 -> // GZip
                     input = new GZIPInputStream(input);
-            case 0x02 -> // Zlib
-                    input = new InflaterInputStream(input);
+            case 0x02 -> { // Zlib
+                Inflater inflater = INFLATER_HOLDER.get();
+                inflater.reset();
+                input = new InflaterInputStream(input, inflater);
+            }
             case 0x03 -> { // Uncompressed
             }
             default ->
                     throw new IOException("Unsupported compression method: " + Integer.toHexString(chunkHeader[4] & 0xff));
         }
         try (DataInputStream dis = new DataInputStream(input)) {
-            return new Chunk(dis);
+            return new Chunk(dis, timestamps[i], new Chunk.ChunkPos((i & 31), ((i >> 5) & 31)), true);
         }
     }
 
     public record ChunkLocation(int offset, int size) {
     }
-
 }
