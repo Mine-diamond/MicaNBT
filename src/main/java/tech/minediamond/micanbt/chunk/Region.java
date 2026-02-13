@@ -88,17 +88,8 @@ public class Region {
         if (offset == 0) {
             return Chunk.ofEmptyChunk();
         }
-        byte[] chunkHeader;
-        chunkHeader = Arrays.copyOfRange(data, offset, offset + 5);
-        int chunkLength = ((chunkHeader[0] & 0xff) << 24)
-                + ((chunkHeader[1] & 0xff) << 16)
-                + ((chunkHeader[2] & 0xff) << 8)
-                + (chunkHeader[3] & 0xff);
-        //System.out.println("offset: " + offset + ", offset sector: " + offset/SECTOR_LENGTH + ", chunkLength: " + chunkLength + ", (offset + chunkLength - 1): " + (offset + chunkLength - 1));
-        int payloadOffset = offset + 5;
-        int payloadLength = chunkLength - 1;
-        InputStream input = new ByteArrayInputStream(data, payloadOffset, payloadLength);
-        switch (chunkHeader[4]) {
+        InputStream input = getByteArrayInputStream(offset);
+        switch (data[offset + 4]) {
             case 0x01 -> // GZip
                     input = new GZIPInputStream(input);
             case 0x02 -> { // Zlib
@@ -109,11 +100,22 @@ public class Region {
             case 0x03 -> { // Uncompressed
             }
             default ->
-                    throw new IOException("Unsupported compression method: " + Integer.toHexString(chunkHeader[4] & 0xff));
+                    throw new IOException("Unsupported compression method: " + Integer.toHexString(data[offset + 4] & 0xff));
         }
         try (DataInputStream dis = new DataInputStream(input)) {
             return new Chunk(dis, timestamps[i], new Chunk.ChunkPos((i & 31), ((i >> 5) & 31)), true);
         }
+    }
+
+    private InputStream getByteArrayInputStream(int offset) {
+        int chunkLength = ((data[offset] & 0xff) << 24)
+                + ((data[offset + 1] & 0xff) << 16)
+                + ((data[offset + 2] & 0xff) << 8)
+                + (data[offset + 3] & 0xff);
+        //System.out.println("offset: " + offset + ", offset sector: " + offset/SECTOR_LENGTH + ", chunkLength: " + chunkLength + ", (offset + chunkLength - 1): " + (offset + chunkLength - 1));
+        int payloadOffset = offset + 5;
+        int payloadLength = chunkLength - 1;
+        return new ByteArrayInputStream(data, payloadOffset, payloadLength);
     }
 
     public record ChunkLocation(int offset, int size) {
