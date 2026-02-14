@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
@@ -16,13 +15,14 @@ import java.util.zip.InflaterInputStream;
 
 
 public class Region {
+    public static final int CHUNKS_PER_REGION = 1024;
     public static final int SECTOR_LENGTH = 4 * 1024;
 
     Path path;
     byte[] data;
     ChunkLocation[] chunkLocations;
     int[] timestamps;
-    Chunk[] chunks = new Chunk[1024];
+    Chunk[] chunks = new Chunk[CHUNKS_PER_REGION];
 
     private static final ThreadLocal<Inflater> INFLATER_HOLDER =
             ThreadLocal.withInitial(Inflater::new);
@@ -36,16 +36,16 @@ public class Region {
             locks[i] = new Object();
         }
         chunkLocations = getChunkLocations();
-        timestamps = getTimestamps(Arrays.copyOfRange(data, SECTOR_LENGTH, SECTOR_LENGTH * 2));
+        timestamps = getTimestamps();
         if (preLoadChunk) {
-            CHUNK_PARSER_EXECUTOR.submit(() -> IntStream.range(0, 1024).parallel()
+            CHUNK_PARSER_EXECUTOR.submit(() -> IntStream.range(0, CHUNKS_PER_REGION).parallel()
                     .forEach(i -> chunks[i] = parseChunk(i))).get();
         }
     }
 
     private ChunkLocation[] getChunkLocations() {
-        ChunkLocation[] chunkLocations = new ChunkLocation[1024];
-        for (int i = 0; i < 4 * 1024; i += 4) {
+        ChunkLocation[] chunkLocations = new ChunkLocation[CHUNKS_PER_REGION];
+        for (int i = 0; i < SECTOR_LENGTH; i += 4) {
             int offset = ((data[i] & 0xFF) << 16) | ((data[i + 1] & 0xFF) << 8) | (data[i + 2] & 0xFF);
             byte size = data[i + 3];
             chunkLocations[i >> 2] = new ChunkLocation(offset, size);
@@ -53,11 +53,11 @@ public class Region {
         return chunkLocations;
     }
 
-    private int[] getTimestamps(byte[] TimestampsData) {
-        int[] timestamps = new int[1024];
-        for (int i = 0; i < 4 * 1024; i += 4) {
-            int timestamp = ((TimestampsData[i] & 0xFF) << 24) | ((TimestampsData[i + 1] & 0xFF) << 16) | ((TimestampsData[i + 2] & 0xFF) << 8) | (TimestampsData[i + 3] & 0xFF);
-            timestamps[i >> 2] = timestamp;
+    private int[] getTimestamps() {
+        int[] timestamps = new int[CHUNKS_PER_REGION];
+        for (int i = SECTOR_LENGTH; i < 2 * SECTOR_LENGTH; i += 4) {
+            int timestamp = ((data[i] & 0xFF) << 24) | ((data[i + 1] & 0xFF) << 16) | ((data[i + 2] & 0xFF) << 8) | (data[i + 3] & 0xFF);
+            timestamps[i >> 3] = timestamp;
         }
         return timestamps;
     }
