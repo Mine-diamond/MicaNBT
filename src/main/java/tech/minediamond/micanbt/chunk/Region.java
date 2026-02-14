@@ -41,14 +41,13 @@ public class Region {
             CHUNK_PARSER_EXECUTOR.submit(() -> IntStream.range(0, 1024).parallel()
                     .forEach(i -> chunks[i] = parseChunk(i))).get();
         }
-        //System.out.println("Region initialled");
     }
 
     private ChunkLocation[] getChunkLocations() {
         ChunkLocation[] chunkLocations = new ChunkLocation[1024];
         for (int i = 0; i < 4 * 1024; i += 4) {
-            int offset = ((data[i] & 0xFF) << 16) + ((data[i + 1] & 0xFF) << 8) + (data[i + 2] & 0xFF);
-            int size = data[i + 3];
+            int offset = ((data[i] & 0xFF) << 16) | ((data[i + 1] & 0xFF) << 8) | (data[i + 2] & 0xFF);
+            byte size = data[i + 3];
             chunkLocations[i >> 2] = new ChunkLocation(offset, size);
         }
         return chunkLocations;
@@ -57,7 +56,7 @@ public class Region {
     private int[] getTimestamps(byte[] TimestampsData) {
         int[] timestamps = new int[1024];
         for (int i = 0; i < 4 * 1024; i += 4) {
-            int timestamp = ((TimestampsData[i] & 0xFF) << 24) + ((TimestampsData[i + 1] & 0xFF) << 16) + ((TimestampsData[i + 2] & 0xFF) << 8) + (TimestampsData[i + 3] & 0xFF);
+            int timestamp = ((TimestampsData[i] & 0xFF) << 24) | ((TimestampsData[i + 1] & 0xFF) << 16) | ((TimestampsData[i + 2] & 0xFF) << 8) | (TimestampsData[i + 3] & 0xFF);
             timestamps[i >> 2] = timestamp;
         }
         return timestamps;
@@ -76,7 +75,6 @@ public class Region {
     }
 
     private Chunk parseChunk(int i) {
-        //System.out.println("processing chunk now: " + i);
         int offset = chunkLocations[i].offset * SECTOR_LENGTH;
         if (offset == 0) {
             return Chunk.ofEmpty();
@@ -110,12 +108,11 @@ public class Region {
                 + ((data[offset + 1] & 0xff) << 16)
                 + ((data[offset + 2] & 0xff) << 8)
                 + (data[offset + 3] & 0xff);
-        //System.out.println("offset: " + offset + ", offset sector: " + offset/SECTOR_LENGTH + ", chunkLength: " + chunkLength + ", (offset + chunkLength - 1): " + (offset + chunkLength - 1));
         int payloadOffset = offset + 5;
         int payloadLength = chunkLength - 1;
         return new ByteArrayInputStream(data, payloadOffset, payloadLength);
     }
 
-    public record ChunkLocation(int offset, int size) {
+    public record ChunkLocation(int offset, byte size) {
     }
 }
