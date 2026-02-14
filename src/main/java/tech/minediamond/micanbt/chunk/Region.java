@@ -35,7 +35,7 @@ public class Region {
         for (int i = 0; i < locks.length; i++) {
             locks[i] = new Object();
         }
-        chunkLocations = getChunkLocations(Arrays.copyOfRange(data, 0, SECTOR_LENGTH));
+        chunkLocations = getChunkLocations();
         timestamps = getTimestamps(Arrays.copyOfRange(data, SECTOR_LENGTH, SECTOR_LENGTH * 2));
         if (preLoadChunk) {
             CHUNK_PARSER_EXECUTOR.submit(() -> IntStream.range(0, 1024).parallel()
@@ -44,11 +44,11 @@ public class Region {
         //System.out.println("Region initialled");
     }
 
-    private ChunkLocation[] getChunkLocations(byte[] header) {
+    private ChunkLocation[] getChunkLocations() {
         ChunkLocation[] chunkLocations = new ChunkLocation[1024];
         for (int i = 0; i < 4 * 1024; i += 4) {
-            int offset = ((header[i] & 0xFF) << 16) + ((header[i + 1] & 0xFF) << 8) + (header[i + 2] & 0xFF);
-            int size = header[i + 3];
+            int offset = ((data[i] & 0xFF) << 16) + ((data[i + 1] & 0xFF) << 8) + (data[i + 2] & 0xFF);
+            int size = data[i + 3];
             chunkLocations[i >> 2] = new ChunkLocation(offset, size);
         }
         return chunkLocations;
@@ -79,7 +79,7 @@ public class Region {
         //System.out.println("processing chunk now: " + i);
         int offset = chunkLocations[i].offset * SECTOR_LENGTH;
         if (offset == 0) {
-            return Chunk.ofEmptyChunk();
+            return Chunk.ofEmpty();
         }
         Chunk.ChunkPos chunkPos = new Chunk.ChunkPos((i & 31), ((i >> 5) & 31));
         try {

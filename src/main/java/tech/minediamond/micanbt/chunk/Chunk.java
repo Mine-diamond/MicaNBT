@@ -47,7 +47,7 @@ public class Chunk {
         this.error = cause;
     }
 
-    public static Chunk ofEmptyChunk() {
+    public static Chunk ofEmpty() {
         return new Chunk(new CommonCompoundTag(""), false);
     }
 
