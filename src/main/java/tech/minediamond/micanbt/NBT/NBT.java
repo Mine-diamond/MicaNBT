@@ -35,10 +35,10 @@ public class NBT {
     }
 
     public static void write(CompoundTag tag, Path path) throws IOException {
-        new NBTWriter(tag, path, false, false);
+        new NBTWriter(tag, path, NBTCompressType.UNCOMPRESSED, false);
     }
 
-    public static void write(CompoundTag tag, Path path, boolean compressed, boolean littleEndian) throws IOException {
-        new NBTWriter(tag, path, compressed, littleEndian);
+    public static void write(CompoundTag tag, Path path, NBTCompressType compressType, boolean littleEndian) throws IOException {
+        new NBTWriter(tag, path, compressType, littleEndian);
     }
 }

@@ -88,6 +88,7 @@ public class Region {
         if (offset == 0) {
             return Chunk.ofEmptyChunk();
         }
+        System.out.println("header: "+ Integer.toHexString(data[offset + 5]) + ", " + Integer.toHexString(data[offset + 6]));
         InputStream input = getByteArrayInputStream(offset);
         switch (data[offset + 4]) {
             case 0x01 -> // GZip

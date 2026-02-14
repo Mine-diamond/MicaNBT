@@ -3,6 +3,7 @@ package tech.minediamond.micanbt.roundtrip;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import tech.minediamond.micanbt.NBT.NBT;
+import tech.minediamond.micanbt.NBT.NBTCompressType;
 import tech.minediamond.micanbt.SNBT.SNBT;
 import tech.minediamond.micanbt.SNBT.SNBTStyle;
 import tech.minediamond.micanbt.tag.*;
@@ -62,7 +63,7 @@ public class RoundTripTest {
              ; DataInputStream dataInput = new DataInputStream(gzipInputStream)) {
             parsed = NBT.fromDataInput(dataInput).getTag();
         }
-        NBT.write((CompoundTag) parsed, filePath, false, false);
+        NBT.write((CompoundTag) parsed, filePath, NBTCompressType.UNCOMPRESSED, false);
         parsedBytes = Files.readAllBytes(filePath);
         assertArrayEquals(originalBytes, parsedBytes);
     }

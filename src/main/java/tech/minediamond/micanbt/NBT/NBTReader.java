@@ -56,7 +56,7 @@ public class NBTReader {
     }
 
     private Tag inferenceCompressed(InputStream is) throws IOException {
-        if (compressType == null) { // Can not inference zlib now
+        if (compressType == null) {
             is.mark(3);
             byte[] header = new byte[3];
             if (is.read(header) < 3) {
@@ -66,10 +66,11 @@ public class NBTReader {
 
             if (header[0] == 0x1f && header[1] == (byte) 0x8b && header[2] == 0x08) {
                 compressType = NBTCompressType.GZIP;
+            } else if ((header[0] & 0x0F) == 8 && (header[0] >>> 4) <= 7 && (header[0] * 256 + header[1]) % 31 == 0) {
+                compressType = NBTCompressType.ZLIB;
             } else {
                 compressType = NBTCompressType.UNCOMPRESSED;
             }
-
         }
 
         try (InputStream in = switch (compressType) {
