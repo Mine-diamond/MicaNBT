@@ -26,7 +26,7 @@ public class Region {
 
     private static final ThreadLocal<Inflater> INFLATER_HOLDER =
             ThreadLocal.withInitial(Inflater::new);
-    private static final ForkJoinPool SHARED_POOL = new ForkJoinPool(Runtime.getRuntime().availableProcessors() / 2);
+    private static final ForkJoinPool CHUNK_PARSER_EXECUTOR = new ForkJoinPool(Runtime.getRuntime().availableProcessors() / 2);
     private final Object[] locks = new Object[64];
 
     public Region(Path path, boolean preLoadChunk) throws IOException, InterruptedException, ExecutionException {
@@ -38,15 +38,10 @@ public class Region {
         chunkLocations = getChunkLocations(Arrays.copyOfRange(data, 0, SECTOR_LENGTH));
         timestamps = getTimestamps(Arrays.copyOfRange(data, SECTOR_LENGTH, SECTOR_LENGTH * 2));
         if (preLoadChunk) {
-            SHARED_POOL.submit(() -> IntStream.range(0, 1024).parallel().forEach(i -> {
-                try {
-                    chunks[i] = parseChunk(i);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            })).get();
+            CHUNK_PARSER_EXECUTOR.submit(() -> IntStream.range(0, 1024).parallel()
+                    .forEach(i -> chunks[i] = parseChunk(i))).get();
         }
-        System.out.println("Region initialled");
+        //System.out.println("Region initialled");
     }
 
     private ChunkLocation[] getChunkLocations(byte[] header) {
@@ -73,39 +68,40 @@ public class Region {
         if (chunks[index] == null) {
             synchronized (locks[index % locks.length]) {
                 if (chunks[index] == null) {
-                    try {
-                        chunks[index] = parseChunk(index);
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to load chunk at " + index, e);
-                    }
+                    chunks[index] = parseChunk(index);
                 }
             }
         }
         return chunks[index];
     }
 
-    private Chunk parseChunk(int i) throws IOException {
+    private Chunk parseChunk(int i) {
         //System.out.println("processing chunk now: " + i);
         int offset = chunkLocations[i].offset * SECTOR_LENGTH;
         if (offset == 0) {
             return Chunk.ofEmptyChunk();
         }
-        InputStream input = getByteArrayInputStream(offset);
-        switch (data[offset + 4]) {
-            case 0x01 -> // GZip
-                    input = new GZIPInputStream(input);
-            case 0x02 -> { // Zlib
-                Inflater inflater = INFLATER_HOLDER.get();
-                inflater.reset();
-                input = new InflaterInputStream(input, inflater);
+        Chunk.ChunkPos chunkPos = new Chunk.ChunkPos((i & 31), ((i >> 5) & 31));
+        try {
+            InputStream input = getByteArrayInputStream(offset);
+            switch (data[offset + 4]) {
+                case 0x01 -> // GZip
+                        input = new GZIPInputStream(input);
+                case 0x02 -> { // Zlib
+                    Inflater inflater = INFLATER_HOLDER.get();
+                    inflater.reset();
+                    input = new InflaterInputStream(input, inflater);
+                }
+                case 0x03 -> { // Uncompressed
+                }
+                default ->
+                        throw new IOException("Unsupported compression method: " + Integer.toHexString(data[offset + 4] & 0xff));
             }
-            case 0x03 -> { // Uncompressed
+            try (DataInputStream dis = new DataInputStream(input)) {
+                return new Chunk(dis, timestamps[i], chunkPos, true);
             }
-            default ->
-                    throw new IOException("Unsupported compression method: " + Integer.toHexString(data[offset + 4] & 0xff));
-        }
-        try (DataInputStream dis = new DataInputStream(input)) {
-            return new Chunk(dis, timestamps[i], new Chunk.ChunkPos((i & 31), ((i >> 5) & 31)), true);
+        } catch (IOException e) {
+            return Chunk.ofCorrupt(chunkPos, e);
         }
     }
 
