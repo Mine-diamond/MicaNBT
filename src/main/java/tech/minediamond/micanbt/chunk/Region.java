@@ -27,26 +27,24 @@ public class Region {
     private static final ThreadLocal<Inflater> INFLATER_HOLDER =
             ThreadLocal.withInitial(Inflater::new);
     private static final ForkJoinPool SHARED_POOL = new ForkJoinPool(Runtime.getRuntime().availableProcessors() / 2);
+    private final Object[] locks = new Object[64];
 
-    public Region(Path path, boolean preLoadChunk) throws IOException {
+    public Region(Path path, boolean preLoadChunk) throws IOException, InterruptedException, ExecutionException {
         this.path = path;
         data = Files.readAllBytes(path);
+        for (int i = 0; i < locks.length; i++) {
+            locks[i] = new Object();
+        }
         chunkLocations = getChunkLocations(Arrays.copyOfRange(data, 0, SECTOR_LENGTH));
         timestamps = getTimestamps(Arrays.copyOfRange(data, SECTOR_LENGTH, SECTOR_LENGTH * 2));
         if (preLoadChunk) {
-            try {
-                SHARED_POOL.submit(() -> {
-                    IntStream.range(0, 1024).parallel().forEach(i -> {
-                        try {
-                            chunks[i] = parseChunk(i);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e); // 之后再改
-                        }
-                    });
-                }).get();
-            } catch (InterruptedException | ExecutionException e) {
-                throw new RuntimeException(e); // 之后再改
-            }
+            SHARED_POOL.submit(() -> IntStream.range(0, 1024).parallel().forEach(i -> {
+                try {
+                    chunks[i] = parseChunk(i);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            })).get();
         }
         System.out.println("Region initialled");
     }
@@ -73,10 +71,14 @@ public class Region {
     public Chunk getChunk(int x, int z) {
         int index = ((z & 31) << 5) | (x & 31);
         if (chunks[index] == null) {
-            try {
-                chunks[index] = parseChunk(index);
-            } catch (IOException e) {
-                throw new RuntimeException(e); // 之后再改
+            synchronized (locks[index % locks.length]) {
+                if (chunks[index] == null) {
+                    try {
+                        chunks[index] = parseChunk(index);
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to load chunk at " + index, e);
+                    }
+                }
             }
         }
         return chunks[index];
@@ -88,7 +90,6 @@ public class Region {
         if (offset == 0) {
             return Chunk.ofEmptyChunk();
         }
-        System.out.println("header: "+ Integer.toHexString(data[offset + 5]) + ", " + Integer.toHexString(data[offset + 6]));
         InputStream input = getByteArrayInputStream(offset);
         switch (data[offset + 4]) {
             case 0x01 -> // GZip
