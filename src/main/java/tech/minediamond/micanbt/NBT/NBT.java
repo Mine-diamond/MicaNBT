@@ -18,8 +18,8 @@ public class NBT {
         return NBTReader.builder(path);
     }
 
-    public static Tag read(Path path, boolean compressed, boolean littleEndian, CompoundSelection compoundSelection) throws IOException {
-        return fromPath(path).compressed(compressed).littleEndian(littleEndian).compoundSelection(compoundSelection).getTag();
+    public static Tag read(Path path, NBTCompressType compressType, boolean littleEndian, CompoundSelection compoundSelection) throws IOException {
+        return fromPath(path).compressType(compressType).littleEndian(littleEndian).compoundSelection(compoundSelection).getTag();
     }
 
     public static NBTReader.Builder fromDataInput(DataInput input) throws IOException {
@@ -35,10 +35,10 @@ public class NBT {
     }
 
     public static void write(CompoundTag tag, Path path) throws IOException {
-        new NBTWriter(tag, path, false, false);
+        new NBTWriter(tag, path, NBTCompressType.UNCOMPRESSED, false);
     }
 
-    public static void write(CompoundTag tag, Path path, boolean compressed, boolean littleEndian) throws IOException {
-        new NBTWriter(tag, path, compressed, littleEndian);
+    public static void write(CompoundTag tag, Path path, NBTCompressType compressType, boolean littleEndian) throws IOException {
+        new NBTWriter(tag, path, compressType, littleEndian);
     }
 }

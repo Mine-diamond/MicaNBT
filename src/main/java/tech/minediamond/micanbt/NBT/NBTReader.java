@@ -7,19 +7,25 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.InflaterInputStream;
 
 public class NBTReader {
     private final Path path;
+    private final byte[] data;
     private DataInput in;
-    private final Boolean compressed;
+    private NBTCompressType compressType;
     private final boolean littleEndian;
     private final CompoundSelection compoundSelection;
 
     private final Tag tag;
 
     private NBTReader(Builder builder) throws IOException {
+        if (builder.path == null && builder.data == null && builder.dataInput == null) {
+            throw new IllegalArgumentException("No input source provided to NBTReader");
+        }
         this.path = builder.path;
-        this.compressed = builder.compressed;
+        this.data = builder.data;
+        this.compressType = builder.compressType;
         this.littleEndian = builder.littleEndian;
         this.compoundSelection = builder.compoundSelection;
         this.in = builder.dataInput;
@@ -38,34 +44,44 @@ public class NBTReader {
         return new Builder(dataInput);
     }
 
+    public static Builder builder(byte[] data) {
+        return new Builder(data);
+    }
+
     public Tag getTag() {
         return tag;
     }
 
     private Tag read() throws IOException {
-        try (InputStream fis = Files.newInputStream(path);
-             BufferedInputStream bis = new BufferedInputStream(fis)) {
-            return inferenceCompressed(bis);
+        try (InputStream is = path != null ? new BufferedInputStream(Files.newInputStream(path)) : new ByteArrayInputStream(data)) {
+            return inferenceCompressed(is);
         }
     }
 
-    private Tag inferenceCompressed(InputStream bis) throws IOException {
-        if (compressed == null) {
-            bis.mark(3);
+    private Tag inferenceCompressed(InputStream is) throws IOException {
+        if (compressType == null) {
+            is.mark(3);
             byte[] header = new byte[3];
-            if (bis.read(header) < 3) {
+            if (is.read(header) < 3) {
                 throw new IOException("File is too small");
             }
-            bis.reset();
+            is.reset();
 
-            try (InputStream in = (header[0] == 0x1f && header[1] == (byte) 0x8b && header[2] == 0x08)
-                    ? new GZIPInputStream(bis, 64 * 1024) : bis) {
-                return inferenceLittleEndian(in, littleEndian);
+            if (header[0] == 0x1f && header[1] == (byte) 0x8b && header[2] == 0x08) {
+                compressType = NBTCompressType.GZIP;
+            } else if ((header[0] & 0x0F) == 8 && (header[0] >>> 4) <= 7 && (header[0] * 256 + header[1]) % 31 == 0) {
+                compressType = NBTCompressType.ZLIB;
+            } else {
+                compressType = NBTCompressType.UNCOMPRESSED;
             }
-        } else {
-            try (InputStream in = compressed ? new GZIPInputStream(bis) : bis) {
-                return inferenceLittleEndian(in, littleEndian);
-            }
+        }
+
+        try (InputStream in = switch (compressType) {
+            case UNCOMPRESSED -> is;
+            case GZIP -> new GZIPInputStream(is);
+            case ZLIB -> new InflaterInputStream(is);
+        }) {
+            return inferenceLittleEndian(in, littleEndian);
         }
     }
 
@@ -159,11 +175,12 @@ public class NBTReader {
     }
 
     public static class Builder {
-        // Either path or dataInput must be provided, and this is ensured through the constructor.
+        // one of path, dataInput or data must be provided, and this is ensured through the constructor.
         private Path path;
         private DataInput dataInput;
+        private byte[] data;
         // compressed and littleEndian are only required when using path, not needed when using dataInput
-        private Boolean compressed; // When not specified, it is automatically inferred; otherwise, the specified value is used.
+        private NBTCompressType compressType; // When not specified, it is automatically inferred; otherwise, the specified value is used.
         private boolean littleEndian = false;
         private CompoundSelection compoundSelection = CompoundSelection.COMMON_MAP;
 
@@ -175,8 +192,12 @@ public class NBTReader {
             this.dataInput = dataInput;
         }
 
-        public Builder compressed(boolean compressed) {
-            this.compressed = compressed;
+        private Builder(byte[] data) {
+            this.data = data;
+        }
+
+        public Builder compressType(NBTCompressType compressType) {
+            this.compressType = compressType;
             return this;
         }
 

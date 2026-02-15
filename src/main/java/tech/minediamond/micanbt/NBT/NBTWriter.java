@@ -5,20 +5,21 @@ import tech.minediamond.micanbt.tag.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.zip.DeflaterOutputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class NBTWriter {
     CompoundTag tag;
     Path path;
-    boolean compressed;
+    NBTCompressType compressType;
     boolean littleEndian;
 
     DataOutput dataOutput;
 
-    public NBTWriter(CompoundTag tag, Path path, boolean compressed, boolean littleEndian) throws IOException {
+    public NBTWriter(CompoundTag tag, Path path, NBTCompressType compressType, boolean littleEndian) throws IOException {
         this.tag = tag;
         this.path = path;
-        this.compressed = compressed;
+        this.compressType = compressType;
         this.littleEndian = littleEndian;
 
         write();
@@ -32,7 +33,11 @@ public class NBTWriter {
 
         try (OutputStream fos = Files.newOutputStream(path);
              BufferedOutputStream bos = new BufferedOutputStream(fos);
-             OutputStream out = compressed ? new GZIPOutputStream(bos) : bos;
+             OutputStream out = switch (compressType) {
+                 case GZIP -> new GZIPOutputStream(bos);
+                 case ZLIB -> new DeflaterOutputStream(bos);
+                 case UNCOMPRESSED -> bos;
+             };
              FilterOutputStream dos = littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out)) {
 
             this.dataOutput = (DataOutput) dos;
