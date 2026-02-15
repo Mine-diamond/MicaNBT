@@ -57,7 +57,7 @@ public class Region {
         int[] timestamps = new int[CHUNKS_PER_REGION];
         for (int i = SECTOR_LENGTH; i < 2 * SECTOR_LENGTH; i += 4) {
             int timestamp = ((data[i] & 0xFF) << 24) | ((data[i + 1] & 0xFF) << 16) | ((data[i + 2] & 0xFF) << 8) | (data[i + 3] & 0xFF);
-            timestamps[i >> 3] = timestamp;
+            timestamps[(i - SECTOR_LENGTH) >> 2] = timestamp;
         }
         return timestamps;
     }

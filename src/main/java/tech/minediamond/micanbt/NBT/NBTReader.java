@@ -20,6 +20,9 @@ public class NBTReader {
     private final Tag tag;
 
     private NBTReader(Builder builder) throws IOException {
+        if (builder.path == null && builder.data == null && builder.dataInput == null) {
+            throw new IllegalArgumentException("No input source provided to NBTReader");
+        }
         this.path = builder.path;
         this.data = builder.data;
         this.compressType = builder.compressType;
