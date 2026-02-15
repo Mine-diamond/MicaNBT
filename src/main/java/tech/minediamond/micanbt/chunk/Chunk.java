@@ -12,36 +12,36 @@ import java.io.IOException;
 public class Chunk {
 
     private final CompoundTag chunkTag;
-    private int timestamp;
-    private ChunkPos chunkPos;
-    private boolean isChunkInitialized = false;
+    private final int timestamp;
+    private final ChunkPos chunkPos;
+    private final boolean isChunkInitialized;
 
     private final boolean isCorrupt;
-    private Throwable error;
+    private final Throwable error;
 
     private final Region region;
 
-    private Chunk(CompoundTag compoundTag, int timestamp, ChunkPos chunkPos, Region region) {
+    private Chunk(CompoundTag compoundTag, int timestamp, ChunkPos chunkPos, boolean isChunkInitialized, Region region) {
         this.chunkTag = compoundTag;
         this.timestamp = timestamp;
         this.chunkPos = chunkPos;
-        this.isChunkInitialized = true;
-        this.isCorrupt = false;
-        this.region = region;
-    }
-
-    private Chunk(CompoundTag compoundTag, boolean isChunkInitialized, Region region) {
-        this.chunkTag = compoundTag;
         this.isChunkInitialized = isChunkInitialized;
+
         this.isCorrupt = false;
+        this.error = null;
+
         this.region = region;
     }
 
-    private Chunk(ChunkPos chunkPos, Throwable cause, Region region) {
+    private Chunk(int timestamp, ChunkPos chunkPos, Throwable cause, Region region) {
         this.chunkTag = null;
+        this.timestamp = timestamp;
         this.chunkPos = chunkPos;
+        this.isChunkInitialized = false;
+
         this.isCorrupt = true;
         this.error = cause;
+
         this.region = region;
     }
 
@@ -50,25 +50,21 @@ public class Chunk {
         try {
             parsed = NBT.parse(dataInput);
         } catch (IOException e) {
-            return ofCorrupt(chunkPos, e, region);
+            return ofCorrupt(timestamp, chunkPos, e, region);
         }
         if (parsed instanceof CompoundTag compoundTag) {
-            return new Chunk(compoundTag, timestamp, chunkPos, region);
+            return new Chunk(compoundTag, timestamp, chunkPos, true, region);
         } else {
-            return ofCorrupt(chunkPos, new NBTParseException("Invalid Chunk Tag"), region);
+            return ofCorrupt(timestamp, chunkPos, new NBTParseException("Invalid Chunk Tag"), region);
         }
     }
 
-    public static Chunk ofUninitialized(Region region) {
-        return new Chunk(new CommonCompoundTag(""), false, region);
+    public static Chunk ofUninitialized(ChunkPos chunkPos, Region region) {
+        return new Chunk(new CommonCompoundTag(""), 0, chunkPos, false, region);
     }
 
-    public static Chunk ofCorrupt(ChunkPos chunkPos, Throwable cause, Region region) {
-        return new Chunk(chunkPos, cause, region);
-    }
-
-    public boolean isChunkInitialized() {
-        return isChunkInitialized;
+    public static Chunk ofCorrupt(int timestamp, ChunkPos chunkPos, Throwable cause, Region region) {
+        return new Chunk(timestamp, chunkPos, cause, region);
     }
 
     public CompoundTag getChunkTag() {
@@ -83,16 +79,20 @@ public class Chunk {
         return chunkPos;
     }
 
-    public Region getRegion() {
-        return region;
+    public boolean isChunkInitialized() {
+        return isChunkInitialized;
+    }
+
+    public boolean isCorrupt() {
+        return isCorrupt;
     }
 
     public Throwable getError() {
         return error;
     }
 
-    public boolean isCorrupt() {
-        return isCorrupt;
+    public Region getRegion() {
+        return region;
     }
 
     public record ChunkPos(int x, int z) {

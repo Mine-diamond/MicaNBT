@@ -76,10 +76,10 @@ public class Region {
 
     private Chunk parseChunk(int i) {
         int offset = chunkLocations[i].offset * SECTOR_LENGTH;
-        if (offset == 0) {
-            return Chunk.ofUninitialized(this);
-        }
         Chunk.ChunkPos chunkPos = new Chunk.ChunkPos((i & 31), ((i >> 5) & 31));
+        if (offset == 0) {
+            return Chunk.ofUninitialized(chunkPos, this);
+        }
         try {
             InputStream input = getByteArrayInputStream(offset);
             switch (data[offset + 4]) {
@@ -99,7 +99,7 @@ public class Region {
                 return Chunk.of(dis, timestamps[i], chunkPos, this);
             }
         } catch (IOException e) {
-            return Chunk.ofCorrupt(chunkPos, e, this);
+            return Chunk.ofCorrupt(timestamps[i], chunkPos, e, this);
         }
     }
 
