@@ -29,9 +29,23 @@ public class Region {
     private static final ForkJoinPool CHUNK_PARSER_EXECUTOR = new ForkJoinPool(Runtime.getRuntime().availableProcessors() / 2);
     private final Object[] locks = new Object[64];
 
+    public Region(byte[] data, boolean preLoadChunk) throws ExecutionException, InterruptedException {
+        this.data = data;
+        initialize(preLoadChunk);
+    }
+
     public Region(Path path, boolean preLoadChunk) throws IOException, InterruptedException, ExecutionException {
         this.path = path;
         data = Files.readAllBytes(path);
+        initialize(preLoadChunk);
+    }
+
+    public Region(InputStream stream, boolean preLoadChunk) throws IOException, InterruptedException, ExecutionException {
+        data = stream.readAllBytes();
+        initialize(preLoadChunk);
+    }
+
+    private void initialize(boolean preLoadChunk) throws ExecutionException, InterruptedException {
         for (int i = 0; i < locks.length; i++) {
             locks[i] = new Object();
         }
