@@ -77,7 +77,7 @@ public class Region {
     private Chunk parseChunk(int i) {
         int offset = chunkLocations[i].offset * SECTOR_LENGTH;
         if (offset == 0) {
-            return Chunk.ofEmpty();
+            return Chunk.ofUninitialized(this);
         }
         Chunk.ChunkPos chunkPos = new Chunk.ChunkPos((i & 31), ((i >> 5) & 31));
         try {
@@ -96,10 +96,10 @@ public class Region {
                         throw new IOException("Unsupported compression method: " + Integer.toHexString(data[offset + 4] & 0xff));
             }
             try (DataInputStream dis = new DataInputStream(input)) {
-                return new Chunk(dis, timestamps[i], chunkPos, true);
+                return Chunk.of(dis, timestamps[i], chunkPos, this);
             }
         } catch (IOException e) {
-            return Chunk.ofCorrupt(chunkPos, e);
+            return Chunk.ofCorrupt(chunkPos, e, this);
         }
     }
 
