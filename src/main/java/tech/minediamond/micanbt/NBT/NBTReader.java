@@ -56,12 +56,16 @@ public class NBTReader {
     }
 
     private Tag inferenceAndRead() throws IOException {
+        return warpSource();
+    }
+
+    private Tag warpSource() throws IOException {
         try (InputStream is = path != null ? new BufferedInputStream(Files.newInputStream(path)) : new ByteArrayInputStream(data)) {
-            return inferenceCompressed(is);
+            return inferenceCompressType(is);
         }
     }
 
-    private Tag inferenceCompressed(InputStream is) throws IOException {
+    private Tag inferenceCompressType(InputStream is) throws IOException {
         if (compressType == null) {
             is.mark(3);
             byte[] header = new byte[3];
