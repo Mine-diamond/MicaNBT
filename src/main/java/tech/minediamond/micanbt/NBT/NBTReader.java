@@ -9,6 +9,13 @@ import java.nio.file.Path;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
+/**
+ * A reader for Named Binary Tag (NBT) data.
+ * <p>
+ * This class provides functionality to parse NBT data from various sources including
+ * files, byte arrays, and {@link DataInput} streams. It supports automatic inference
+ * of compression types (GZIP, ZLIB, or Uncompressed) and configurable byte order.
+ */
 public class NBTReader {
     private final Path path;
     private final byte[] data;
@@ -39,18 +46,41 @@ public class NBTReader {
         }
     }
 
+    /**
+     * Creates a new {@link Builder} to read NBT data from a file path.
+     *
+     * @param path The path to the NBT file.
+     * @return A new Builder instance.
+     */
     public static Builder builder(Path path) {
         return new Builder(path);
     }
 
+    /**
+     * Creates a new {@link Builder} to read NBT data from a {@link DataInput} source.
+     *
+     * @param dataInput The DataInput stream to read from.
+     * @return A new Builder instance.
+     */
     public static Builder builder(DataInput dataInput) {
         return new Builder(dataInput);
     }
 
+    /**
+     * Creates a new {@link Builder} to read NBT data from a byte array.
+     *
+     * @param data The byte array containing NBT data.
+     * @return A new Builder instance.
+     */
     public static Builder builder(byte[] data) {
         return new Builder(data);
     }
 
+    /**
+     * Gets the root NBT tag parsed by this reader.
+     *
+     * @return The parsed root {@link Tag}.
+     */
     public Tag getTag() {
         return tag;
     }
@@ -181,6 +211,9 @@ public class NBTReader {
         return new LongArrayTag(name, value);
     }
 
+    /**
+     * A fluent Builder for configuring and creating an {@link NBTReader}.
+     */
     public static class Builder {
         // one of path, dataInput or data must be provided, and this is ensured through the constructor.
         private Path path;
@@ -203,25 +236,57 @@ public class NBTReader {
             this.data = data;
         }
 
+        /**
+         * Sets the compression type for the NBT data.
+         * If not specified, the reader will attempt to infer the type automatically.
+         *
+         * @param compressType The compression type (GZIP, ZLIB, or UNCOMPRESSED).
+         * @return This builder instance.
+         */
         public Builder compressType(NBTCompressType compressType) {
             this.compressType = compressType;
             return this;
         }
 
+        /**
+         * Sets whether the data should be read in Little Endian byte order.
+         * Default is {@code false} (Big Endian).
+         *
+         * @param littleEndian {@code true} for Little Endian, {@code false} for Big Endian.
+         * @return This builder instance.
+         */
         public Builder littleEndian(boolean littleEndian) {
             this.littleEndian = littleEndian;
             return this;
         }
 
+        /**
+         * Configures the internal map implementation used for {@link CompoundTag}.
+         *
+         * @param selection The selection strategy (e.g., Common Map or Reorderable Map).
+         * @return This builder instance.
+         */
         public Builder compoundSelection(CompoundSelection selection) {
             this.compoundSelection = selection;
             return this;
         }
 
+        /**
+         * Constructs the {@link NBTReader} and performs the reading operation.
+         *
+         * @return A fully initialized NBTReader.
+         * @throws IOException If an I/O error occurs or the NBT format is invalid.
+         */
         public NBTReader build() throws IOException {
             return new NBTReader(this);
         }
 
+        /**
+         * A convenience method that builds the reader and returns the root tag immediately.
+         *
+         * @return The root {@link Tag}.
+         * @throws IOException If an I/O error occurs during reading.
+         */
         public Tag getTag() throws IOException {
             return new NBTReader(this).getTag();
         }
