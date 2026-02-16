@@ -2,6 +2,7 @@ package tech.minediamond.micanbt.chunk;
 
 import tech.minediamond.micanbt.NBT.NBT;
 import tech.minediamond.micanbt.NBT.NBTParseException;
+import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
@@ -45,10 +46,10 @@ public class Chunk {
         this.region = region;
     }
 
-    public static Chunk of(DataInput dataInput, int timestamp, ChunkPos chunkPos, Region region) {
+    public static Chunk of(DataInput dataInput, CompoundSelection compoundSelection, int timestamp, ChunkPos chunkPos, Region region) {
         Tag parsed;
         try {
-            parsed = NBT.parse(dataInput);
+            parsed = NBT.read(dataInput, compoundSelection);
         } catch (IOException e) {
             return ofCorrupt(timestamp, chunkPos, e, region);
         }

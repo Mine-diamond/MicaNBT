@@ -32,7 +32,10 @@ public class NBTReader {
         if (in != null) {
             tag = readNamedTag();
         } else {
-            tag = read();
+            tag = inferenceAndRead();
+        }
+        if (tag == null) {
+            throw new NBTParseException("Root tag is end tag");
         }
     }
 
@@ -52,7 +55,7 @@ public class NBTReader {
         return tag;
     }
 
-    private Tag read() throws IOException {
+    private Tag inferenceAndRead() throws IOException {
         try (InputStream is = path != null ? new BufferedInputStream(Files.newInputStream(path)) : new ByteArrayInputStream(data)) {
             return inferenceCompressed(is);
         }
@@ -81,11 +84,11 @@ public class NBTReader {
             case GZIP -> new GZIPInputStream(is);
             case ZLIB -> new InflaterInputStream(is);
         }) {
-            return inferenceLittleEndian(in, littleEndian);
+            return inferenceLittleEndian(in);
         }
     }
 
-    private Tag inferenceLittleEndian(InputStream in, boolean littleEndian) throws IOException {
+    private Tag inferenceLittleEndian(InputStream in) throws IOException {
         this.in = littleEndian ? new LittleEndianDataInputStream(in) : new DataInputStream(in);
         return readNamedTag();
     }

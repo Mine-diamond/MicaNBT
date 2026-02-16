@@ -1,5 +1,7 @@
 package tech.minediamond.micanbt.chunk;
 
+import tech.minediamond.micanbt.core.CompoundSelection;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -24,24 +26,29 @@ public class Region {
     int[] timestamps;
     Chunk[] chunks = new Chunk[CHUNKS_PER_REGION];
 
+    CompoundSelection compoundSelection;
+
     private static final ThreadLocal<Inflater> INFLATER_HOLDER =
             ThreadLocal.withInitial(Inflater::new);
     private static final ForkJoinPool CHUNK_PARSER_EXECUTOR = new ForkJoinPool(Runtime.getRuntime().availableProcessors() / 2);
     private final Object[] locks = new Object[64];
 
-    public Region(byte[] data, boolean preLoadChunk) throws ExecutionException, InterruptedException {
+    public Region(byte[] data, boolean preLoadChunk, CompoundSelection compoundSelection) throws ExecutionException, InterruptedException {
         this.data = data;
+        this.compoundSelection = compoundSelection;
         initialize(preLoadChunk);
     }
 
-    public Region(Path path, boolean preLoadChunk) throws IOException, InterruptedException, ExecutionException {
+    public Region(Path path, boolean preLoadChunk, CompoundSelection compoundSelection) throws IOException, InterruptedException, ExecutionException {
         this.path = path;
+        this.compoundSelection = compoundSelection;
         data = Files.readAllBytes(path);
         initialize(preLoadChunk);
     }
 
-    public Region(InputStream stream, boolean preLoadChunk) throws IOException, InterruptedException, ExecutionException {
+    public Region(InputStream stream, boolean preLoadChunk, CompoundSelection compoundSelection) throws IOException, InterruptedException, ExecutionException {
         data = stream.readAllBytes();
+        this.compoundSelection = compoundSelection;
         initialize(preLoadChunk);
     }
 
@@ -110,7 +117,7 @@ public class Region {
                         throw new IOException("Unsupported compression method: " + Integer.toHexString(data[offset + 4] & 0xff));
             }
             try (DataInputStream dis = new DataInputStream(input)) {
-                return Chunk.of(dis, timestamps[i], chunkPos, this);
+                return Chunk.of(dis, compoundSelection, timestamps[i], chunkPos, this);
             }
         } catch (IOException e) {
             return Chunk.ofCorrupt(timestamps[i], chunkPos, e, this);
