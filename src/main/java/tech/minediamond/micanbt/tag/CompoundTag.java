@@ -69,6 +69,14 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     public abstract boolean contains(String tagName);
 
     /**
+     * Checks if this compound contains the specified tag.
+     *
+     * @param tag The tag to check for.
+     * @return {@code true} if the tag exists, {@code false} otherwise.
+     */
+    public abstract boolean contains(Tag tag);
+
+    /**
      * Checks if the compound tag contains no tags.
      *
      * @return {@code true} if empty.
@@ -86,6 +94,9 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
      * Removes all tags from this compound.
      */
     public abstract void clear();
+
+    @Override
+    public abstract CompoundTag copy();
 
     @Override
     public int getTagId() {

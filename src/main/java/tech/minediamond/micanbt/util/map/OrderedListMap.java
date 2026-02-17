@@ -128,6 +128,10 @@ public class OrderedListMap<K, V extends Tag> implements Iterable<V> {
         return internalMap.containsKey(key);
     }
 
+    public boolean containsValue(V value) {
+        return internalMap.containsValue(value);
+    }
+
     public void clear() {
         internalMap.clear();
         keys.clear();

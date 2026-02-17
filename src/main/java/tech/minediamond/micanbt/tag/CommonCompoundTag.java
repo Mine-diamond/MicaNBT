@@ -69,6 +69,11 @@ public class CommonCompoundTag extends CompoundTag {
         return this.value.containsKey(tagName);
     }
 
+    @Override
+    public boolean contains(Tag tag) {
+        return this.value.containsValue(tag);
+    }
+
     /**
      * Returns a view of all tags contained in this compound.
      *

@@ -126,6 +126,11 @@ public class ReorderableCompoundTag extends CompoundTag {
     }
 
     @Override
+    public boolean contains(Tag tag) {
+        return this.value.containsValue(tag);
+    }
+
+    @Override
     public boolean isEmpty() {
         return this.value.isEmpty();
     }
@@ -209,7 +214,7 @@ public class ReorderableCompoundTag extends CompoundTag {
     }
 
     @Override
-    public Tag copy() {
+    public ReorderableCompoundTag copy() {
         return new ReorderableCompoundTag(getName(), getClonedValue());
     }
 }

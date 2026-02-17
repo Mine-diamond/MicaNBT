@@ -215,10 +215,25 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     }
 
     /**
+     * Checks if this list contains a tag with the specified name.
+     *
+     * @param tagName The name to check.
+     * @return {@code true} if the tag exists, {@code false} otherwise.
+     */
+    public boolean contains(String tagName) {
+        for (T tag : this.value) {
+            if (tag.getName().equals(tagName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Checks if this list contains the specified tag.
      *
      * @param tag The tag to check for.
-     * @return {@code true} if the tag is present.
+     * @return {@code true} if the tag exists, {@code false} otherwise.
      */
     public boolean contains(T tag) {
         if (tag != null && tag.getTagId() != this.typeId) {
