@@ -2,6 +2,7 @@ package tech.minediamond.micanbt.chunk;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.CompoundTag;
 
 import java.io.IOException;
@@ -15,7 +16,7 @@ public class ChunkParseTest {
     public void testChunkParse() throws IOException, ExecutionException, InterruptedException {
         try (InputStream resource = this.getClass().getResourceAsStream("/r.0.0.mca")) {
             Assertions.assertNotNull(resource);
-            Region region = new Region(resource, true);
+            Region region = new Region(resource, true, CompoundSelection.COMMON_MAP);
             Assertions.assertNotNull(region);
 
             Chunk chunk = region.getChunk(0, 0);

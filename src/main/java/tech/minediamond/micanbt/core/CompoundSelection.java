@@ -1,11 +1,12 @@
 package tech.minediamond.micanbt.core;
 
 import tech.minediamond.micanbt.tag.CommonCompoundTag;
+import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.ReorderableCompoundTag;
 
 /**
- * Defines the implementation strategy for {@link tech.minediamond.micanbt.tag.CompoundTag}
- * when parsing SNBT data.
+ * Defines the implementation strategy for {@link CompoundTag}
+ * when parsing NBT/SNBT data.
  */
 public enum CompoundSelection {
     /**
