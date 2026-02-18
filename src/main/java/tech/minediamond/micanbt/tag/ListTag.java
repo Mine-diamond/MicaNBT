@@ -261,11 +261,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      * @throws IllegalArgumentException If the tag is null or the type is mismatched.
      */
     private void checkType(T tag) {
-        if (tag == null) {
-            throw new NullPointerException("tag is null");
-        }
-
-        int incomingId = tag.getTagId();
+        int incomingId = Objects.requireNonNull(tag, "tag is null").getTagId();
         // For List Tag with undetermined tag type, use this as tag type.
         if (this.typeId == 0) {
             this.typeId = incomingId;
@@ -275,17 +271,12 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     }
 
     private void checkType(Collection<T> tags) {
-        if (tags == null) {
-            throw new NullPointerException("tag list is null");
-        }
+        Objects.requireNonNull(tags, "tag list is null");
 
         int id = this.typeId;
         boolean initialized = id != 0;
         for (T tag : tags) {
-            if (tag == null) {
-                throw new NullPointerException("tag is null");
-            }
-            int incomingId = tag.getTagId();
+            int incomingId = Objects.requireNonNull(tag, "tag is null").getTagId();
             // For List Tag with undetermined tag type, use first as tag type.
             if (!initialized) {
                 id = incomingId;
