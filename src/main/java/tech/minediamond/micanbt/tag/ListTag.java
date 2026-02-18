@@ -262,7 +262,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      */
     private void checkType(T tag) {
         int incomingId = Objects.requireNonNull(tag, "tag is null").getTagId();
-        // For List Tag with undetermined tag type, use this as tag type.
+        // For list tag with undetermined tag type, use this as tag type.
         if (this.typeId == 0) {
             this.typeId = incomingId;
         } else if (this.typeId != incomingId) {
@@ -274,13 +274,11 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
         Objects.requireNonNull(tags, "tag list is null");
 
         int id = this.typeId;
-        boolean initialized = id != 0;
         for (T tag : tags) {
             int incomingId = Objects.requireNonNull(tag, "tag is null").getTagId();
-            // For List Tag with undetermined tag type, use first as tag type.
-            if (!initialized) {
+            // For list tag with undetermined tag type, use first as tag type.
+            if (id == 0) {
                 id = incomingId;
-                initialized = true;
             } else if (id != incomingId) {
                 throw new NBTTypeException(String.format("Tag type mismatch. Expected ID: %d, got: %d", this.typeId, incomingId));
             }
