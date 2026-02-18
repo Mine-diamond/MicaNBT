@@ -14,7 +14,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /**
      * The NBT Tag ID of the elements contained within this list. Defaults to 0 (TAG_End) for empty lists.
      */
-    private int typeId = 0;
+    private int typeId;
     private final List<T> value;
 
     /**
@@ -25,7 +25,6 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     public ListTag(String name) {
         super(name);
 
-        this.typeId = 0;
         this.value = new ArrayList<>();
     }
 
