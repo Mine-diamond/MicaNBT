@@ -77,10 +77,8 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      * @throws IllegalArgumentException If the tags in the list are not of the same type or a tag is null.
      */
     public void setValue(List<T> value) {
+        checkType(value);
         this.value.clear();
-        for (T tag : value) {
-            checkType(tag);
-        }
         this.value.addAll(value);
     }
 
@@ -129,9 +127,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      * @throws IllegalArgumentException If any tag fails the type check.
      */
     public void addAll(Collection<T> tags) throws IllegalArgumentException {
-        for (T tag : tags) {
-            checkType(tag);
-        }
+        checkType(tags);
         this.value.addAll(tags);
     }
 
@@ -221,6 +217,9 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      * @return {@code true} if the tag exists, {@code false} otherwise.
      */
     public boolean contains(String tagName) {
+        if (tagName == null) {
+            return false;
+        }
         for (T tag : this.value) {
             if (tag.getName().equals(tagName)) {
                 return true;
@@ -263,16 +262,39 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      */
     private void checkType(T tag) {
         if (tag == null) {
-            throw new IllegalArgumentException("tag is null");
+            throw new NullPointerException("tag is null");
         }
 
         int incomingId = tag.getTagId();
-        // If empty list, use this as tag type.
+        // For List Tag with undetermined tag type, use this as tag type.
         if (this.typeId == 0) {
             this.typeId = incomingId;
         } else if (this.typeId != incomingId) {
-            throw new IllegalArgumentException(String.format("Tag type mismatch. Expected ID: %d, got: %d", this.typeId, incomingId));
+            throw new NBTTypeException(String.format("Tag type mismatch. Expected ID: %d, got: %d", this.typeId, incomingId));
         }
+    }
+
+    private void checkType(Collection<T> tags) {
+        if (tags == null) {
+            throw new NullPointerException("tag list is null");
+        }
+
+        int id = this.typeId;
+        boolean initialized = id != 0;
+        for (T tag : tags) {
+            if (tag == null) {
+                throw new NullPointerException("tag is null");
+            }
+            int incomingId = tag.getTagId();
+            // For List Tag with undetermined tag type, use first as tag type.
+            if (!initialized) {
+                id = incomingId;
+                initialized = true;
+            } else if (id != incomingId) {
+                throw new NBTTypeException(String.format("Tag type mismatch. Expected ID: %d, got: %d", this.typeId, incomingId));
+            }
+        }
+        this.typeId = id;
     }
 
     @Override
