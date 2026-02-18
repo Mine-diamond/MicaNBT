@@ -14,7 +14,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /**
      * The NBT Tag ID of the elements contained within this list. Defaults to 0 (TAG_End) for empty lists.
      */
-    private int typeId = 0;
+    private int typeId;
     private final List<T> value;
 
     /**
@@ -25,7 +25,6 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     public ListTag(String name) {
         super(name);
 
-        this.typeId = 0;
         this.value = new ArrayList<>();
     }
 
@@ -77,10 +76,8 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      * @throws IllegalArgumentException If the tags in the list are not of the same type or a tag is null.
      */
     public void setValue(List<T> value) {
+        checkType(value);
         this.value.clear();
-        for (T tag : value) {
-            checkType(tag);
-        }
         this.value.addAll(value);
     }
 
@@ -129,9 +126,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      * @throws IllegalArgumentException If any tag fails the type check.
      */
     public void addAll(Collection<T> tags) throws IllegalArgumentException {
-        for (T tag : tags) {
-            checkType(tag);
-        }
+        checkType(tags);
         this.value.addAll(tags);
     }
 
@@ -215,13 +210,31 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     }
 
     /**
+     * Checks if this list contains a tag with the specified name.
+     *
+     * @param tagName The name to check.
+     * @return {@code true} if the tag exists, {@code false} otherwise.
+     */
+    public boolean contains(String tagName) {
+        if (tagName == null) {
+            return false;
+        }
+        for (T tag : this.value) {
+            if (tag.getName().equals(tagName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Checks if this list contains the specified tag.
      *
      * @param tag The tag to check for.
-     * @return {@code true} if the tag is present.
+     * @return {@code true} if the tag exists, {@code false} otherwise.
      */
     public boolean contains(T tag) {
-        if (tag != null && tag.getTagId() != this.typeId) {
+        if (tag == null || tag.getTagId() != this.typeId) {
             return false;
         }
         return this.value.contains(tag);
@@ -247,17 +260,29 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
      * @throws IllegalArgumentException If the tag is null or the type is mismatched.
      */
     private void checkType(T tag) {
-        if (tag == null) {
-            throw new IllegalArgumentException("tag is null");
-        }
-
-        int incomingId = tag.getTagId();
-        // If empty list, use this as tag type.
+        int incomingId = Objects.requireNonNull(tag, "tag is null").getTagId();
+        // For list tag with undetermined tag type, use this as tag type.
         if (this.typeId == 0) {
             this.typeId = incomingId;
         } else if (this.typeId != incomingId) {
-            throw new IllegalArgumentException(String.format("Tag type mismatch. Expected ID: %d, got: %d", this.typeId, incomingId));
+            throw new NBTTypeException(String.format("Tag type mismatch. Expected ID: %d, got: %d", this.typeId, incomingId));
         }
+    }
+
+    private void checkType(Collection<T> tags) {
+        Objects.requireNonNull(tags, "tag list is null");
+
+        int id = this.typeId;
+        for (T tag : tags) {
+            int incomingId = Objects.requireNonNull(tag, "tag is null").getTagId();
+            // For list tag with undetermined tag type, use first as tag type.
+            if (id == 0) {
+                id = incomingId;
+            } else if (id != incomingId) {
+                throw new NBTTypeException(String.format("Tag type mismatch. Expected ID: %d, got: %d", this.typeId, incomingId));
+            }
+        }
+        this.typeId = id;
     }
 
     @Override

@@ -3,8 +3,6 @@ package tech.minediamond.micanbt.basic;
 import org.junit.jupiter.api.Test;
 import tech.minediamond.micanbt.tag.*;
 
-import java.util.Comparator;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ReorderableTagTest {
@@ -15,13 +13,13 @@ public class ReorderableTagTest {
 
         DoubleTag tag = (DoubleTag) compoundTag.get("DoubleTag");
         DoubleTag tag2 = new DoubleTag("NewDoubleTagName", tag.getRawValue());
-        compoundTag.replaceAt(tag, tag2);
+        compoundTag.replace(tag, tag2);
 
         assertEquals(1.0, compoundTag.get(2).getRawValue());
         assertEquals(1.0, compoundTag.get("NewDoubleTagName").getRawValue());
 
         Tag tag3 = new FloatTag("NewFloatTagName", -1.0f);
-        compoundTag.replaceAt(3, tag3);
+        compoundTag.set(3, tag3);
         assertEquals(-1.0f, compoundTag.get(3).getRawValue());
         assertEquals(-1.0f, compoundTag.get("NewFloatTagName").getRawValue());
     }

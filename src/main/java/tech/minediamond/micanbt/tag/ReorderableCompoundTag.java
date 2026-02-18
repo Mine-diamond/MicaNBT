@@ -67,6 +67,29 @@ public class ReorderableCompoundTag extends CompoundTag {
         this.value.putAll(other.getRawValue());
     }
 
+    /**
+     * Replaces the tag at a specific index with a new tag.
+     *
+     * @param index The index to replace.
+     * @param tag   The new tag.
+     * @return The old tag that was replaced.
+     */
+    public Tag set(int index, Tag tag) {
+        return this.value.replaceAt(index, tag.getName(), tag);
+    }
+
+    /**
+     * Replaces an existing tag with a new one. The tag to be replaced is identified by the name of oldTag. The position of the tag remains unchanged.
+     *
+     * @param oldTag The tag to be replaced.
+     * @param newTag The new tag.
+     * @return The old tag that was replaced.
+     */
+    public Tag replace(Tag oldTag, Tag newTag) {
+        Objects.requireNonNull(oldTag, "tag to replace is null");
+        return this.value.replaceAt(oldTag.getName(), newTag.getName(), newTag);
+    }
+
     @Override
     public Tag get(String tagName) {
         return this.value.get(tagName);
@@ -92,29 +115,6 @@ public class ReorderableCompoundTag extends CompoundTag {
         return this.value.computeIfAbsent(key, mappingFunction);
     }
 
-    /**
-     * Replaces the tag at a specific index with a new tag.
-     *
-     * @param index The index to replace.
-     * @param tag   The new tag.
-     * @return The old tag that was replaced.
-     */
-    public Tag replaceAt(int index, Tag tag) {
-        return this.value.replaceAt(index, tag.getName(), tag);
-    }
-
-    /**
-     * Replaces an existing tag with a new one. The tag to be replaced is identified by the name of oldTag. The position of the tag remains unchanged.
-     *
-     * @param oldTag The tag to be replaced.
-     * @param newTag The new tag.
-     * @return The old tag that was replaced.
-     */
-    public Tag replaceAt(Tag oldTag, Tag newTag) {
-        Objects.requireNonNull(oldTag, "tag to replace is null");
-        return this.value.replaceAt(oldTag.getName(), newTag.getName(), newTag);
-    }
-
     @Override
     public Tag remove(String tagName) {
         return this.value.remove(tagName);
@@ -123,6 +123,11 @@ public class ReorderableCompoundTag extends CompoundTag {
     @Override
     public boolean contains(String tagName) {
         return this.value.containsKey(tagName);
+    }
+
+    @Override
+    public boolean contains(Tag tag) {
+        return this.value.containsValue(tag);
     }
 
     @Override
@@ -209,7 +214,7 @@ public class ReorderableCompoundTag extends CompoundTag {
     }
 
     @Override
-    public Tag copy() {
+    public ReorderableCompoundTag copy() {
         return new ReorderableCompoundTag(getName(), getClonedValue());
     }
 }

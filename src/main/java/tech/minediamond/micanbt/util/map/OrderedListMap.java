@@ -49,7 +49,7 @@ public class OrderedListMap<K, V extends Tag> implements Iterable<V> {
     }
 
     public V replaceAt(int index, K newKey, V newValue) {
-        Objects.requireNonNull(newValue, "newValue");
+        Objects.requireNonNull(newValue, "newValue is null");
 
         K oldKey = keys.get(index);
 
@@ -126,6 +126,10 @@ public class OrderedListMap<K, V extends Tag> implements Iterable<V> {
 
     public boolean containsKey(K key) {
         return internalMap.containsKey(key);
+    }
+
+    public boolean containsValue(V value) {
+        return internalMap.containsValue(value);
     }
 
     public void clear() {
