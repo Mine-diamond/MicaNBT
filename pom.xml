@@ -116,7 +116,7 @@
                                     <version>3.8.1</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <version>17</version>
+                                    <version>25</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
@@ -155,7 +155,7 @@
                 </executions>
                 <configuration>
                     <show>public</show>
-                    <release>17</release>
+                    <release>25</release> <!-- java 25 for markdown support -->
                     <failOnError>true</failOnError>
                 </configuration>
             </plugin>
