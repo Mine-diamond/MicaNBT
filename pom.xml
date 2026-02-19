@@ -23,6 +23,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.release>17</maven.compiler.release>
 
+        <java.version>25</java.version>
+
         <junit.version>5.11.0</junit.version>
 
         <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
@@ -116,7 +118,7 @@
                                     <version>3.8.1</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <version>17</version>
+                                    <version>${java.version}</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
@@ -155,7 +157,7 @@
                 </executions>
                 <configuration>
                     <show>public</show>
-                    <release>17</release>
+                    <release>${java.version}</release> <!-- java 25 for markdown support -->
                     <failOnError>true</failOnError>
                 </configuration>
             </plugin>
