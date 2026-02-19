@@ -17,7 +17,7 @@ import java.util.function.Function;
  * This class provides {@link #set(int, Tag)} and {@link #replace(Tag, Tag)} to perform
  * <b>in-place updates</b>, allowing a tag's name to be changed without altering its
  * position. Some position-based operations such as {@link #swap}, {@link #moveTo},
- * {@link #sort(Comparator)} is also provided.
+ * {@link #sort(Comparator)} are also provided.
  */
 public class ReorderableCompoundTag extends CompoundTag {
     OrderedListMap<String, Tag> value;
