@@ -1,7 +1,9 @@
 package tech.minediamond.micanbt.tag;
 
 /**
- * A tag containing an integer.
+ * TAG_Int (ID: {@value #ID}).
+ * <p>
+ * Stores a {@code int} value.
  */
 public class IntTag extends Tag {
     public static final int ID = 3;

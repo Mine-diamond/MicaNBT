@@ -3,7 +3,9 @@ package tech.minediamond.micanbt.tag;
 import java.util.Arrays;
 
 /**
- * A tag containing an integer array.
+ * TAG_Int_Array (ID: {@value #ID}).
+ * <p>
+ * Stores a {@code int[]} value.
  */
 public class IntArrayTag extends Tag {
     public static final int ID = 11;

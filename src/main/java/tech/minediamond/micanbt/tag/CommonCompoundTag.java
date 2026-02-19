@@ -4,8 +4,10 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- * A standard implementation of {@link CompoundTag} backed by a {@link LinkedHashMap}.
- * This implementation preserves the order in which tags are added.
+ * Standard implementation of {@link CompoundTag} backed by a {@link LinkedHashMap}.
+ * <p>
+ * This implementation preserves the <b>insertion order</b> of tags. It provides efficient
+ * O(1) lookup performance while ensuring predictable iteration sequences.
  */
 public class CommonCompoundTag extends CompoundTag {
     private Map<String, Tag> value;

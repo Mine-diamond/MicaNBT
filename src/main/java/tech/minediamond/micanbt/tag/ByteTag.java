@@ -1,7 +1,9 @@
 package tech.minediamond.micanbt.tag;
 
 /**
- * A tag containing a byte.
+ * TAG_Byte (ID: {@value #ID}).
+ * <p>
+ * Stores a {@code byte} value.
  */
 public class ByteTag extends Tag {
     public static final int ID = 1;

@@ -7,10 +7,10 @@ import tech.minediamond.micanbt.path.NBTPath;
 import tech.minediamond.micanbt.path.NBTPathParseException;
 
 /**
- * Represents an NBT tag.
+ * The base class for all NBT (Named Binary Tag) structures.
  * <p>
- * All tags must have a constructor with a single string parameter for reading tags (can be any visibility).
- * Tags should also have setter methods specific to their value types.
+ * NBT tags are used to store structured data in a tree-like format. Each tag
+ * consists of an optional name and a payload defined by its specific implementation.
  */
 public abstract class Tag {
     private final String name;

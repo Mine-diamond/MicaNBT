@@ -3,7 +3,10 @@ package tech.minediamond.micanbt.tag;
 import java.util.Map;
 
 /**
- * Represents an NBT Compound tag, which serves as a container for a named collection of other tags.
+ * TAG_Compound (ID: {@value #ID}).
+ * <p>
+ * A map-like container for named tags. Each entry consists of a unique {@code String} key
+ * and a {@link Tag} value. It is the primary structure used to group related data.
  */
 public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     public static final int ID = 10;

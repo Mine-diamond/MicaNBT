@@ -9,8 +9,15 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * A specialized {@link CompoundTag} that allows elements to be reordered,
- * accessed by index, or sorted explicitly.
+ * Extended {@link CompoundTag} supporting indexed access and manual reordering.
+ * <p>
+ * Unlike standard compounds, this implementation treats the tag collection as both
+ * a map and a list.
+ * <p>
+ * This class provides {@link #set(int, Tag)} and {@link #replace(Tag, Tag)} to perform
+ * <b>in-place updates</b>, allowing a tag's name to be changed without altering its
+ * position. Some position-based operations such as {@link #swap}, {@link #moveTo},
+ * {@link #sort(Comparator)} is also provided.
  */
 public class ReorderableCompoundTag extends CompoundTag {
     OrderedListMap<String, Tag> value;

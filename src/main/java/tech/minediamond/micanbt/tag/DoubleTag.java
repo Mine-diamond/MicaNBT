@@ -1,7 +1,9 @@
 package tech.minediamond.micanbt.tag;
 
 /**
- * A tag containing a double.
+ * TAG_Double (ID: {@value #ID}).
+ * <p>
+ * Stores a {@code double} value.
  */
 public class DoubleTag extends Tag {
     public static final int ID = 6;

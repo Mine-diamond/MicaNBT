@@ -3,7 +3,9 @@ package tech.minediamond.micanbt.tag;
 import java.util.Arrays;
 
 /**
- * A tag containing a long array.
+ * TAG_Long_Array (ID: {@value #ID}).
+ * <p>
+ * Stores a {@code long[]} value.
  */
 public class LongArrayTag extends Tag {
     public static final int ID = 12;

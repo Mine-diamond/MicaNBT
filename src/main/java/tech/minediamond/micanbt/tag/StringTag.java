@@ -3,7 +3,9 @@ package tech.minediamond.micanbt.tag;
 import java.util.Objects;
 
 /**
- * A tag containing a string.
+ * TAG_String (ID: {@value #ID}).
+ * <p>
+ * Stores a {@code String} value.
  */
 public class StringTag extends Tag {
     public static final int ID = 8;

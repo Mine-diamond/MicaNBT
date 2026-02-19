@@ -1,7 +1,9 @@
 package tech.minediamond.micanbt.tag;
 
 /**
- * A tag containing a float.
+ * TAG_Float (ID: {@value #ID}).
+ * <p>
+ * Stores a {@code float} value.
  */
 public class FloatTag extends Tag {
     public static final int ID = 5;

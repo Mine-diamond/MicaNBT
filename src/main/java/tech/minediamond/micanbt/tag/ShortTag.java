@@ -1,7 +1,9 @@
 package tech.minediamond.micanbt.tag;
 
 /**
- * A tag containing a short.
+ * TAG_Short (ID: {@value #ID}).
+ * <p>
+ * Stores a {@code short} value.
  */
 public class ShortTag extends Tag {
     public static final int ID = 2;

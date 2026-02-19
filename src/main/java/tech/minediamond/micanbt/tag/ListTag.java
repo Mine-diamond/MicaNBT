@@ -4,8 +4,10 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * Represents an NBT List tag.
- * A ListTag contains a sequence of unnamed tags of the same type.
+ * TAG_List (ID: {@value #ID}).
+ * <p>
+ * A sequential collection of unnamed tags. All tags within a list must be of the same type.
+ * The type of the list is determined by the first tag added or defined at construction.
  *
  * @param <T> The type of Tag stored in this list.
  */

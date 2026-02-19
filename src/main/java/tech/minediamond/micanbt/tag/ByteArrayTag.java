@@ -3,7 +3,9 @@ package tech.minediamond.micanbt.tag;
 import java.util.Arrays;
 
 /**
- * A tag containing a byte array.
+ * TAG_Byte_Array (ID: {@value #ID}).
+ * <p>
+ * Stores a {@code byte[]} value.
  */
 public class ByteArrayTag extends Tag {
     public static final int ID = 7;

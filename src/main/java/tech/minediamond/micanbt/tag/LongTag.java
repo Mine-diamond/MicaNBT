@@ -1,7 +1,9 @@
 package tech.minediamond.micanbt.tag;
 
 /**
- * A tag containing a long.
+ * TAG_Long (ID: {@value #ID}).
+ * <p>
+ * Stores a {@code long} value.
  */
 public class LongTag extends Tag {
     public static final int ID = 4;
