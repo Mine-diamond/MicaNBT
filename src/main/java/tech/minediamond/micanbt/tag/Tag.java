@@ -9,7 +9,25 @@ import tech.minediamond.micanbt.path.NBTPathParseException;
 /// The base class for all NBT (Named Binary Tag) structures.
 ///
 /// NBT tags are used to store structured data in a tree-like format. Each tag
-/// consists of an optional name and a payload defined by its specific implementation.
+/// consists of a name and a payload defined by its specific implementation.
+///
+/// ### Supported NBT Types
+///
+/// | Tag type       | Class          | ID                       |
+/// | :------------- | -------------- | :----------------------- |
+/// | TAG_End        |                | 0                        |
+/// | TAG_Byte       | [ByteTag]      | {@value ByteTag#ID}      |
+/// | TAG_Short      | [ShortTag]     | {@value ShortTag#ID}     |
+/// | TAG_Int        | [IntTag]       | {@value IntTag#ID}       |
+/// | TAG_Long       | [LongTag]      | {@value LongTag#ID}      |
+/// | TAG_Float      | [FloatTag]     | {@value FloatTag#ID}     |
+/// | TAG_Double     | [DoubleTag]    | {@value DoubleTag#ID}    |
+/// | TAG_Byte_Array | [ByteArrayTag] | {@value ByteArrayTag#ID} |
+/// | TAG_String     | [StringTag]    | {@value StringTag#ID}    |
+/// | TAG_List       | [ListTag]      | {@value ListTag#ID}      |
+/// | TAG_Compound   | [CompoundTag]  | {@value CompoundTag#ID}  |
+/// | TAG_Int_Array  | [IntArrayTag]  | {@value IntArrayTag#ID}  |
+/// | TAG_Long_Array | [LongArrayTag] | {@value LongArrayTag#ID} |
 ///
 /// @see <a href="https://minecraft.wiki/w/NBT_format#TAG_definition">Minecraft Wiki: NBT format</a>
 public abstract class Tag {
@@ -81,24 +99,7 @@ public abstract class Tag {
 
     /// Get the tag type ID defined according to the NBT specification.
     ///
-    /// | Tag type       | Class          | ID                       |
-    /// | :------------- | -------------- | :----------------------- |
-    /// | TAG_End        |                | 0                        |
-    /// | TAG_Byte       | [ByteTag]      | {@value ByteTag#ID}      |
-    /// | TAG_Short      | [ShortTag]     | {@value ShortTag#ID}     |
-    /// | TAG_Int        | [IntTag]       | {@value IntTag#ID}       |
-    /// | TAG_Long       | [LongTag]      | {@value LongTag#ID}      |
-    /// | TAG_Float      | [FloatTag]     | {@value FloatTag#ID}     |
-    /// | TAG_Double     | [DoubleTag]    | {@value DoubleTag#ID}    |
-    /// | TAG_Byte_Array | [ByteArrayTag] | {@value ByteArrayTag#ID} |
-    /// | TAG_String     | [StringTag]    | {@value StringTag#ID}    |
-    /// | TAG_List       | [ListTag]      | {@value ListTag#ID}      |
-    /// | TAG_Compound   | [CompoundTag]  | {@value CompoundTag#ID}  |
-    /// | TAG_Int_Array  | [IntArrayTag]  | {@value IntArrayTag#ID}  |
-    /// | TAG_Long_Array | [LongArrayTag] | {@value LongArrayTag#ID} |
-    ///
     /// @return ID of the tag type.
-    /// @see <a href="https://minecraft.wiki/w/NBT_format#TAG_definition">Minecraft Wiki: NBT format</a>
     public abstract int getTagId();
 
     /// Creates and returns a copy of this tag.

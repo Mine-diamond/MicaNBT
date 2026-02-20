@@ -68,6 +68,7 @@ public class ByteArrayTag extends Tag {
         this.value[index] = value;
     }
 
+    /// @return {@value #ID}
     @Override
     public int getTagId() {
         return ID;

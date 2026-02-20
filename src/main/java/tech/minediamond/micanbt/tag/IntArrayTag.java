@@ -50,6 +50,7 @@ public class IntArrayTag extends Tag {
         this.value = value.clone();
     }
 
+    /// @return {@value #ID}
     @Override
     public int getTagId() {
         return ID;

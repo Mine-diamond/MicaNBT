@@ -80,6 +80,7 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     @Override
     public abstract CompoundTag copy();
 
+    /// @return {@value #ID}
     @Override
     public int getTagId() {
         return ID;

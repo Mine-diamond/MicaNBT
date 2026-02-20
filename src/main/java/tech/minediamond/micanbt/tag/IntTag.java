@@ -40,6 +40,7 @@ public class IntTag extends Tag {
         this.value = value;
     }
 
+    /// @return {@value #ID}
     @Override
     public int getTagId() {
         return ID;

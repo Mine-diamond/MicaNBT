@@ -40,6 +40,7 @@ public class LongTag extends Tag {
         this.value = value;
     }
 
+    /// @return {@value #ID}
     @Override
     public int getTagId() {
         return ID;
