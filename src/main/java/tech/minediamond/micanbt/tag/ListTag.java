@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 /// A sequential collection of unnamed tags. All tags within a list must be of the same type.
 /// The type of the list is determined by the first tag added or defined at construction.
 ///
-/// @param <T> The type of Tag stored in this list.
+/// @param <T> The type of Tag stored in this list. Must extend [Tag].
 public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     public static final int ID = 9;
     /// The NBT Tag ID of the elements contained within this list. Defaults to 0 (TAG_End) for empty lists.

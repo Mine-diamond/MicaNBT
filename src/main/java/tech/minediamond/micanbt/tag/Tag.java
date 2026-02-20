@@ -114,7 +114,7 @@ public abstract class Tag {
         return this.name.hashCode();
     }
 
-    /// get SNBT representation of this tag.
+    /// Get SNBT representation of this tag.
     ///
     /// @return the SNBT representation of this tag.
     @Override
@@ -122,7 +122,7 @@ public abstract class Tag {
         return this.toString(true, SNBTStyle.COMPACT);
     }
 
-    /// get SNBT representation of this tag.
+    /// Get SNBT representation of this tag.
     ///
     /// @param stringifyRootTagName does snbt include tag names
     /// @param snbtStyle            The format of SNBT
