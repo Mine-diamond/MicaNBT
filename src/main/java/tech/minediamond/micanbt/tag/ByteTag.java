@@ -14,7 +14,7 @@ public class ByteTag extends Tag {
         this(name, (byte) 0);
     }
 
-    /// Creates a tag with the specified name.
+    /// Creates a tag with the specified name and value.
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.

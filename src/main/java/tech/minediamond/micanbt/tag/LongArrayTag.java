@@ -16,7 +16,7 @@ public class LongArrayTag extends Tag {
         this(name, new long[0]);
     }
 
-    /// Creates a tag with the specified name.
+    /// Creates a tag with the specified name and value.
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.

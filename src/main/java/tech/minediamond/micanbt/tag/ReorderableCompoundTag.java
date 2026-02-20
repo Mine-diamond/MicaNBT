@@ -20,13 +20,20 @@ import java.util.function.Function;
 public class ReorderableCompoundTag extends CompoundTag {
     OrderedListMap<String, Tag> value;
 
+    /// Creates a tag with the specified name.
+    ///
+    /// @param name The name of the tag.
     public ReorderableCompoundTag(String name) {
         this(name, new OrderedListMap<>());
     }
 
-    public ReorderableCompoundTag(String name, OrderedListMap<String, Tag> map) {
+    /// Creates a tag with the specified name and value.
+    ///
+    /// @param name  The name of the tag.
+    /// @param value The value of the tag.
+    public ReorderableCompoundTag(String name, OrderedListMap<String, Tag> value) {
         super(name);
-        this.value = map;
+        this.value = value;
     }
 
     public ReorderableCompoundTag(String name, Map<String, Tag> map) {

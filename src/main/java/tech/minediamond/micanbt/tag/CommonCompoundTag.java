@@ -10,10 +10,17 @@ import java.util.Map.Entry;
 public class CommonCompoundTag extends CompoundTag {
     private Map<String, Tag> value;
 
+    /// Creates a tag with the specified name.
+    ///
+    /// @param name The name of the tag.
     public CommonCompoundTag(String name) {
         this(name, new LinkedHashMap<>());
     }
 
+    /// Creates a tag with the specified name and value.
+    ///
+    /// @param name  The name of the tag.
+    /// @param value The value of the tag.
     public CommonCompoundTag(String name, Map<String, Tag> value) {
         super(name);
         this.value = new LinkedHashMap<>(value);

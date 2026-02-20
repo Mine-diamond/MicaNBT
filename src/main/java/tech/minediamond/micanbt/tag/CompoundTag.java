@@ -9,6 +9,9 @@ import java.util.Map;
 public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     public static final int ID = 10;
 
+    /// Creates a tag with the specified name.
+    ///
+    /// @param name The name of the tag.
     public CompoundTag(String name) {
         super(name);
     }
