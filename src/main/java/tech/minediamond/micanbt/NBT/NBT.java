@@ -5,7 +5,9 @@ import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 
 import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Path;
 
 public class NBT {
@@ -113,11 +115,104 @@ public class NBT {
         return fromBytes(data).compressType(compressType).littleEndian(littleEndian).compoundSelection(compoundSelection).getTag();
     }
 
-    public static void write(CompoundTag tag, Path path) throws IOException {
-        new NBTWriter(tag, path, NBTCompressType.UNCOMPRESSED, false);
+    /// Initiates a builder to write NBT data to a file path.
+    ///
+    /// @param tag  The root `CompoundTag` to write.
+    /// @param path The path to the file.
+    /// @return An `NBTWriter.Builder` for configuration.
+    /// @throws IOException If an I/O error occurs.
+    public static NBTWriter.Builder toPath(CompoundTag tag, Path path) throws IOException {
+        return NBTWriter.builder(tag, path);
     }
 
+    /// Initiates a builder to write NBT data to an `OutputStream`.
+    ///
+    /// @param tag          The root `CompoundTag` to write.
+    /// @param outputStream The destination output stream.
+    /// @return An `NBTWriter.Builder` for configuration.
+    /// @throws IOException If an I/O error occurs.
+    public static NBTWriter.Builder toStream(CompoundTag tag, OutputStream outputStream) throws IOException {
+        return NBTWriter.builder(tag, outputStream);
+    }
+
+    /// Initiates a builder to write NBT data to a `DataOutput`.
+    ///
+    /// @param tag        The root `CompoundTag` to write.
+    /// @param dataOutput The destination data output.
+    /// @return An `NBTWriter.Builder` for configuration.
+    /// @throws IOException If an I/O error occurs.
+    public static NBTWriter.Builder toDataOutput(CompoundTag tag, DataOutput dataOutput) throws IOException {
+        return NBTWriter.builder(tag, dataOutput);
+    }
+
+    /// Writes the root NBT tag to a file path with automatic settings (GZIP compression, Big Endian).
+    ///
+    /// @param tag  The root `CompoundTag` to write.
+    /// @param path The path to the file.
+    /// @throws IOException If an I/O error occurs.
+    public static void write(CompoundTag tag, Path path) throws IOException {
+        toPath(tag, path).write();
+    }
+
+    /// Writes the root NBT tag to a file path with full configuration.
+    ///
+    /// @param tag          The root `CompoundTag` to write.
+    /// @param path         The path to the file.
+    /// @param compressType The specific compression type to use.
+    /// @param littleEndian Whether to use Little Endian byte order.
+    /// @throws IOException If an I/O error occurs.
     public static void write(CompoundTag tag, Path path, NBTCompressType compressType, boolean littleEndian) throws IOException {
-        new NBTWriter(tag, path, compressType, littleEndian);
+        toPath(tag, path).compressType(compressType).littleEndian(littleEndian).write();
+    }
+
+    /// Writes the root NBT tag to an `OutputStream` with automatic settings (GZIP compression, Big Endian).
+    ///
+    /// @param tag          The root `CompoundTag` to write.
+    /// @param outputStream The destination output stream.
+    /// @throws IOException If an I/O error occurs.
+    public static void write(CompoundTag tag, OutputStream outputStream) throws IOException {
+        toStream(tag, outputStream).write();
+    }
+
+    /// Writes the root NBT tag to an `OutputStream` with full configuration.
+    ///
+    /// @param tag          The root `CompoundTag` to write.
+    /// @param outputStream The destination output stream.
+    /// @param compressType The specific compression type to use.
+    /// @param littleEndian Whether to use Little Endian byte order.
+    /// @throws IOException If an I/O error occurs.
+    public static void write(CompoundTag tag, OutputStream outputStream, NBTCompressType compressType, boolean littleEndian) throws IOException {
+        toStream(tag, outputStream).compressType(compressType).littleEndian(littleEndian).write();
+    }
+
+    /// Writes the root NBT tag directly to a `DataOutput`.
+    ///
+    /// **Note**: This method writes the raw data to the output without additional compression logic.
+    ///
+    /// @param tag        The root `CompoundTag` to write.
+    /// @param dataOutput The destination data output.
+    /// @throws IOException If an I/O error occurs.
+    public static void write(CompoundTag tag, DataOutput dataOutput) throws IOException {
+        toDataOutput(tag, dataOutput).write();
+    }
+
+    /// Serializes the root NBT tag into a byte array with automatic settings (GZIP compression, Big Endian).
+    ///
+    /// @param tag The root `CompoundTag` to serialize.
+    /// @return A byte array containing the serialized NBT data.
+    /// @throws IOException If an I/O error occurs.
+    public static byte[] toBytes(CompoundTag tag) throws IOException {
+        return NBTWriter.builder(tag).toByteArray();
+    }
+
+    /// Serializes the root NBT tag into a byte array with full configuration.
+    ///
+    /// @param tag          The root `CompoundTag` to serialize.
+    /// @param compressType The specific compression type to use.
+    /// @param littleEndian Whether to use Little Endian byte order.
+    /// @return A byte array containing the serialized NBT data.
+    /// @throws IOException If an I/O error occurs.
+    public static byte[] toBytes(CompoundTag tag, NBTCompressType compressType, boolean littleEndian) throws IOException {
+        return NBTWriter.builder(tag).compressType(compressType).littleEndian(littleEndian).toByteArray();
     }
 }
