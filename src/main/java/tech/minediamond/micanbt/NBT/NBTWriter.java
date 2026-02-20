@@ -102,19 +102,19 @@ public class NBTWriter {
     }
 
     private void writeByteArrayTag(ByteArrayTag byteArrayTag) throws IOException {
-        dataOutput.writeInt(byteArrayTag.length());
+        dataOutput.writeInt(byteArrayTag.size());
         dataOutput.write(byteArrayTag.getRawValue());
     }
 
     private void writeIntArray(IntArrayTag intArrayTag) throws IOException {
-        dataOutput.writeInt(intArrayTag.length());
+        dataOutput.writeInt(intArrayTag.size());
         for (int i : intArrayTag.getRawValue()) {
             dataOutput.writeInt(i);
         }
     }
 
     private void writeLongArray(LongArrayTag longArrayTag) throws IOException {
-        dataOutput.writeInt(longArrayTag.length());
+        dataOutput.writeInt(longArrayTag.size());
         for (long l : longArrayTag.getRawValue()) {
             dataOutput.writeLong(l);
         }
