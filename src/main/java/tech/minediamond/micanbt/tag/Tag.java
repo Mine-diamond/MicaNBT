@@ -36,7 +36,7 @@ public abstract class Tag {
     /// @return The deep copied value of this tag.
     public abstract Object getClonedValue();
 
-    /// Gets original reference of value of this tag.
+    /// Gets original reference of the value of this tag.
     ///
     /// Modifying the returned value may reflect in this tag.
     ///
@@ -118,7 +118,7 @@ public abstract class Tag {
         return this.name.hashCode();
     }
 
-    /// Get SNBT representation of this tag.
+    /// Gets SNBT representation of this tag.
     ///
     /// @return the SNBT representation of this tag.
     @Override
@@ -126,7 +126,7 @@ public abstract class Tag {
         return this.toString(true, SNBTStyle.COMPACT);
     }
 
-    /// Get SNBT representation of this tag.
+    /// Gets SNBT representation of this tag.
     ///
     /// @param stringifyRootTagName does snbt include tag names
     /// @param snbtStyle            The format of SNBT

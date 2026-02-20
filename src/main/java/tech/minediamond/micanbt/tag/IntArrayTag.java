@@ -41,8 +41,8 @@ public class IntArrayTag extends Tag {
     /// If the passed parameter is `null`, no operation is performed.
     ///
     /// @param value New value of this tag.
-    //TODO: Change the behavior of passing null values to throw NullPointerException
     public void setValue(int[] value) {
+        //TODO: Change the behavior of passing null values to throw NullPointerException
         if (value == null) {
             return;
         }

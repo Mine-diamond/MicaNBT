@@ -41,8 +41,8 @@ public class LongArrayTag extends Tag {
     /// If the passed parameter is `null`, no operation is performed.
     ///
     /// @param value New value of this tag.
-    //TODO: Change the behavior of passing null values to throw NullPointerException
     public void setValue(long[] value) {
+        //TODO: Change the behavior of passing null values to throw NullPointerException
         if (value == null) {
             return;
         }
