@@ -41,12 +41,8 @@ public class ByteArrayTag extends Tag {
     /// If the passed parameter is `null`, no operation is performed.
     ///
     /// @param value New value of this tag.
+    /// @throws NullPointerException The value passed in is null
     public void setValue(byte[] value) {
-        //TODO: Change the behavior of passing null values to throw NullPointerException
-        if (value == null) {
-            return;
-        }
-
         this.value = value.clone();
     }
 
@@ -77,7 +73,7 @@ public class ByteArrayTag extends Tag {
     /// Gets the length of this tag's array.
     ///
     /// @return This tag's array length.
-    public int length() {
+    public int size() {
         return this.value.length;
     }
 

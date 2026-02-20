@@ -15,7 +15,7 @@ import tech.minediamond.micanbt.path.NBTPathParseException;
 ///
 /// | Tag type       | Class          | ID                       |
 /// | :------------- | -------------- | :----------------------- |
-/// | TAG_End        |                | 0                        |
+/// | TAG_End        | _N/A_          | 0                        |
 /// | TAG_Byte       | [ByteTag]      | {@value ByteTag#ID}      |
 /// | TAG_Short      | [ShortTag]     | {@value ShortTag#ID}     |
 /// | TAG_Int        | [IntTag]       | {@value IntTag#ID}       |
