@@ -15,25 +15,36 @@ public class NBTWriter {
 
     DataOutput dataOutput;
 
-    public NBTWriter(CompoundTag tag, Path path, NBTCompressType compressType, boolean littleEndian) throws IOException {
-        this.tag = tag;
-        this.compressType = compressType;
-        this.littleEndian = littleEndian;
+    private NBTWriter(Builder builder) throws IOException {
+        this.tag = builder.tag;
+        this.compressType = builder.compressType;
+        this.littleEndian = builder.littleEndian;
 
-        writePath(path);
+        if (builder.path != null) {
+            writePath(builder.path);
+        } else if (builder.stream != null) {
+            writeStream(builder.stream);
+        } else if (builder.dataOutput != null) {
+            writeDirect(builder.dataOutput);
+        } else {
+            throw new IOException("No path, stream or dataOutput provided");
+        }
     }
 
-    public NBTWriter(CompoundTag tag, OutputStream stream, NBTCompressType compressType, boolean littleEndian) throws IOException {
-        this.tag = tag;
-        this.compressType = compressType;
-        this.littleEndian = littleEndian;
-
-        writeStream(stream);
+    public static Builder Builder(CompoundTag tag, Path path) {
+        return new Builder(tag, path);
     }
 
-    public NBTWriter(CompoundTag tag, DataOutput dataOutput) throws IOException {
-        this.tag = tag;
-        writeDirect(dataOutput);
+    public static Builder Builder(CompoundTag tag, OutputStream stream) {
+        return new Builder(tag, stream);
+    }
+
+    public static Builder Builder(CompoundTag tag, DataOutput dataOutput) {
+        return new Builder(tag, dataOutput);
+    }
+
+    public static Builder Builder(CompoundTag tag) {
+        return new Builder(tag);
     }
 
     private void writePath(Path path) throws IOException {
@@ -140,6 +151,57 @@ public class NBTWriter {
         dataOutput.writeInt(longArrayTag.size());
         for (long l : longArrayTag.getRawValue()) {
             dataOutput.writeLong(l);
+        }
+    }
+
+    public static class Builder {
+        private Path path = null;
+        private OutputStream stream = null;
+        private DataOutput dataOutput = null;
+
+        private final CompoundTag tag;
+        private NBTCompressType compressType = NBTCompressType.GZIP;
+        private boolean littleEndian = false;
+
+        private Builder(CompoundTag tag) {
+            this.tag = tag;
+        }
+
+        private Builder(CompoundTag tag, Path path) {
+            this.tag = tag;
+            this.path = path;
+        }
+
+        private Builder(CompoundTag tag, OutputStream stream) {
+            this.tag = tag;
+            this.stream = stream;
+        }
+
+        private Builder(CompoundTag tag, DataOutput dataOutput) {
+            this.tag = tag;
+            this.dataOutput = dataOutput;
+        }
+
+        public Builder compressType(NBTCompressType compressType) {
+            this.compressType = compressType;
+            return this;
+        }
+
+        public Builder littleEndian(boolean littleEndian) {
+            this.littleEndian = littleEndian;
+            return this;
+        }
+
+        public void write() throws IOException {
+            new NBTWriter(this);
+        }
+
+        public byte[] toByteArray() throws IOException {
+            try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+                this.stream = bos;
+                new NBTWriter(this);
+                return bos.toByteArray();
+            }
         }
     }
 }

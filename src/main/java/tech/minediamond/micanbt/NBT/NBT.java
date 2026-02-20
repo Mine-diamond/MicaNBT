@@ -5,7 +5,9 @@ import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 
 import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Path;
 
 public class NBT {
@@ -113,11 +115,43 @@ public class NBT {
         return fromBytes(data).compressType(compressType).littleEndian(littleEndian).compoundSelection(compoundSelection).getTag();
     }
 
+    public static NBTWriter.Builder toPath(CompoundTag tag, Path path) throws IOException {
+        return NBTWriter.Builder(tag, path);
+    }
+
+    public static NBTWriter.Builder toStream(CompoundTag tag, OutputStream outputStream) throws IOException {
+        return NBTWriter.Builder(tag, outputStream);
+    }
+
+    public static NBTWriter.Builder toDataOutput(CompoundTag tag, DataOutput dataOutput) throws IOException {
+        return NBTWriter.Builder(tag, dataOutput);
+    }
+
     public static void write(CompoundTag tag, Path path) throws IOException {
-        new NBTWriter(tag, path, NBTCompressType.UNCOMPRESSED, false);
+        toPath(tag, path).write();
     }
 
     public static void write(CompoundTag tag, Path path, NBTCompressType compressType, boolean littleEndian) throws IOException {
-        new NBTWriter(tag, path, compressType, littleEndian);
+        toPath(tag, path).compressType(compressType).littleEndian(littleEndian).write();
+    }
+
+    public static void write(CompoundTag tag, OutputStream outputStream) throws IOException {
+        toStream(tag, outputStream).write();
+    }
+
+    public static void write(CompoundTag tag, OutputStream outputStream, NBTCompressType compressType, boolean littleEndian) throws IOException {
+        toStream(tag, outputStream).compressType(compressType).littleEndian(littleEndian).write();
+    }
+
+    public static void write(CompoundTag tag, DataOutput dataOutput) throws IOException {
+        toDataOutput(tag, dataOutput).write();
+    }
+
+    public static byte[] toBytes(CompoundTag tag) throws IOException {
+        return NBTWriter.Builder(tag).toByteArray();
+    }
+
+    public static byte[] toBytes(CompoundTag tag, NBTCompressType compressType, boolean littleEndian) throws IOException {
+        return NBTWriter.Builder(tag).compressType(compressType).littleEndian(littleEndian).toByteArray();
     }
 }
