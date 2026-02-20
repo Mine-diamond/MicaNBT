@@ -10,7 +10,6 @@ import java.util.zip.GZIPOutputStream;
 
 public class NBTWriter {
     CompoundTag tag;
-    Path path;
     NBTCompressType compressType;
     boolean littleEndian;
 
@@ -18,31 +17,55 @@ public class NBTWriter {
 
     public NBTWriter(CompoundTag tag, Path path, NBTCompressType compressType, boolean littleEndian) throws IOException {
         this.tag = tag;
-        this.path = path;
         this.compressType = compressType;
         this.littleEndian = littleEndian;
 
-        write();
+        writePath(path);
     }
 
-    private void write() throws IOException {
+    public NBTWriter(CompoundTag tag, OutputStream stream, NBTCompressType compressType, boolean littleEndian) throws IOException {
+        this.tag = tag;
+        this.compressType = compressType;
+        this.littleEndian = littleEndian;
+
+        writeStream(stream);
+    }
+
+    public NBTWriter(CompoundTag tag, DataOutput dataOutput) throws IOException {
+        this.tag = tag;
+        writeDirect(dataOutput);
+    }
+
+    private void writePath(Path path) throws IOException {
         Path parent = path.getParent();
         if (parent != null && Files.notExists(parent)) {
             Files.createDirectories(parent);
         }
 
-        try (OutputStream fos = Files.newOutputStream(path);
-             BufferedOutputStream bos = new BufferedOutputStream(fos);
-             OutputStream out = switch (compressType) {
-                 case GZIP -> new GZIPOutputStream(bos);
-                 case ZLIB -> new DeflaterOutputStream(bos);
-                 case UNCOMPRESSED -> bos;
-             };
-             FilterOutputStream dos = littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out)) {
-
+        try (OutputStream fos = Files.newOutputStream(path); BufferedOutputStream bos = new BufferedOutputStream(fos); OutputStream out = switch (compressType) {
+            case GZIP -> new GZIPOutputStream(bos);
+            case ZLIB -> new DeflaterOutputStream(bos);
+            case UNCOMPRESSED -> bos;
+        }; FilterOutputStream dos = littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out)) {
             this.dataOutput = (DataOutput) dos;
             writeNamedTag(this.tag);
         }
+    }
+
+    private void writeStream(OutputStream ops) throws IOException {
+        try (OutputStream out = switch (compressType) {
+            case GZIP -> new GZIPOutputStream(ops);
+            case ZLIB -> new DeflaterOutputStream(ops);
+            case UNCOMPRESSED -> ops;
+        }; FilterOutputStream dos = littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out)) {
+            this.dataOutput = (DataOutput) dos;
+            writeNamedTag(this.tag);
+        }
+    }
+
+    private void writeDirect(DataOutput dataOutput) throws IOException {
+        this.dataOutput = dataOutput;
+        writeNamedTag(this.tag);
     }
 
     private void writeNamedTag(Tag tag) throws IOException {
