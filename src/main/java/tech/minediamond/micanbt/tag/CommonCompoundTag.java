@@ -3,12 +3,10 @@ package tech.minediamond.micanbt.tag;
 import java.util.*;
 import java.util.Map.Entry;
 
-/**
- * Standard implementation of {@link CompoundTag} backed by a {@link LinkedHashMap}.
- * <p>
- * This implementation preserves the <b>insertion order</b> of tags. It provides efficient
- * O(1) lookup performance while ensuring predictable iteration sequences.
- */
+/// Standard implementation of [CompoundTag] backed by a [LinkedHashMap].
+///
+/// This implementation preserves the **insertion order** of tags. It provides efficient
+/// O(1) lookup performance while ensuring predictable iteration sequences.
 public class CommonCompoundTag extends CompoundTag {
     private Map<String, Tag> value;
 
@@ -31,12 +29,10 @@ public class CommonCompoundTag extends CompoundTag {
         this.value.put(tag.getName(), tag);
     }
 
-    /**
-     * Adds all tags from another compound tag into this one.
-     * Existing tags with the same name will be overwritten.
-     *
-     * @param other The compound tag to copy data from.
-     */
+    /// Adds all tags from another compound tag into this one.
+    /// Existing tags with the same name will be overwritten.
+    ///
+    /// @param other The compound tag to copy data from.
     public void putAll(CommonCompoundTag other) {
         this.value.putAll(other.getRawValue());
     }
@@ -76,11 +72,9 @@ public class CommonCompoundTag extends CompoundTag {
         return this.value.containsValue(tag);
     }
 
-    /**
-     * Returns a view of all tags contained in this compound.
-     *
-     * @return A collection of tags.
-     */
+    /// Returns a view of all tags contained in this compound.
+    ///
+    /// @return A collection of tags.
     public Collection<Tag> values() {
         return this.value.values();
     }

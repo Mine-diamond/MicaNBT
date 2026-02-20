@@ -93,7 +93,6 @@ public abstract class Tag {
     /// | TAG_Long_Array | {@value LongArrayTag#ID} |
     ///
     /// @return ID of the tag type.
-    ///
     /// @see <a href="https://minecraft.wiki/w/NBT_format#TAG_definition">Minecraft Wiki: NBT format</a>
     public abstract int getTagId();
 
