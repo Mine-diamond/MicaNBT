@@ -2,30 +2,24 @@ package tech.minediamond.micanbt.tag;
 
 import java.util.Arrays;
 
-/**
- * TAG_Byte_Array (ID: {@value #ID}).
- * <p>
- * Stores a {@code byte[]} value.
- */
+/// TAG_Byte_Array (ID: {@value #ID}).
+///
+/// Stores a `byte[]` value.
 public class ByteArrayTag extends Tag {
     public static final int ID = 7;
     private byte[] value;
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name The name of the tag.
-     */
+    /// Creates a tag with the specified name.
+    ///
+    /// @param name The name of the tag.
     public ByteArrayTag(String name) {
         this(name, new byte[0]);
     }
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name  The name of the tag.
-     * @param value The value of the tag.
-     */
+    /// Creates a tag with the specified name.
+    ///
+    /// @param name  The name of the tag.
+    /// @param value The value of the tag.
     public ByteArrayTag(String name, byte[] value) {
         super(name);
         this.value = value;
@@ -41,11 +35,9 @@ public class ByteArrayTag extends Tag {
         return this.value;
     }
 
-    /**
-     * Sets the value of this tag.
-     *
-     * @param value New value of this tag.
-     */
+    /// Sets the value of this tag.
+    ///
+    /// @param value New value of this tag.
     public void setValue(byte[] value) {
         if (value == null) {
             return;
@@ -54,22 +46,18 @@ public class ByteArrayTag extends Tag {
         this.value = value.clone();
     }
 
-    /**
-     * Gets a value in this tag's array.
-     *
-     * @param index Index of the value.
-     * @return The value at the given index.
-     */
+    /// Gets a value in this tag's array.
+    ///
+    /// @param index Index of the value.
+    /// @return The value at the given index.
     public byte getValue(int index) {
         return this.value[index];
     }
 
-    /**
-     * Sets a value in this tag's array.
-     *
-     * @param index Index of the value.
-     * @param value Value to set.
-     */
+    /// Sets a value in this tag's array.
+    ///
+    /// @param index Index of the value.
+    /// @param value Value to set.
     public void setValue(int index, byte value) {
         this.value[index] = value;
     }
@@ -79,11 +67,9 @@ public class ByteArrayTag extends Tag {
         return ID;
     }
 
-    /**
-     * Gets the length of this tag's array.
-     *
-     * @return This tag's array length.
-     */
+    /// Gets the length of this tag's array.
+    ///
+    /// @return This tag's array length.
     public int length() {
         return this.value.length;
     }

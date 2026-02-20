@@ -1,29 +1,23 @@
 package tech.minediamond.micanbt.tag;
 
-/**
- * TAG_Byte (ID: {@value #ID}).
- * <p>
- * Stores a {@code byte} value.
- */
+/// TAG_Byte (ID: {@value #ID}).
+///
+/// Stores a `byte` value.
 public class ByteTag extends Tag {
     public static final int ID = 1;
     private byte value;
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name The name of the tag.
-     */
+    /// Creates a tag with the specified name.
+    ///
+    /// @param name The name of the tag.
     public ByteTag(String name) {
         this(name, (byte) 0);
     }
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name  The name of the tag.
-     * @param value The value of the tag.
-     */
+    /// Creates a tag with the specified name.
+    ///
+    /// @param name  The name of the tag.
+    /// @param value The value of the tag.
     public ByteTag(String name, byte value) {
         super(name);
         this.value = value;
@@ -39,11 +33,9 @@ public class ByteTag extends Tag {
         return this.value;
     }
 
-    /**
-     * Sets the value of this tag.
-     *
-     * @param value New value of this tag.
-     */
+    /// Sets the value of this tag.
+    ///
+    /// @param value New value of this tag.
     public void setValue(byte value) {
         this.value = value;
     }

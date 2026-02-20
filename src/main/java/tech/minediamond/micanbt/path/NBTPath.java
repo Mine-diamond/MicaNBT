@@ -4,6 +4,7 @@ import tech.minediamond.micanbt.tag.Tag;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Represents a logical path used to navigate and locate specific tags within an NBT structure.

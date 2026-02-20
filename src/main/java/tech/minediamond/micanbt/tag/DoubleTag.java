@@ -1,29 +1,23 @@
 package tech.minediamond.micanbt.tag;
 
-/**
- * TAG_Double (ID: {@value #ID}).
- * <p>
- * Stores a {@code double} value.
- */
+/// TAG_Double (ID: {@value #ID}).
+///
+/// Stores a `double` value.
 public class DoubleTag extends Tag {
     public static final int ID = 6;
     private double value;
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name The name of the tag.
-     */
+    /// Creates a tag with the specified name.
+    ///
+    /// @param name The name of the tag.
     public DoubleTag(String name) {
         this(name, 0);
     }
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name  The name of the tag.
-     * @param value The value of the tag.
-     */
+    /// Creates a tag with the specified name.
+    ///
+    /// @param name  The name of the tag.
+    /// @param value The value of the tag.
     public DoubleTag(String name, double value) {
         super(name);
         this.value = value;
@@ -39,11 +33,9 @@ public class DoubleTag extends Tag {
         return this.value;
     }
 
-    /**
-     * Sets the value of this tag.
-     *
-     * @param value New value of this tag.
-     */
+    /// Sets the value of this tag.
+    ///
+    /// @param value New value of this tag.
     public void setValue(double value) {
         this.value = value;
     }
