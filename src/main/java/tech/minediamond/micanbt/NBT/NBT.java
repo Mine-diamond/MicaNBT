@@ -116,15 +116,15 @@ public class NBT {
     }
 
     public static NBTWriter.Builder toPath(CompoundTag tag, Path path) throws IOException {
-        return NBTWriter.Builder(tag, path);
+        return NBTWriter.builder(tag, path);
     }
 
     public static NBTWriter.Builder toStream(CompoundTag tag, OutputStream outputStream) throws IOException {
-        return NBTWriter.Builder(tag, outputStream);
+        return NBTWriter.builder(tag, outputStream);
     }
 
     public static NBTWriter.Builder toDataOutput(CompoundTag tag, DataOutput dataOutput) throws IOException {
-        return NBTWriter.Builder(tag, dataOutput);
+        return NBTWriter.builder(tag, dataOutput);
     }
 
     public static void write(CompoundTag tag, Path path) throws IOException {
@@ -148,10 +148,10 @@ public class NBT {
     }
 
     public static byte[] toBytes(CompoundTag tag) throws IOException {
-        return NBTWriter.Builder(tag).toByteArray();
+        return NBTWriter.builder(tag).toByteArray();
     }
 
     public static byte[] toBytes(CompoundTag tag, NBTCompressType compressType, boolean littleEndian) throws IOException {
-        return NBTWriter.Builder(tag).compressType(compressType).littleEndian(littleEndian).toByteArray();
+        return NBTWriter.builder(tag).compressType(compressType).littleEndian(littleEndian).toByteArray();
     }
 }

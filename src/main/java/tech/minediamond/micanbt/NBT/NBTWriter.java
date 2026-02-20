@@ -31,19 +31,19 @@ public class NBTWriter {
         }
     }
 
-    public static Builder Builder(CompoundTag tag, Path path) {
+    public static Builder builder(CompoundTag tag, Path path) {
         return new Builder(tag, path);
     }
 
-    public static Builder Builder(CompoundTag tag, OutputStream stream) {
+    public static Builder builder(CompoundTag tag, OutputStream stream) {
         return new Builder(tag, stream);
     }
 
-    public static Builder Builder(CompoundTag tag, DataOutput dataOutput) {
+    public static Builder builder(CompoundTag tag, DataOutput dataOutput) {
         return new Builder(tag, dataOutput);
     }
 
-    public static Builder Builder(CompoundTag tag) {
+    public static Builder builder(CompoundTag tag) {
         return new Builder(tag);
     }
 
@@ -64,10 +64,10 @@ public class NBTWriter {
     }
 
     private void writeStream(OutputStream ops) throws IOException {
-        try (OutputStream out = switch (compressType) {
-            case GZIP -> new GZIPOutputStream(ops);
-            case ZLIB -> new DeflaterOutputStream(ops);
-            case UNCOMPRESSED -> ops;
+        try (BufferedOutputStream bos = new BufferedOutputStream(ops); OutputStream out = switch (compressType) {
+            case GZIP -> new GZIPOutputStream(bos);
+            case ZLIB -> new DeflaterOutputStream(bos);
+            case UNCOMPRESSED -> bos;
         }; FilterOutputStream dos = littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out)) {
             this.dataOutput = (DataOutput) dos;
             writeNamedTag(this.tag);
