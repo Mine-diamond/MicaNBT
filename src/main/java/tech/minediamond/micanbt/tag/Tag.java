@@ -36,7 +36,7 @@ public abstract class Tag {
     /// @return The deep copied value of this tag.
     public abstract Object getClonedValue();
 
-    /// Gets original reference of the value of this tag.
+    /// Gets the original reference of the value of this tag.
     ///
     /// Modifying the returned value may reflect in this tag.
     ///
@@ -81,20 +81,21 @@ public abstract class Tag {
 
     /// Get the tag type ID defined according to the NBT specification.
     ///
-    /// | Tag type | ID |
-    /// | :--- | :--- |
-    /// | TAG_Byte | {@value ByteTag#ID} |
-    /// | TAG_Short | {@value ShortTag#ID} |
-    /// | TAG_Int | {@value IntTag#ID} |
-    /// | TAG_Long | {@value LongTag#ID} |
-    /// | TAG_Float | {@value FloatTag#ID} |
-    /// | TAG_Double | {@value DoubleTag#ID} |
-    /// | TAG_Byte_Array | {@value ByteArrayTag#ID} |
-    /// | TAG_String | {@value StringTag#ID} |
-    /// | TAG_List | {@value ListTag#ID} |
-    /// | TAG_Compound | {@value CompoundTag#ID} |
-    /// | TAG_Int_Array | {@value IntArrayTag#ID} |
-    /// | TAG_Long_Array | {@value LongArrayTag#ID} |
+    /// | Tag type       | Class          | ID                       |
+    /// | :------------- | -------------- | :----------------------- |
+    /// | TAG_End        |                | 0                        |
+    /// | TAG_Byte       | [ByteTag]      | {@value ByteTag#ID}      |
+    /// | TAG_Short      | [ShortTag]     | {@value ShortTag#ID}     |
+    /// | TAG_Int        | [IntTag]       | {@value IntTag#ID}       |
+    /// | TAG_Long       | [LongTag]      | {@value LongTag#ID}      |
+    /// | TAG_Float      | [FloatTag]     | {@value FloatTag#ID}     |
+    /// | TAG_Double     | [DoubleTag]    | {@value DoubleTag#ID}    |
+    /// | TAG_Byte_Array | [ByteArrayTag] | {@value ByteArrayTag#ID} |
+    /// | TAG_String     | [StringTag]    | {@value StringTag#ID}    |
+    /// | TAG_List       | [ListTag]      | {@value ListTag#ID}      |
+    /// | TAG_Compound   | [CompoundTag]  | {@value CompoundTag#ID}  |
+    /// | TAG_Int_Array  | [IntArrayTag]  | {@value IntArrayTag#ID}  |
+    /// | TAG_Long_Array | [LongArrayTag] | {@value LongArrayTag#ID} |
     ///
     /// @return ID of the tag type.
     /// @see <a href="https://minecraft.wiki/w/NBT_format#TAG_definition">Minecraft Wiki: NBT format</a>
