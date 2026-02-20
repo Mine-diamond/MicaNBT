@@ -2,28 +2,24 @@ package tech.minediamond.micanbt.tag;
 
 import java.util.Objects;
 
-/**
- * A tag containing a string.
- */
+/// TAG_String (ID: {@value #ID}).
+///
+/// Stores a `String` value.
 public class StringTag extends Tag {
     public static final int ID = 8;
     private String value;
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name The name of the tag.
-     */
+    /// Creates a tag with the specified name.
+    ///
+    /// @param name The name of the tag.
     public StringTag(String name) {
         this(name, "");
     }
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name  The name of the tag.
-     * @param value The value of the tag.
-     */
+    /// Creates a tag with the specified name and value.
+    ///
+    /// @param name  The name of the tag.
+    /// @param value The value of the tag.
     public StringTag(String name, String value) {
         super(name);
         this.value = value;
@@ -39,15 +35,14 @@ public class StringTag extends Tag {
         return this.value;
     }
 
-    /**
-     * Sets the value of this tag.
-     *
-     * @param value New value of this tag.
-     */
+    /// Sets the value of this tag.
+    ///
+    /// @param value New value of this tag.
     public void setValue(String value) {
         this.value = value;
     }
 
+    /// @return {@value #ID}
     @Override
     public int getTagId() {
         return ID;

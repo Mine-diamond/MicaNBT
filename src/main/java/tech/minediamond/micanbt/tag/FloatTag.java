@@ -1,27 +1,23 @@
 package tech.minediamond.micanbt.tag;
 
-/**
- * A tag containing a float.
- */
+/// TAG_Float (ID: {@value #ID}).
+///
+/// Stores a `float` value.
 public class FloatTag extends Tag {
     public static final int ID = 5;
     private float value;
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name The name of the tag.
-     */
+    /// Creates a tag with the specified name.
+    ///
+    /// @param name The name of the tag.
     public FloatTag(String name) {
         this(name, 0);
     }
 
-    /**
-     * Creates a tag with the specified name.
-     *
-     * @param name  The name of the tag.
-     * @param value The value of the tag.
-     */
+    /// Creates a tag with the specified name and value.
+    ///
+    /// @param name  The name of the tag.
+    /// @param value The value of the tag.
     public FloatTag(String name, float value) {
         super(name);
         this.value = value;
@@ -37,15 +33,14 @@ public class FloatTag extends Tag {
         return this.value;
     }
 
-    /**
-     * Sets the value of this tag.
-     *
-     * @param value New value of this tag.
-     */
+    /// Sets the value of this tag.
+    ///
+    /// @param value New value of this tag.
     public void setValue(float value) {
         this.value = value;
     }
 
+    /// @return {@value #ID}
     @Override
     public int getTagId() {
         return ID;

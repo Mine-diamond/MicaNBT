@@ -3,17 +3,24 @@ package tech.minediamond.micanbt.tag;
 import java.util.*;
 import java.util.Map.Entry;
 
-/**
- * A standard implementation of {@link CompoundTag} backed by a {@link LinkedHashMap}.
- * This implementation preserves the order in which tags are added.
- */
+/// Standard implementation of [CompoundTag] backed by a [LinkedHashMap].
+///
+/// This implementation preserves the **insertion order** of tags. It provides efficient
+/// O(1) lookup performance while ensuring predictable iteration sequences.
 public class CommonCompoundTag extends CompoundTag {
     private Map<String, Tag> value;
 
+    /// Creates a tag with the specified name.
+    ///
+    /// @param name The name of the tag.
     public CommonCompoundTag(String name) {
         this(name, new LinkedHashMap<>());
     }
 
+    /// Creates a tag with the specified name and value.
+    ///
+    /// @param name  The name of the tag.
+    /// @param value The value of the tag.
     public CommonCompoundTag(String name, Map<String, Tag> value) {
         super(name);
         this.value = new LinkedHashMap<>(value);
@@ -29,12 +36,10 @@ public class CommonCompoundTag extends CompoundTag {
         this.value.put(tag.getName(), tag);
     }
 
-    /**
-     * Adds all tags from another compound tag into this one.
-     * Existing tags with the same name will be overwritten.
-     *
-     * @param other The compound tag to copy data from.
-     */
+    /// Adds all tags from another compound tag into this one.
+    /// Existing tags with the same name will be overwritten.
+    ///
+    /// @param other The compound tag to copy data from.
     public void putAll(CommonCompoundTag other) {
         this.value.putAll(other.getRawValue());
     }
@@ -74,11 +79,9 @@ public class CommonCompoundTag extends CompoundTag {
         return this.value.containsValue(tag);
     }
 
-    /**
-     * Returns a view of all tags contained in this compound.
-     *
-     * @return A collection of tags.
-     */
+    /// Returns a view of all tags contained in this compound.
+    ///
+    /// @return A collection of tags.
     public Collection<Tag> values() {
         return this.value.values();
     }
