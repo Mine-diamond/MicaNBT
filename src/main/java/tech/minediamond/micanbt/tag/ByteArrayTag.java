@@ -37,7 +37,11 @@ public class ByteArrayTag extends Tag {
 
     /// Sets the value of this tag.
     ///
+    /// This method creates a clone of the passed array so modifying the raw value will not affect value in this tag.
+    /// If the passed parameter is `null`, no operation is performed.
+    ///
     /// @param value New value of this tag.
+    //TODO: Change the behavior of passing null values to throw NullPointerException
     public void setValue(byte[] value) {
         if (value == null) {
             return;
@@ -48,16 +52,18 @@ public class ByteArrayTag extends Tag {
 
     /// Gets a value in this tag's array.
     ///
-    /// @param index Index of the value.
+    /// @param index Index of the value to read.
     /// @return The value at the given index.
+    /// @throws IndexOutOfBoundsException If the index is out of range
     public byte getValue(int index) {
         return this.value[index];
     }
 
-    /// Sets a value in this tag's array.
+    /// Sets the value at the specified index in the array.
     ///
-    /// @param index Index of the value.
+    /// @param index Index of the value to set.
     /// @param value Value to set.
+    /// @throws IndexOutOfBoundsException If the index is out of range
     public void setValue(int index, byte value) {
         this.value[index] = value;
     }

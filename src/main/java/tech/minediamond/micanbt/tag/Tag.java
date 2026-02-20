@@ -29,14 +29,18 @@ public abstract class Tag {
         return this.name;
     }
 
-    /// Gets the copied value of this tag.
+    /// Gets the deep copied value of this tag.
     ///
-    /// @return The copied value of this tag.
+    /// Modifying the returned value does not affect the state inside this tag
+    ///
+    /// @return The deep copied value of this tag.
     public abstract Object getClonedValue();
 
-    /// Gets the value of this tag.
+    /// Gets original reference of value of this tag.
     ///
-    /// @return The value of this tag.
+    /// Modifying the returned value may reflect in this tag.
+    ///
+    /// @return The original reference of value of this tag.
     public abstract Object getRawValue();
 
     /// Navigates the NBT tree starting from this tag and retrieves the tag located at
