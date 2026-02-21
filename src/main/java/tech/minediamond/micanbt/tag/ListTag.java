@@ -157,6 +157,24 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
         return this.value.indexOf(tag);
     }
 
+    public int indexOf(Predicate<? super T> predicate) {
+        for (int i = 0; i < value.size(); i++) {
+            if (predicate.test(value.get(i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public T find(Predicate<? super T> predicate) {
+        for (T t : value) {
+            if (predicate.test(t)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
     /// Returns the number of tags in this list.
     ///
     /// @return The size of the list.
@@ -201,24 +219,6 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
             return false;
         }
         return this.value.contains(tag);
-    }
-
-    public int indexOf(Predicate<? super T> predicate) {
-        for (int i = 0; i < value.size(); i++) {
-            if (predicate.test(value.get(i))) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public T find(Predicate<? super T> predicate) {
-        for (T t : value) {
-            if (predicate.test(t)) {
-                return t;
-            }
-        }
-        return null;
     }
 
     @Override

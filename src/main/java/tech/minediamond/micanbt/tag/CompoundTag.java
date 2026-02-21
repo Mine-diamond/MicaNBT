@@ -47,6 +47,24 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     /// @return The current (existing or computed) tag.
     public abstract Tag computeIfAbsent(String key, java.util.function.Function<? super String, ? extends Tag> mappingFunction);
 
+    public String findKey(Predicate<? super Tag> predicate) {
+        for (Tag tag : this) {
+            if (predicate.test(tag)) {
+                return tag.getName();
+            }
+        }
+        return null;
+    }
+
+    public Tag find(Predicate<? super Tag> predicate) {
+        for (Tag tag : this) {
+            if (predicate.test(tag)) {
+                return tag;
+            }
+        }
+        return null;
+    }
+
     /// Removes a tag from this compound by its name.
     ///
     /// @param tagName The name of the tag to remove.
@@ -77,24 +95,6 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
 
     /// Removes all tags from this compound.
     public abstract void clear();
-
-    public String findKey(Predicate<? super Tag> predicate) {
-        for (Tag tag : this) {
-            if (predicate.test(tag)) {
-                return tag.getName();
-            }
-        }
-        return null;
-    }
-
-    public Tag find(Predicate<? super Tag> predicate) {
-        for (Tag tag : this) {
-            if (predicate.test(tag)) {
-                return tag;
-            }
-        }
-        return null;
-    }
 
     @Override
     public abstract CompoundTag copy();
