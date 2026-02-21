@@ -184,6 +184,15 @@ public class ReorderableCompoundTag extends CompoundTag {
         this.value.clear();
     }
 
+    public int indexOf(java.util.function.Predicate<? super Tag> predicate) {
+        for (int i = 0; i < value.size(); i++) {
+            if (predicate.test(value.get(i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     @Override
     public OrderedListMap<String, Tag> getClonedValue() {
         OrderedListMap<String, Tag> copy = new OrderedListMap<>();

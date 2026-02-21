@@ -77,6 +77,24 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     /// Removes all tags from this compound.
     public abstract void clear();
 
+    public String findKey(java.util.function.Predicate<? super Tag> predicate) {
+        for (Tag tag : this) {
+            if (predicate.test(tag)) {
+                return tag.getName();
+            }
+        }
+        return null;
+    }
+
+    public Tag find(java.util.function.Predicate<? super Tag> predicate) {
+        for (Tag tag : this) {
+            if (predicate.test(tag)) {
+                return tag;
+            }
+        }
+        return null;
+    }
+
     @Override
     public abstract CompoundTag copy();
 

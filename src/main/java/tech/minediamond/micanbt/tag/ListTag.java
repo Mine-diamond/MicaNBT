@@ -202,6 +202,19 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
         return this.value.contains(tag);
     }
 
+    public int indexOf(java.util.function.Predicate<? super T> predicate) {
+        for (int i = 0; i < value.size(); i++) {
+            if (predicate.test(value.get(i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public java.util.Optional<T> find(java.util.function.Predicate<? super T> predicate) {
+        return value.stream().filter(predicate).findFirst();
+    }
+
     @Override
     public Iterator<T> iterator() {
         return this.value.iterator();
