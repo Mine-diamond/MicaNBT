@@ -211,8 +211,13 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
         return -1;
     }
 
-    public java.util.Optional<T> find(java.util.function.Predicate<? super T> predicate) {
-        return value.stream().filter(predicate).findFirst();
+    public T find(java.util.function.Predicate<? super T> predicate) {
+        for (T t : value) {
+            if (predicate.test(t)) {
+                return t;
+            }
+        }
+        return null;
     }
 
     @Override
