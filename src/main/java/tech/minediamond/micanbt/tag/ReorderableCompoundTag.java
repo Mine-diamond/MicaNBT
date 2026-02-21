@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /// Extended [CompoundTag] supporting indexed access and manual reordering.
 ///
@@ -184,7 +185,7 @@ public class ReorderableCompoundTag extends CompoundTag {
         this.value.clear();
     }
 
-    public int indexOf(java.util.function.Predicate<? super Tag> predicate) {
+    public int indexOf(Predicate<? super Tag> predicate) {
         for (int i = 0; i < value.size(); i++) {
             if (predicate.test(value.get(i))) {
                 return i;
