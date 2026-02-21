@@ -1,6 +1,7 @@
 package tech.minediamond.micanbt.tag;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /// TAG_List (ID: {@value #ID}).
@@ -154,6 +155,24 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// @return The index of the tag, or -1 if not found.
     public int indexOf(T tag) {
         return this.value.indexOf(tag);
+    }
+
+    public int indexOf(Predicate<? super T> predicate) {
+        for (int i = 0; i < value.size(); i++) {
+            if (predicate.test(value.get(i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public T find(Predicate<? super T> predicate) {
+        for (T t : value) {
+            if (predicate.test(t)) {
+                return t;
+            }
+        }
+        return null;
     }
 
     /// Returns the number of tags in this list.

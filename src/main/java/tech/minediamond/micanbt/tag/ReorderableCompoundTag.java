@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /// Extended [CompoundTag] supporting indexed access and manual reordering.
 ///
@@ -113,6 +114,15 @@ public class ReorderableCompoundTag extends CompoundTag {
     @Override
     public Tag computeIfAbsent(String key, Function<? super String, ? extends Tag> mappingFunction) {
         return this.value.computeIfAbsent(key, mappingFunction);
+    }
+
+    public int indexOf(Predicate<? super Tag> predicate) {
+        for (int i = 0; i < value.size(); i++) {
+            if (predicate.test(value.get(i))) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override

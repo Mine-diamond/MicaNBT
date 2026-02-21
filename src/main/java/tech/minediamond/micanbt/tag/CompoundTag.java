@@ -1,6 +1,7 @@
 package tech.minediamond.micanbt.tag;
 
 import java.util.Map;
+import java.util.function.Predicate;
 
 /// TAG_Compound (ID: {@value #ID}).
 ///
@@ -45,6 +46,24 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     /// @param mappingFunction The function to compute the value.
     /// @return The current (existing or computed) tag.
     public abstract Tag computeIfAbsent(String key, java.util.function.Function<? super String, ? extends Tag> mappingFunction);
+
+    public String findKey(Predicate<? super Tag> predicate) {
+        for (Tag tag : this) {
+            if (predicate.test(tag)) {
+                return tag.getName();
+            }
+        }
+        return null;
+    }
+
+    public Tag find(Predicate<? super Tag> predicate) {
+        for (Tag tag : this) {
+            if (predicate.test(tag)) {
+                return tag;
+            }
+        }
+        return null;
+    }
 
     /// Removes a tag from this compound by its name.
     ///
