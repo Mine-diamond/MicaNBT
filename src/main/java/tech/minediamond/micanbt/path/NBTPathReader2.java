@@ -8,7 +8,7 @@ import java.util.List;
 
 public class NBTPathReader2 {
     private final CharReader reader;
-    private final List<Object> tokens = new ArrayList<>();
+    private final List<PathToken> tokens = new ArrayList<>();
 
     private final StringBuilder reusableBuilder = new StringBuilder();
 
@@ -21,16 +21,16 @@ public class NBTPathReader2 {
         }
     }
 
-    public static Object[] read(String path) {
-        return new NBTPathReader(path).getTokensArray();
+    public static PathToken[] read(String path) {
+        return new NBTPathReader2(path).getTokensArray();
     }
 
-    public List<Object> getTokens() {
+    public List<PathToken> getTokens() {
         return tokens;
     }
 
-    public Object[] getTokensArray() {
-        return tokens.toArray(new Object[0]);
+    public PathToken[] getTokensArray() {
+        return tokens.toArray(new PathToken[0]);
     }
 
     private void parsePath() {
@@ -56,7 +56,7 @@ public class NBTPathReader2 {
         tokens.add(parseUnquotedToken());
     }
 
-    private int parseIntToken() {
+    private IndexToken parseIntToken() {
         reader.skipOrThrow(Tokens.ARRAY_BEGIN); // [
         int index = reader.position();
         int count = 0;
@@ -67,10 +67,10 @@ public class NBTPathReader2 {
         reader.skipOrThrow(Tokens.ARRAY_END); // ]
 
         String value = reader.substring(index, count);
-        return Integer.parseInt(value);
+        return new IndexToken(Integer.parseInt(value));
     }
 
-    private String parseQuotedToken() {
+    private KeyToken parseQuotedToken() {
         char quoteChar = reader.consume(); // `"` or `'`
         reusableBuilder.setLength(0);
 
@@ -93,7 +93,7 @@ public class NBTPathReader2 {
                     default -> reusableBuilder.append(next);
                 }
             } else if (c == quoteChar) {
-                return reusableBuilder.toString();
+                return new KeyToken(reusableBuilder.toString());
             } else {
                 reusableBuilder.append(c);
             }
@@ -102,7 +102,7 @@ public class NBTPathReader2 {
         throw new NBTPathParseException("Unclosed quoted string");
     }
 
-    private String parseUnquotedToken() {
+    private KeyToken parseUnquotedToken() {
         int startPos = reader.position();
         int endPos = startPos;
         while (reader.isAvailable(endPos)) {
@@ -117,6 +117,6 @@ public class NBTPathReader2 {
             throw new NBTPathParseException("Expected an unquoted token but found none.");
         }
         reader.position(endPos);
-        return substring;
+        return new KeyToken(substring);
     }
 }

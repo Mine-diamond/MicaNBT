@@ -6,6 +6,10 @@ public class NBTFinder2 {
     private NBTFinder2() {
     }
 
+    public static Tag get(Tag root, NBTPath2 path) {
+        return get(root, path.getTokens());
+    }
+
     public static Tag get(Tag root, PathToken[] tokens) {
         if (root == null ||  tokens == null) {
             return null;
