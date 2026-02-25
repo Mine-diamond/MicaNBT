@@ -2,7 +2,6 @@ package tech.minediamond.micanbt.NBT;
 
 import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.CompoundTag;
-import tech.minediamond.micanbt.tag.Tag;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -46,10 +45,10 @@ public class NBT {
      * Reads the root NBT tag from a file path with automatic settings.
      *
      * @param path The path to the file.
-     * @return The parsed root {@link Tag}.
+     * @return The parsed root {@link CompoundTag}.
      * @throws IOException If an I/O error occurs.
      */
-    public static Tag read(Path path) throws IOException {
+    public static CompoundTag read(Path path) throws IOException {
         return NBTReader.builder(path).getTag();
     }
 
@@ -60,10 +59,10 @@ public class NBT {
      * @param compressType      The specific compression type to use.
      * @param littleEndian      Whether to use Little Endian byte order.
      * @param compoundSelection The implementation strategy for CompoundTags.
-     * @return The parsed root {@link Tag}.
+     * @return The parsed root {@link CompoundTag}.
      * @throws IOException If an I/O error occurs.
      */
-    public static Tag read(Path path, NBTCompressType compressType, boolean littleEndian, CompoundSelection compoundSelection) throws IOException {
+    public static CompoundTag read(Path path, NBTCompressType compressType, boolean littleEndian, CompoundSelection compoundSelection) throws IOException {
         return fromPath(path).compressType(compressType).littleEndian(littleEndian).compoundSelection(compoundSelection).getTag();
     }
 
@@ -71,10 +70,10 @@ public class NBT {
      * Reads the root NBT tag from a {@link DataInput}.
      *
      * @param dataInput The data input source.
-     * @return The parsed root {@link Tag}.
+     * @return The parsed root {@link CompoundTag}.
      * @throws IOException If an I/O error occurs.
      */
-    public static Tag read(DataInput dataInput) throws IOException {
+    public static CompoundTag read(DataInput dataInput) throws IOException {
         return fromDataInput(dataInput).getTag();
     }
 
@@ -83,10 +82,10 @@ public class NBT {
      *
      * @param dataInput         The data input source.
      * @param compoundSelection The implementation strategy for CompoundTags.
-     * @return The parsed root {@link Tag}.
+     * @return The parsed root {@link CompoundTag}.
      * @throws IOException If an I/O error occurs.
      */
-    public static Tag read(DataInput dataInput, CompoundSelection compoundSelection) throws IOException {
+    public static CompoundTag read(DataInput dataInput, CompoundSelection compoundSelection) throws IOException {
         return fromDataInput(dataInput).compoundSelection(compoundSelection).getTag();
     }
 
@@ -94,10 +93,10 @@ public class NBT {
      * Reads the root NBT tag from a byte array with automatic settings.
      *
      * @param data The byte array containing NBT data.
-     * @return The parsed root {@link Tag}.
+     * @return The parsed root {@link CompoundTag}.
      * @throws IOException If an I/O error occurs.
      */
-    public static Tag read(byte[] data) throws IOException {
+    public static CompoundTag read(byte[] data) throws IOException {
         return fromBytes(data).getTag();
     }
 
@@ -108,10 +107,10 @@ public class NBT {
      * @param compressType      The specific compression type to use.
      * @param littleEndian      Whether to use Little Endian byte order.
      * @param compoundSelection The implementation strategy for CompoundTags.
-     * @return The parsed root {@link Tag}.
+     * @return The parsed root {@link CompoundTag}.
      * @throws IOException If an I/O error occurs.
      */
-    public static Tag read(byte[] data, NBTCompressType compressType, boolean littleEndian, CompoundSelection compoundSelection) throws IOException {
+    public static CompoundTag read(byte[] data, NBTCompressType compressType, boolean littleEndian, CompoundSelection compoundSelection) throws IOException {
         return fromBytes(data).compressType(compressType).littleEndian(littleEndian).compoundSelection(compoundSelection).getTag();
     }
 
