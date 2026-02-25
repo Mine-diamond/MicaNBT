@@ -132,7 +132,8 @@ public class NBTReader {
         if (root instanceof CompoundTag compoundRootTag) {
             return compoundRootTag;
         } else {
-            throw new NBTParseException("Invalid NBT data");
+            throw new NBTParseException("NBT root must be a CompoundTag, but found: " +
+                    (root == null ? "null" : root.getClass().getSimpleName()));
         }
     }
 
