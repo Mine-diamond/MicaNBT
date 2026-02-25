@@ -102,6 +102,15 @@ public abstract class Tag {
     /// @param paths The NBT paths to found tag.
     /// @return The first [Tag] found in the incoming paths, or `null` if no tag is found in any path.
     /// @throws NBTPathParseException If the path format is invalid.
+    public Tag atAny(NBTPath... paths) {
+        return NBTFinder.findFirst(this, paths);
+    }
+
+    /// Return the tag corresponding to the first existing path.
+    ///
+    /// @param paths The NBT paths to found tag.
+    /// @return The first [Tag] found in the incoming paths, or `null` if no tag is found in any path.
+    /// @throws NBTPathParseException If the path format is invalid.
     public Tag atAny(String... paths) {
         return NBTFinder.findFirst(this, paths);
     }

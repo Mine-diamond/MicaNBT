@@ -23,6 +23,16 @@ public final class NBTFinder {
         return null;
     }
 
+    public static Tag findFirst(Tag root, NBTPath... paths) {
+        for (NBTPath path : paths) {
+            Tag tag = get(root, path);
+            if (tag != null) {
+                return tag;
+            }
+        }
+        return null;
+    }
+
     public static Tag getFromParts(Tag root, Object... parts) {
         return get(root, NBTPath.fromParts(parts));
     }
