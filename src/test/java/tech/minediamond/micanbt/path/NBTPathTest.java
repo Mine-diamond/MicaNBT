@@ -5,25 +5,30 @@ import tech.minediamond.micanbt.SNBT.SNBT;
 import tech.minediamond.micanbt.tag.Tag;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class NBTPathTest {
 
     public static Tag tag = initTag();
+    public static Tag oldVersionTag = getOldVersionTag();
+    public static Tag newVersionTag = getNewVersionTag();
+
+    Random rand = new Random();
 
     @Test
     public void testPath() {
         assertPath("\"id\":\"minecraft:black_shulker_box\"", "id");
         assertPath("\"Name\":\"{\\\"text\\\":\\\"维度递归核心\\\",\\\"color\\\":\\\"gold\\\",\\\"italic\\\":false}\"", "tag.display.Name");
-        assertPath("\"\":{id:\"minecraft:protection\",lvl:10s}","tag.Enchantments[0]");
-        assertPath("\"\":{id:\"minecraft:unbreaking\",lvl:10s}","tag.Enchantments[-1]");
+        assertPath("\"\":{id:\"minecraft:protection\",lvl:10s}", "tag.Enchantments[0]");
+        assertPath("\"\":{id:\"minecraft:unbreaking\",lvl:10s}", "tag.Enchantments[-1]");
         assertPath("\"Frequency.in.last.hour\":440.0d", "tag.CustomData.RootLayer.Level1.Level2.Level3.Parameters.\"Frequency.in.last.hour\"");
         assertPath("\"\":1", "tag.CustomData.RootLayer.Level1.Level2.Level3.Parameters.Level4.Security.Level5.Matrix[0][0]");
 
         assertRawToken("\"\":{id:\"minecraft:unbreaking\",lvl:10s}", "tag", "Enchantments", 1);
         assertRawToken("\"Slot\":13b", "tag", "BlockEntityTag", "Items", 0, "Slot");
-        assertRawToken("\"Frequency.in.last.hour\":440.0d", "tag","CustomData","RootLayer","Level1","Level2","Level3","Parameters","Frequency.in.last.hour");
+        assertRawToken("\"Frequency.in.last.hour\":440.0d", "tag", "CustomData", "RootLayer", "Level1", "Level2", "Level3", "Parameters", "Frequency.in.last.hour");
 
         assertPathNull("tag.tagNotExist");
 
@@ -40,7 +45,10 @@ public class NBTPathTest {
 
         assertPath("\"Name\":\"{\\\"text\\\":\\\"维度递归核心\\\",\\\"color\\\":\\\"gold\\\",\\\"italic\\\":false}\"", NBTPath.of("tag.display").resolve("Name"));
         assertPath("\"\":{id:\"minecraft:protection\",lvl:10s}", NBTPath.of("tag.Enchantments").resolve(NBTPath.of("[0]")));
-        assertPath("\"\":1", NBTPath.of("tag.CustomData.RootLayer.Level1.Level2.Level3.Parameters.Level4.Security").resolveFromParts("Level5","Matrix",0,0));
+        assertPath("\"\":1", NBTPath.of("tag.CustomData.RootLayer.Level1.Level2.Level3.Parameters.Level4.Security").resolveFromParts("Level5", "Matrix", 0, 0));
+
+        assertAtAny("posX","playerPos.X");
+        assertAtAny("oldName","newName");
     }
 
     public void assertPath(String expected, String path) {
@@ -65,6 +73,11 @@ public class NBTPathTest {
 
     public void assertToStringFromRawToken(String expected, Object... path) {
         assertEquals(expected, NBTPath.fromParts(path).toString());
+    }
+
+    public void assertAtAny(String... paths) {
+        assertNotNull(oldVersionTag.atAny(paths));
+        assertNotNull(newVersionTag.atAny(paths));
     }
 
     public static Tag initTag() {
@@ -136,6 +149,33 @@ public class NBTPathTest {
                 """;
 
 
+        return SNBT.parse(snbtData);
+    }
+
+    public static Tag getOldVersionTag() {
+        String snbtData = """
+                {
+                    posX: 123,
+                    posY: 66,
+                    posZ: 1233,
+                    oldName: "str"
+                }
+                """;
+
+        return SNBT.parse(snbtData);
+    }
+
+    public static Tag getNewVersionTag() {
+        String snbtData = """
+                {
+                    "playerPos":{
+                        X: 123,
+                        Y: 66,
+                        Z: 1233,
+                    },
+                    newName: "str"
+                }
+        """;
         return SNBT.parse(snbtData);
     }
 }
