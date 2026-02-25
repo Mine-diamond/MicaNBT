@@ -28,7 +28,7 @@ public class NBTRoundTripTest {
 
         CompoundTag tag = Util.getBasicTag();
         NBT.write(tag, filePath);
-        CompoundTag read = (CompoundTag) NBT.fromPath(filePath).getTag();
+        CompoundTag read = NBT.fromPath(filePath).getTag();
         assertInstanceOf(CompoundTag.class, read);
 
         assertEquals(tag, read);
@@ -38,7 +38,7 @@ public class NBTRoundTripTest {
     public void testNBTFileRoundTrip() throws IOException {
         Path filePath = tempDir.resolve("level.dat");
         byte[] originalBytes;
-        Tag parsed;
+        CompoundTag parsed;
         byte[] parsedBytes;
         try (InputStream inputStream = this.getClass().getResourceAsStream("/level.dat")
              ; InputStream buffer = new BufferedInputStream(inputStream)
@@ -52,7 +52,7 @@ public class NBTRoundTripTest {
              ; DataInputStream dataInput = new DataInputStream(gzipInputStream)) {
             parsed = NBT.fromDataInput(dataInput).getTag();
         }
-        NBT.write((CompoundTag) parsed, filePath, NBTCompressType.UNCOMPRESSED, false);
+        NBT.write(parsed, filePath, NBTCompressType.UNCOMPRESSED, false);
         parsedBytes = Files.readAllBytes(filePath);
         assertArrayEquals(originalBytes, parsedBytes);
     }
