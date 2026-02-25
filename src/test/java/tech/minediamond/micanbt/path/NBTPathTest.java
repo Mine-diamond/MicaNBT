@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import tech.minediamond.micanbt.SNBT.SNBT;
 import tech.minediamond.micanbt.tag.Tag;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,8 +13,6 @@ public class NBTPathTest {
     public static Tag tag = initTag();
     public static Tag oldVersionTag = getOldVersionTag();
     public static Tag newVersionTag = getNewVersionTag();
-
-    Random rand = new Random();
 
     @Test
     public void testPath() {
@@ -47,8 +44,8 @@ public class NBTPathTest {
         assertPath("\"\":{id:\"minecraft:protection\",lvl:10s}", NBTPath.of("tag.Enchantments").resolve(NBTPath.of("[0]")));
         assertPath("\"\":1", NBTPath.of("tag.CustomData.RootLayer.Level1.Level2.Level3.Parameters.Level4.Security").resolveFromParts("Level5", "Matrix", 0, 0));
 
-        assertAtAny("posX","playerPos.X");
-        assertAtAny("oldName","newName");
+        assertAtAny("posX", "playerPos.X");
+        assertAtAny("oldName", "newName");
     }
 
     public void assertPath(String expected, String path) {
@@ -168,14 +165,14 @@ public class NBTPathTest {
     public static Tag getNewVersionTag() {
         String snbtData = """
                 {
-                    "playerPos":{
+                    "playerPos": {
                         X: 123,
                         Y: 66,
                         Z: 1233,
                     },
                     newName: "str"
                 }
-        """;
+                """;
         return SNBT.parse(snbtData);
     }
 }
