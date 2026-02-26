@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.NBT;
+package tech.minediamond.micanbt.nbt;
 
 public enum NBTCompressType {
     UNCOMPRESSED, GZIP, ZLIB

@@ -1,10 +1,8 @@
 package tech.minediamond.micanbt.path;
 
 import org.junit.jupiter.api.Test;
-import tech.minediamond.micanbt.SNBT.SNBT;
+import tech.minediamond.micanbt.snbt.SNBT;
 import tech.minediamond.micanbt.tag.Tag;
-
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 

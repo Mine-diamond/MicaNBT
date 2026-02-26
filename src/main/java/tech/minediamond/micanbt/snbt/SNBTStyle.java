@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.SNBT;
+package tech.minediamond.micanbt.snbt;
 
 /**
  * Defines the formatting styles for Stringified NBT (SNBT) generation.

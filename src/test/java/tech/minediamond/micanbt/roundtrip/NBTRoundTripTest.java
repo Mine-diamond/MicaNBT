@@ -2,10 +2,9 @@ package tech.minediamond.micanbt.roundtrip;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import tech.minediamond.micanbt.NBT.NBT;
-import tech.minediamond.micanbt.NBT.NBTCompressType;
+import tech.minediamond.micanbt.nbt.NBT;
+import tech.minediamond.micanbt.nbt.NBTCompressType;
 import tech.minediamond.micanbt.tag.CompoundTag;
-import tech.minediamond.micanbt.tag.Tag;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;

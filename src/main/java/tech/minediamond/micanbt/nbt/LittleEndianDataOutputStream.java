@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.NBT;
+package tech.minediamond.micanbt.nbt;
 
 import java.io.DataOutput;
 import java.io.FilterOutputStream;

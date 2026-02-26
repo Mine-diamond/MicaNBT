@@ -2,8 +2,8 @@ package tech.minediamond.micanbt.roundtrip;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import tech.minediamond.micanbt.SNBT.SNBT;
-import tech.minediamond.micanbt.SNBT.SNBTStyle;
+import tech.minediamond.micanbt.snbt.SNBT;
+import tech.minediamond.micanbt.snbt.SNBTStyle;
 import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 
