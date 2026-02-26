@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.SNBT;
+package tech.minediamond.micanbt.snbt;
 
 import tech.minediamond.micanbt.core.CharReader;
 import tech.minediamond.micanbt.core.CompoundSelection;

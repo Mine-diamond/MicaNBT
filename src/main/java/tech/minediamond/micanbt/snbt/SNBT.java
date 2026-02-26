@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.SNBT;
+package tech.minediamond.micanbt.snbt;
 
 import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.Tag;

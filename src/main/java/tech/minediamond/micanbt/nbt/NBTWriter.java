@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.NBT;
+package tech.minediamond.micanbt.nbt;
 
 import tech.minediamond.micanbt.tag.*;
 

@@ -1,7 +1,7 @@
 package tech.minediamond.micanbt.chunk;
 
-import tech.minediamond.micanbt.NBT.NBT;
-import tech.minediamond.micanbt.NBT.NBTParseException;
+import tech.minediamond.micanbt.nbt.NBT;
+import tech.minediamond.micanbt.nbt.NBTParseException;
 import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.CompoundTag;
