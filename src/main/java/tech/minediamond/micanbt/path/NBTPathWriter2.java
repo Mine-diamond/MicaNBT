@@ -1,7 +1,7 @@
 package tech.minediamond.micanbt.path;
 
-import tech.minediamond.micanbt.SNBT.SNBT;
-import tech.minediamond.micanbt.SNBT.SNBTStyle;
+import tech.minediamond.micanbt.snbt.SNBT;
+import tech.minediamond.micanbt.snbt.SNBTStyle;
 import tech.minediamond.micanbt.core.Tokens;
 import tech.minediamond.micanbt.path.nbtpathtoken.*;
 

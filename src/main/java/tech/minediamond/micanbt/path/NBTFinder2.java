@@ -7,11 +7,32 @@ public class NBTFinder2 {
     private NBTFinder2() {
     }
 
-    public static Tag get(Tag root, NBTPath2 path) {
-        return get(root, path.getTokens());
+    public static Tag get(Tag root, String path) {
+        return get(root, NBTPath2.of(path));
     }
 
-    public static Tag get(Tag root, PathToken[] tokens) {
+    public static Tag findFirst(Tag root, String... paths) {
+        for (String path : paths) {
+            Tag tag = get(root, path);
+            if (tag != null) {
+                return tag;
+            }
+        }
+        return null;
+    }
+
+    public static Tag findFirst(Tag root, NBTPath2... paths) {
+        for (NBTPath2 path : paths) {
+            Tag tag = get(root, path);
+            if (tag != null) {
+                return tag;
+            }
+        }
+        return null;
+    }
+
+    public static Tag get(Tag root, NBTPath2 path) {
+        PathToken[] tokens = path.getTokens();
         if (root == null ||  tokens == null) {
             return null;
         }

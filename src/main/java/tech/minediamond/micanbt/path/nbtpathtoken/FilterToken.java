@@ -1,6 +1,6 @@
 package tech.minediamond.micanbt.path.nbtpathtoken;
 
-import tech.minediamond.micanbt.SNBT.SNBTStyle;
+import tech.minediamond.micanbt.snbt.SNBTStyle;
 import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 
