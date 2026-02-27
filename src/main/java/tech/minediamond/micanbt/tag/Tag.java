@@ -1,7 +1,7 @@
 package tech.minediamond.micanbt.tag;
 
-import tech.minediamond.micanbt.SNBT.SNBT;
-import tech.minediamond.micanbt.SNBT.SNBTStyle;
+import tech.minediamond.micanbt.snbt.SNBT;
+import tech.minediamond.micanbt.snbt.SNBTStyle;
 import tech.minediamond.micanbt.path.NBTFinder;
 import tech.minediamond.micanbt.path.NBTPath;
 import tech.minediamond.micanbt.path.NBTPathParseException;
@@ -95,6 +95,23 @@ public abstract class Tag {
     /// @throws NBTPathParseException If the path format is invalid.
     public Tag atParts(Object... parts) {
         return at(NBTPath.fromParts(parts));
+    }
+
+    /// Return the tag corresponding to the first existing path.
+    ///
+    /// @param paths The NBT paths to found tag.
+    /// @return The first [Tag] found in the incoming paths, or `null` if no tag is found in any path.
+    public Tag atAny(NBTPath... paths) {
+        return NBTFinder.findFirst(this, paths);
+    }
+
+    /// Return the tag corresponding to the first existing path.
+    ///
+    /// @param paths The NBT paths to found tag.
+    /// @return The first [Tag] found in the incoming paths, or `null` if no tag is found in any path.
+    /// @throws NBTPathParseException If the path format is invalid.
+    public Tag atAny(String... paths) {
+        return NBTFinder.findFirst(this, paths);
     }
 
     /// Get the tag type ID defined according to the NBT specification.

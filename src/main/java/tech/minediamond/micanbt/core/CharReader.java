@@ -1,6 +1,6 @@
 package tech.minediamond.micanbt.core;
 
-import tech.minediamond.micanbt.SNBT.SNBTParseException;
+import tech.minediamond.micanbt.snbt.SNBTParseException;
 
 public class CharReader {
     private final char[] buffer;

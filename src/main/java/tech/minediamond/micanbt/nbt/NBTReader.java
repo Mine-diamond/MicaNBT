@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.NBT;
+package tech.minediamond.micanbt.nbt;
 
 import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.*;
@@ -24,7 +24,7 @@ public class NBTReader {
     private final boolean littleEndian;
     private final CompoundSelection compoundSelection;
 
-    private final Tag tag;
+    private final CompoundTag tag;
 
     private NBTReader(Builder builder) throws IOException {
         if (builder.path == null && builder.data == null && builder.dataInput == null) {
@@ -37,7 +37,7 @@ public class NBTReader {
         this.compoundSelection = builder.compoundSelection;
         this.in = builder.dataInput;
         if (in != null) {
-            tag = readNamedTag();
+            tag = readRoot();
         } else {
             tag = inferenceAndRead();
         }
@@ -81,21 +81,21 @@ public class NBTReader {
      *
      * @return The parsed root {@link Tag}.
      */
-    public Tag getTag() {
+    public CompoundTag getTag() {
         return tag;
     }
 
-    private Tag inferenceAndRead() throws IOException {
+    private CompoundTag inferenceAndRead() throws IOException {
         return warpSource();
     }
 
-    private Tag warpSource() throws IOException {
+    private CompoundTag warpSource() throws IOException {
         try (InputStream is = path != null ? new BufferedInputStream(Files.newInputStream(path)) : new ByteArrayInputStream(data)) {
             return inferenceCompressType(is);
         }
     }
 
-    private Tag inferenceCompressType(InputStream is) throws IOException {
+    private CompoundTag inferenceCompressType(InputStream is) throws IOException {
         if (compressType == null) {
             is.mark(3);
             byte[] header = new byte[3];
@@ -122,9 +122,19 @@ public class NBTReader {
         }
     }
 
-    private Tag inferenceLittleEndian(InputStream in) throws IOException {
+    private CompoundTag inferenceLittleEndian(InputStream in) throws IOException {
         this.in = littleEndian ? new LittleEndianDataInputStream(in) : new DataInputStream(in);
-        return readNamedTag();
+        return readRoot();
+    }
+
+    private CompoundTag readRoot() throws IOException {
+        Tag root = readNamedTag();
+        if (root instanceof CompoundTag compoundRootTag) {
+            return compoundRootTag;
+        } else {
+            throw new NBTParseException("NBT root must be a CompoundTag, but found: " +
+                    (root == null ? "null" : root.getClass().getSimpleName()));
+        }
     }
 
     private Tag readNamedTag() throws IOException {
@@ -287,7 +297,7 @@ public class NBTReader {
          * @return The root {@link Tag}.
          * @throws IOException If an I/O error occurs during reading.
          */
-        public Tag getTag() throws IOException {
+        public CompoundTag getTag() throws IOException {
             return new NBTReader(this).getTag();
         }
     }

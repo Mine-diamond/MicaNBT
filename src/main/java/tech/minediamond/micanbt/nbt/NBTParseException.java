@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.NBT;
+package tech.minediamond.micanbt.nbt;
 
 import java.io.IOException;
 import java.io.Serial;
