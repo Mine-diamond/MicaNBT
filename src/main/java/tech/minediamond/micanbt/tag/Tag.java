@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.tag;
 
+import tech.minediamond.micanbt.path.nbtpathtoken.PathToken;
 import tech.minediamond.micanbt.snbt.SNBT;
 import tech.minediamond.micanbt.snbt.SNBTStyle;
 import tech.minediamond.micanbt.path.NBTFinder;
@@ -75,7 +76,6 @@ public abstract class Tag {
     /// the specified string path.
     ///
     /// This is a convenience method that internally calls [NBTPath#of(String)].
-    /// Note that only static paths are supported (e.g., "Data.Level.Seed").
     ///
     /// @param path The NBT path string to resolve.
     /// @return The [Tag] at the specified path, or `null` if the path cannot be resolved.
@@ -87,13 +87,12 @@ public abstract class Tag {
     /// Navigates the NBT tree starting from this tag and retrieves the tag located at
     /// the specified path token.
     ///
-    /// This is a convenience method that internally calls [NBTPath#fromParts(Object...)].
-    /// Note that only static paths are supported (e.g., "Data.Level.Seed").
+    /// This is a convenience method that internally calls [NBTPath#fromParts(PathToken...)].
     ///
     /// @param parts The NBT path token string to resolve.
     /// @return The [Tag] at the specified path, or `null` if the path cannot be resolved.
     /// @throws NBTPathParseException If the path format is invalid.
-    public Tag atParts(Object... parts) {
+    public Tag atParts(PathToken... parts) {
         return at(NBTPath.fromParts(parts));
     }
 

@@ -1,7 +1,5 @@
 package tech.minediamond.micanbt.core;
 
-import tech.minediamond.micanbt.snbt.SNBTParseException;
-
 public class CharReader {
     private final char[] buffer;
     private final int length;
@@ -55,7 +53,7 @@ public class CharReader {
     public void skipOrThrow(char c) {
         char actual = consume();
         if (actual != c) {
-            throw new SNBTParseException("Expected " + c + " but got " + actual);
+            throw new SyntaxException("Expected " + c + " but got " + actual);
         }
     }
 
@@ -67,6 +65,44 @@ public class CharReader {
                 return;
             }
         }
+    }
+
+    public String readUntil(char c) {
+        int index = cursor;
+        int count = 0;
+        while (isAvailable(index + count) && get(index + count) != c) {
+            count++;
+        }
+        skip(count);
+        skipOrThrow(c);
+        return substring(index, count);
+    }
+
+    public String readUntil(int initialDepth , char openChar, char closeChar) {
+        int start = cursor;
+        int depth = initialDepth;
+        int currentPos = cursor;
+
+        while (isAvailable(currentPos)) {
+            char c = get(currentPos);
+
+            if (c == openChar) {
+                depth++;
+            } else if (c == closeChar) {
+                depth--;
+            }
+
+            if (depth == 0) {
+                int length = currentPos - start;
+                skip(length);
+                skipOrThrow(closeChar);
+                return substring(start, length);
+            }
+
+            currentPos++;
+        }
+
+        throw new SyntaxException("Missing closing character: " + closeChar);
     }
 
     public boolean hasRemaining() {

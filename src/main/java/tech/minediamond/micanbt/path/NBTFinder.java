@@ -1,11 +1,9 @@
 package tech.minediamond.micanbt.path;
 
-import tech.minediamond.micanbt.tag.CompoundTag;
-import tech.minediamond.micanbt.tag.ListTag;
+import tech.minediamond.micanbt.path.nbtpathtoken.PathToken;
 import tech.minediamond.micanbt.tag.Tag;
 
-public final class NBTFinder {
-
+public class NBTFinder {
     private NBTFinder() {
     }
 
@@ -33,35 +31,21 @@ public final class NBTFinder {
         return null;
     }
 
-    public static Tag getFromParts(Tag root, Object... parts) {
-        return get(root, NBTPath.fromParts(parts));
-    }
-
     public static Tag get(Tag root, NBTPath path) {
-        if (root == null || path == null) return null;
-
+        PathToken[] tokens = path.getTokens();
+        if (root == null ||  tokens == null) {
+            return null;
+        }
         Tag current = root;
-        Object[] tokens = path.getTokens();
 
-        for (Object token : tokens) {
-            if (current instanceof CompoundTag compoundTag && token instanceof String string) {
-                current = compoundTag.get(string);
-            } else if (current instanceof ListTag<?> list && token instanceof Integer index) {
-                if (index < 0) {
-                    index = list.size() + index;
-                }
-                if (index >= 0 && index < list.size()) {
-                    current = list.get(index);
-                } else {
-                    return null;
-                }
-            } else {
+        for (PathToken token : tokens) {
+            current = token.navigate(current);
+            if (current == null) {
                 return null;
             }
-
-            if (current == null) return null;
         }
 
         return current;
     }
+
 }

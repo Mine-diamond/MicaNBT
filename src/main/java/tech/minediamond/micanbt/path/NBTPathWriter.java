@@ -1,6 +1,9 @@
 package tech.minediamond.micanbt.path;
 
 import tech.minediamond.micanbt.core.Tokens;
+import tech.minediamond.micanbt.path.nbtpathtoken.*;
+import tech.minediamond.micanbt.snbt.SNBT;
+import tech.minediamond.micanbt.snbt.SNBTStyle;
 
 public class NBTPathWriter {
     private boolean isFirst = true;
@@ -22,35 +25,49 @@ public class NBTPathWriter {
     }
 
     public void WriteTokens() {
-        for (Object token : path.getTokens()) {
-            if (token instanceof String stringToken) {
-                writeStringToken(stringToken);
-            } else if (token instanceof Integer integerToken) {
-                writeIntToken(integerToken);
+        for (PathToken token : path.getTokens()) {
+            if (token instanceof KeyToken keyToken) {
+                writeKeyToken(keyToken);
+            } else if (token instanceof IndexToken indexToken) {
+                writeIndexToken(indexToken);
+            } else if (token instanceof MatchToken matchToken) {
+                writeMatchToken(matchToken);
+            } else if (token instanceof FilterToken filterToken) {
+                writeFilterToken(filterToken);
             }
         }
     }
 
-    public void writeStringToken(String stringToken) {
+    public void writeKeyToken(KeyToken keyToken) {
         if (isFirst) {
             isFirst = false;
         } else {
             builder.append(Tokens.DOT);
         }
-        boolean needQuotes = Tokens.needQuotationInNBTPath(stringToken);
+        boolean needQuotes = Tokens.needQuotationInNBTPath(keyToken.key());
         if (needQuotes) {
             builder.append(Tokens.DOUBLE_QUOTE);
         }
-        escapeAndAppend(stringToken);
+        escapeAndAppend(keyToken.key());
         if (needQuotes) {
             builder.append(Tokens.DOUBLE_QUOTE);
         }
     }
 
-    public void writeIntToken(int integer) {
+    public void writeIndexToken(IndexToken indexToken) {
         builder.append(Tokens.ARRAY_BEGIN)
-                .append(integer)
+                .append(indexToken.index())
                 .append(Tokens.ARRAY_END);
+    }
+
+    public void writeMatchToken(MatchToken matchToken) {
+        builder.append(Tokens.ARRAY_BEGIN);
+        builder.append(SNBT.stringify(matchToken.pattern(), false, SNBTStyle.COMPACT));
+        builder.append(Tokens.ARRAY_END);
+    }
+
+    public void writeFilterToken(FilterToken filterToken) {
+        builder.append(SNBT.stringify(filterToken.pattern(), false, SNBTStyle.COMPACT));
     }
 
     //All escape character supported by snbt and `"`
