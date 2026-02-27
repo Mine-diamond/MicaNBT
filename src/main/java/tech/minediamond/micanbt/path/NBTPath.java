@@ -70,12 +70,13 @@ public class NBTPath {
     ///
     /// @return A new `NBTPath` that is the father of this `NBTPath`
     public NBTPath getParent() {
-        int i = this.tokens.length - 2;
+        int i = this.tokens.length - 1;
         while (i >= 0 && tokens[i].isModifier()) {
             i--;
         }
+        i--;
         int length = i + 1;
-        if (length == 0) {
+        if (length <= 0) {
             return null;
         }
         PathToken[] newTokens = new PathToken[length];
