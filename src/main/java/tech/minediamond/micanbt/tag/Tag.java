@@ -76,7 +76,6 @@ public abstract class Tag {
     /// the specified string path.
     ///
     /// This is a convenience method that internally calls [NBTPath#of(String)].
-    /// Note that only static paths are supported (e.g., "Data.Level.Seed").
     ///
     /// @param path The NBT path string to resolve.
     /// @return The [Tag] at the specified path, or `null` if the path cannot be resolved.
@@ -89,7 +88,6 @@ public abstract class Tag {
     /// the specified path token.
     ///
     /// This is a convenience method that internally calls [NBTPath#fromParts(PathToken...)].
-    /// Note that only static paths are supported (e.g., "Data.Level.Seed").
     ///
     /// @param parts The NBT path token string to resolve.
     /// @return The [Tag] at the specified path, or `null` if the path cannot be resolved.
