@@ -12,7 +12,7 @@ import java.util.List;
 /// For example, a path represented by `Player.Inventory[0].id` is parsed into
 /// the tokens `["Player", "Inventory", 0, "id"]`.
 ///
-/// To use `NBTPath`, you can use [NBTFinder] Through method [#get(Tag,NBTPath)], or Directly use [#at(String)] or [#at(NBTPath)] in [Tag]
+/// To use `NBTPath`, you can use [NBTFinder] Through method [NBTFinder#get(Tag,NBTPath)], or Directly use [Tag#at(String)] or [Tag#at(NBTPath)] in [Tag]
 ///
 /// @see NBTFinder
 public class NBTPath {
