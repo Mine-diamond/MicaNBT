@@ -1,10 +1,10 @@
 package tech.minediamond.micanbt.path;
 
-import tech.minediamond.micanbt.snbt.SNBT;
-import tech.minediamond.micanbt.snbt.SNBTParseException;
 import tech.minediamond.micanbt.core.CharReader;
 import tech.minediamond.micanbt.core.Tokens;
 import tech.minediamond.micanbt.path.nbtpathtoken.*;
+import tech.minediamond.micanbt.snbt.SNBT;
+import tech.minediamond.micanbt.snbt.SNBTParseException;
 import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 

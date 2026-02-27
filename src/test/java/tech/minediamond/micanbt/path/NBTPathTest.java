@@ -1,8 +1,12 @@
 package tech.minediamond.micanbt.path;
 
 import org.junit.jupiter.api.Test;
+import tech.minediamond.micanbt.path.nbtpathtoken.*;
 import tech.minediamond.micanbt.snbt.SNBT;
-import tech.minediamond.micanbt.tag.Tag;
+import tech.minediamond.micanbt.tag.*;
+
+import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,9 +25,25 @@ public class NBTPathTest {
         assertPath("\"Frequency.in.last.hour\":440.0d", "tag.CustomData.RootLayer.Level1.Level2.Level3.Parameters.\"Frequency.in.last.hour\"");
         assertPath("\"\":1", "tag.CustomData.RootLayer.Level1.Level2.Level3.Parameters.Level4.Security.Level5.Matrix[0][0]");
 
-//        assertRawToken("\"\":{id:\"minecraft:unbreaking\",lvl:10s}", "tag", "Enchantments", 1);
-//        assertRawToken("\"Slot\":13b", "tag", "BlockEntityTag", "Items", 0, "Slot");
-//        assertRawToken("\"Frequency.in.last.hour\":440.0d", "tag", "CustomData", "RootLayer", "Level1", "Level2", "Level3", "Parameters", "Frequency.in.last.hour");
+        assertPath("\"id\":\"minecraft:written_book\"", "tag.BlockEntityTag.Items[0]{Slot: 13b, Count: 1b}.id");
+        assertPath("\"\":\"{\\\"text\\\":\\\"状态: 活跃\\\",\\\"color\\\":\\\"dark_purple\\\"}\"", "tag.display{Name: '{\"text\":\"维度递归核心\",\"color\":\"gold\",\"italic\":false}'}.Lore[1]");
+        assertPath("\"\":10b", "tag.CustomData.RootLayer.Level1.Data[10b]");
+        assertPath("\"\":723", "tag.CustomData.RootLayer.Level1{Data: [10b, 20b, 30b]}.Level2.Level3.tick[723i]");
+
+        assertRawToken("\"\":{id:\"minecraft:unbreaking\",lvl:10s}", new KeyToken("tag"), new KeyToken("Enchantments"), new IndexToken(1));
+        assertRawToken("\"Slot\":13b", new KeyToken("tag"), new KeyToken("BlockEntityTag"), new KeyToken("Items"), new IndexToken(0), new KeyToken("Slot"));
+        CommonCompoundTag filterCompound = new CommonCompoundTag("");
+        filterCompound.put(new ListTag<>("Data", List.of(new ByteTag("", (byte) 10), new ByteTag("", (byte) 20), new ByteTag("", (byte) 30))));
+        assertRawToken("\"\":723",
+                new KeyToken("tag"),
+                new KeyToken("CustomData"),
+                new KeyToken("RootLayer"),
+                new KeyToken("Level1"),
+                new FilterToken(filterCompound),
+                new KeyToken("Level2"),
+                new KeyToken("Level3"),
+                new KeyToken("tick"),
+                new MatchToken(new IntTag("", 723)));
 
         assertPathNull("tag.tagNotExist");
 
@@ -33,14 +53,8 @@ public class NBTPathTest {
         assertToString("tag.list[2].id", "tag.list[2].id");
         assertToString("tag.\"sub.tag\"", "tag.\"sub.tag\"");
 
-//        assertToStringFromRawToken("a.b.c", "a", "b", "c");
-//        assertToStringFromRawToken("tag.list[2].id", "tag", "list", 2, "id");
-//        assertToStringFromRawToken("tag.\"sub.tag\"", "tag", "sub.tag");
-//        assertToStringFromRawToken("tag.\"list[1]\"[1]", "tag", "list[1]", 1);
-
         assertPath("\"Name\":\"{\\\"text\\\":\\\"维度递归核心\\\",\\\"color\\\":\\\"gold\\\",\\\"italic\\\":false}\"", NBTPath.of("tag.display").resolve("Name"));
         assertPath("\"\":{id:\"minecraft:protection\",lvl:10s}", NBTPath.of("tag.Enchantments").resolve(NBTPath.of("[0]")));
-        //assertPath("\"\":1", NBTPath.of("tag.CustomData.RootLayer.Level1.Level2.Level3.Parameters.Level4.Security").resolveFromParts("Level5", "Matrix", 0, 0));
 
         assertAtAny("posX", "playerPos.X");
         assertAtAny("oldName", "newName");
@@ -54,9 +68,9 @@ public class NBTPathTest {
         assertEquals(expected, tag.at(path).toString());
     }
 
-//    public void assertRawToken(String expected, Object... path) {
-//        assertEquals(expected, NBTFinder0.get(tag, NBTPath0.fromParts(path)).toString());
-//    }
+    public void assertRawToken(String expected, PathToken... path) {
+        assertEquals(expected, Objects.requireNonNull(NBTFinder.get(tag, NBTPath.fromParts(path))).toString());
+    }
 
     public void assertPathNull(String path) {
         assertNull(tag.at(path));
@@ -65,10 +79,6 @@ public class NBTPathTest {
     public void assertToString(String expected, String path) {
         assertEquals(expected, NBTPath.of(path).toString());
     }
-
-//    public void assertToStringFromRawToken(String expected, Object... path) {
-//        assertEquals(expected, NBTPath0.fromParts(path).toString());
-//    }
 
     public void assertAtAny(String... paths) {
         assertNotNull(oldVersionTag.atAny(paths));
@@ -100,6 +110,7 @@ public class NBTPathTest {
                                         Identifier: "uuid-000-111-222",
                                         Level3: {
                                             IsActive: 1b,
+                                            tick: [354, 723],
                                             Parameters: {
                                                 Frequency.in.last.hour: 440.0d,
                                                 Velocity: {x: 0.5f, y: 1.2f, z: -0.1f},

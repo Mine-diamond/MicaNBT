@@ -1,9 +1,9 @@
 package tech.minediamond.micanbt.path;
 
-import tech.minediamond.micanbt.snbt.SNBT;
-import tech.minediamond.micanbt.snbt.SNBTStyle;
 import tech.minediamond.micanbt.core.Tokens;
 import tech.minediamond.micanbt.path.nbtpathtoken.*;
+import tech.minediamond.micanbt.snbt.SNBT;
+import tech.minediamond.micanbt.snbt.SNBTStyle;
 
 public class NBTPathWriter {
     private boolean isFirst = true;

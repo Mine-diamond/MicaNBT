@@ -21,7 +21,7 @@ public class NBTPath {
         return new NBTPath(paths.clone());
     }
 
-    public static NBTPath fromParts(List<Object> path) {
+    public static NBTPath fromParts(List<PathToken> path) {
         if (path == null || path.isEmpty()) return new NBTPath(new PathToken[0]);
         return new NBTPath(path.toArray(new PathToken[0]));
     }
