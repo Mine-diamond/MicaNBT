@@ -1,11 +1,20 @@
 package tech.minediamond.micanbt.path;
 
-import tech.minediamond.micanbt.path.nbtpathtoken.FilterToken;
 import tech.minediamond.micanbt.path.nbtpathtoken.PathToken;
+import tech.minediamond.micanbt.tag.Tag;
 
 import java.util.Arrays;
 import java.util.List;
 
+/// Represents a logical path used to navigate and locate specific tags within an NBT structure.
+///
+/// This class breaks down a hierarchical path into discrete tokens (segments).
+/// For example, a path represented by `Player.Inventory[0].id` is parsed into
+/// the tokens `["Player", "Inventory", 0, "id"]`.
+///
+/// To use `NBTPath`, you can use [NBTFinder] Through method [#get(Tag,NBTPath)], or Directly use [#at(String)] or [#at(NBTPath)] in [Tag]
+///
+/// @see NBTFinder
 public class NBTPath {
     private final PathToken[] tokens;
 
@@ -13,6 +22,10 @@ public class NBTPath {
         this.tokens = tokens;
     }
 
+    /// Parses a standard NBT path string into an `NBTPath` instance.
+    ///
+    /// @param path The string representation of the NBT path.
+    /// @return A new `NBTPath` instance representing the parsed string.
     public static NBTPath of(String path) {
         return new NBTPath(NBTPathReader.read(path));
     }
@@ -27,21 +40,38 @@ public class NBTPath {
         return new NBTPath(path.toArray(new PathToken[0]));
     }
 
+    /// Resolves the given `NBTPath` against this path, effectively appending
+    /// the second path to the end of the current one.
+    ///
+    /// @param path The path to be appended.
+    /// @return A new `NBTPath` representing the combined sequence of tokens.
     public NBTPath resolve(NBTPath path) {
         return mergeToken(this.tokens, path.tokens);
     }
 
+    /// Parses the provided path string and resolves it against this path.
+    ///
+    /// @param path The string representation of the path to append.
+    /// @return A new `NBTPath` representing the combined path.
+    /// @see #of(String)
     public NBTPath resolve(String path) {
         return mergeToken(this.tokens, NBTPath.of(path).tokens);
     }
 
+    /// Resolves the given raw tokens against this path.
+    ///
+    /// @param parts The raw path segments (e.g., String for keys, Integer for indices) to append.
+    /// @return A new `NBTPath` containing the merged tokens.
     public NBTPath resolveFromParts(PathToken... parts) {
         return mergeToken(this.tokens, parts);
     }
 
+    /// Get the `NBTPath` pointing to the parent of this `NBTPath`, or return null if there is no parent node
+    ///
+    /// @return A new `NBTPath` that is the father of this `NBTPath`
     public NBTPath getParent() {
         int i = this.tokens.length - 2;
-        while (i >= 0 && tokens[i] instanceof FilterToken) {
+        while (i >= 0 && tokens[i].isModifier()) {
             i--;
         }
         int length = i + 1;

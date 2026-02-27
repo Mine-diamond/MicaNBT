@@ -21,4 +21,9 @@ public record FilterToken(CompoundTag pattern) implements PathToken {
     public Object getAccessor(Tag container) {
         return container;
     }
+
+    @Override
+    public boolean isModifier() {
+        return true;
+    }
 }
