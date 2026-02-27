@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.tag;
 
+import tech.minediamond.micanbt.path.nbtpathtoken.PathToken;
 import tech.minediamond.micanbt.snbt.SNBT;
 import tech.minediamond.micanbt.snbt.SNBTStyle;
 import tech.minediamond.micanbt.path.NBTFinder;
@@ -93,7 +94,7 @@ public abstract class Tag {
     /// @param parts The NBT path token string to resolve.
     /// @return The [Tag] at the specified path, or `null` if the path cannot be resolved.
     /// @throws NBTPathParseException If the path format is invalid.
-    public Tag atParts(Object... parts) {
+    public Tag atParts(PathToken... parts) {
         return at(NBTPath.fromParts(parts));
     }
 
