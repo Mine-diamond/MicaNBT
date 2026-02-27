@@ -1,6 +1,5 @@
 package tech.minediamond.micanbt.path.nbtpathtoken;
 
-import tech.minediamond.micanbt.snbt.SNBTStyle;
 import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 
@@ -21,10 +20,5 @@ public record FilterToken(CompoundTag pattern) implements PathToken {
     @Override
     public Object getAccessor(Tag container) {
         return container;
-    }
-
-    @Override
-    public String asString() {
-        return pattern.toString(false, SNBTStyle.COMPACT);
     }
 }

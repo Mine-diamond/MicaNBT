@@ -8,7 +8,4 @@ public record KeyToken(String key) implements PathToken {
         return (container instanceof CompoundTag c) ? c.get(key) : null;
     }
     public Object getAccessor(Tag container) { return key; }
-    public String asString() {
-        return key;
-    }
 }

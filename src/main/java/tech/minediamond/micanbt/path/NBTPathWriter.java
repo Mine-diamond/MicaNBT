@@ -48,7 +48,7 @@ public class NBTPathWriter {
         if (needQuotes) {
             builder.append(Tokens.DOUBLE_QUOTE);
         }
-        escapeAndAppend(keyToken.asString());
+        escapeAndAppend(keyToken.key());
         if (needQuotes) {
             builder.append(Tokens.DOUBLE_QUOTE);
         }

@@ -1,6 +1,5 @@
 package tech.minediamond.micanbt.path.nbtpathtoken;
 
-import tech.minediamond.micanbt.snbt.SNBTStyle;
 import tech.minediamond.micanbt.tag.ListTag;
 import tech.minediamond.micanbt.tag.Tag;
 
@@ -26,10 +25,5 @@ public record MatchToken(Tag pattern) implements PathToken{
             }
         }
         return -1;
-    }
-
-    @Override
-    public String asString() {
-        return "[" + pattern.toString(false, SNBTStyle.COMPACT) + "]";
     }
 }

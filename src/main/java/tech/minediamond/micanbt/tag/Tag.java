@@ -88,7 +88,7 @@ public abstract class Tag {
     /// Navigates the NBT tree starting from this tag and retrieves the tag located at
     /// the specified path token.
     ///
-    /// This is a convenience method that internally calls [NBTPath#fromParts(Object...)].
+    /// This is a convenience method that internally calls [NBTPath#fromParts(PathToken...)].
     /// Note that only static paths are supported (e.g., "Data.Level.Seed").
     ///
     /// @param parts The NBT path token string to resolve.
