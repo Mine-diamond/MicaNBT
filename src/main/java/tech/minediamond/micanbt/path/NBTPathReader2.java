@@ -1,7 +1,12 @@
 package tech.minediamond.micanbt.path;
 
+import tech.minediamond.micanbt.SNBT.SNBT;
+import tech.minediamond.micanbt.SNBT.SNBTParseException;
 import tech.minediamond.micanbt.core.CharReader;
 import tech.minediamond.micanbt.core.Tokens;
+import tech.minediamond.micanbt.path.nbtpathtoken.*;
+import tech.minediamond.micanbt.tag.CompoundTag;
+import tech.minediamond.micanbt.tag.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,13 +44,14 @@ public class NBTPathReader2 {
                 case Tokens.DOT -> reader.skip();
                 case Tokens.ARRAY_BEGIN -> parseIndex();
                 case Tokens.DOUBLE_QUOTE, Tokens.SINGLE_QUOTE -> parseQuoted();
+                case Tokens.COMPOUND_BEGIN -> parseCompound();
                 default -> parseUnquoted();
             }
         }
     }
 
     private void parseIndex() {
-        tokens.add(parseIntToken());
+        tokens.add(parseIndexToken());
     }
 
     private void parseQuoted() {
@@ -56,18 +62,28 @@ public class NBTPathReader2 {
         tokens.add(parseUnquotedToken());
     }
 
-    private IndexToken parseIntToken() {
-        reader.skipOrThrow(Tokens.ARRAY_BEGIN); // [
-        int index = reader.position();
-        int count = 0;
-        while (reader.isAvailable(index + count) && reader.get(index + count) != Tokens.ARRAY_END) {
-            count++;
-        }
-        reader.skip(count);
-        reader.skipOrThrow(Tokens.ARRAY_END); // ]
+    private void parseCompound() {
+        tokens.add(parseFilterToken());
+    }
 
-        String value = reader.substring(index, count);
-        return new IndexToken(Integer.parseInt(value));
+    private PathToken parseIndexToken() {
+        reader.skipOrThrow(Tokens.ARRAY_BEGIN); // [
+        String value = reader.readUntil(Tokens.ARRAY_END);
+        try {
+            if (Tokens.mayNumber(value)) {
+                int i = Integer.parseInt(value);
+                return new IndexToken(i);
+            }
+        } catch (NumberFormatException ignored) {
+        }
+        try {
+            if (SNBT.parse(value) instanceof CompoundTag compoundTag) {
+                return new CompoundMatchToken(compoundTag);
+            }
+        } catch (SNBTParseException ignored) {
+        }
+
+        throw new NBTPathParseException("Data that does not conform to the format index");
     }
 
     private KeyToken parseQuotedToken() {
@@ -106,7 +122,7 @@ public class NBTPathReader2 {
         int startPos = reader.position();
         int endPos = startPos;
         while (reader.isAvailable(endPos)) {
-            if (reader.get(endPos) != Tokens.DOT && reader.get(endPos) != Tokens.ARRAY_BEGIN) {
+            if (reader.get(endPos) != Tokens.DOT && reader.get(endPos) != Tokens.ARRAY_BEGIN && reader.get(endPos) != Tokens.COMPOUND_BEGIN) {
                 endPos++;
             } else {
                 break;
@@ -118,5 +134,16 @@ public class NBTPathReader2 {
         }
         reader.position(endPos);
         return new KeyToken(substring);
+    }
+
+    private PathToken parseFilterToken() {
+        reader.skipOrThrow(Tokens.COMPOUND_BEGIN);
+        String compoundValue = reader.readUntil(1, Tokens.COMPOUND_BEGIN, Tokens.COMPOUND_END);
+        compoundValue = "{" + compoundValue + "}";
+        Tag tag = SNBT.parse(compoundValue);
+        if (tag instanceof CompoundTag compoundTag) {
+            return new FilterToken(compoundTag);
+        }
+        throw new NBTPathParseException();
     }
 }

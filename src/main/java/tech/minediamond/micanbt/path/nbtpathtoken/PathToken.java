@@ -1,4 +1,4 @@
-package tech.minediamond.micanbt.path;
+package tech.minediamond.micanbt.path.nbtpathtoken;
 
 import tech.minediamond.micanbt.tag.Tag;
 

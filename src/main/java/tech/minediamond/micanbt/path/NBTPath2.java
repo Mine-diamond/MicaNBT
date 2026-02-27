@@ -1,5 +1,7 @@
 package tech.minediamond.micanbt.path;
 
+import tech.minediamond.micanbt.path.nbtpathtoken.PathToken;
+
 import java.util.Arrays;
 import java.util.List;
 

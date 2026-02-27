@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.path;
 
+import tech.minediamond.micanbt.path.nbtpathtoken.PathToken;
 import tech.minediamond.micanbt.tag.Tag;
 
 public class NBTFinder2 {

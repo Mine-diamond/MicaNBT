@@ -1,11 +1,10 @@
-package tech.minediamond.micanbt.path;
+package tech.minediamond.micanbt.path.nbtpathtoken;
 
-import tech.minediamond.micanbt.SNBT.SNBTStyle;
-import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.ListTag;
+import tech.minediamond.micanbt.tag.StringTag;
 import tech.minediamond.micanbt.tag.Tag;
 
-public record CompoundMatchToken(CompoundTag pattern) implements PathToken {
+public record StringMatchToken(String expectedValue) implements PathToken {
     public Tag navigate(Tag container) {
         int idx = findIndex(container);
         return idx != -1 ? ((ListTag<?>) container).get(idx) : null;
@@ -16,9 +15,9 @@ public record CompoundMatchToken(CompoundTag pattern) implements PathToken {
     }
 
     private int findIndex(Tag container) {
-        if (container instanceof ListTag<?> list && list.getElementTypeId() == CompoundTag.ID) {
+        if (container instanceof ListTag<?> list && list.getElementTypeId() == StringTag.ID) {
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i) instanceof CompoundTag target && target.equals(pattern)) {
+                if (list.get(i) instanceof StringTag s && s.getRawValue().equals(expectedValue)) {
                     return i;
                 }
             }
@@ -26,7 +25,5 @@ public record CompoundMatchToken(CompoundTag pattern) implements PathToken {
         return -1;
     }
 
-    public String asString() {
-        return "[" + pattern.toString(false, SNBTStyle.COMPACT) + "]";
-    }
+    public String asString() { return "[\"" + expectedValue + "\"]"; }
 }
