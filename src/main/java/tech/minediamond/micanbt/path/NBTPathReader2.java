@@ -5,6 +5,7 @@ import tech.minediamond.micanbt.SNBT.SNBTParseException;
 import tech.minediamond.micanbt.core.CharReader;
 import tech.minediamond.micanbt.core.Tokens;
 import tech.minediamond.micanbt.path.nbtpathtoken.*;
+import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 
@@ -77,13 +78,12 @@ public class NBTPathReader2 {
         } catch (NumberFormatException ignored) {
         }
         try {
-            if (SNBT.parse(value) instanceof CompoundTag compoundTag) {
-                return new CompoundMatchToken(compoundTag);
-            }
-        } catch (SNBTParseException ignored) {
+            Tag parsed = SNBT.parse(value);
+            return new MatchToken(parsed);
+        } catch (SNBTParseException e) {
+            System.out.println("value: " + value);
+            throw new NBTPathParseException("Data that does not conform to the format index", e);
         }
-
-        throw new NBTPathParseException("Data that does not conform to the format index");
     }
 
     private KeyToken parseQuotedToken() {

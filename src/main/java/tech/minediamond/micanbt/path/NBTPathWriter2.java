@@ -30,8 +30,8 @@ public class NBTPathWriter2 {
                 writeKeyToken(keyToken);
             } else if (token instanceof IndexToken indexToken) {
                 writeIndexToken(indexToken);
-            } else if (token instanceof CompoundMatchToken compoundMatchToken) {
-                writeCompoundMatchToken(compoundMatchToken);
+            } else if (token instanceof MatchToken matchToken) {
+                writeMatchToken(matchToken);
             } else if (token instanceof FilterToken filterToken) {
                 writeFilterToken(filterToken);
             }
@@ -60,9 +60,9 @@ public class NBTPathWriter2 {
                 .append(Tokens.ARRAY_END);
     }
 
-    public void writeCompoundMatchToken(CompoundMatchToken compoundMatchToken) {
+    public void writeMatchToken(MatchToken matchToken) {
         builder.append(Tokens.ARRAY_BEGIN);
-        builder.append(SNBT.stringify(compoundMatchToken.pattern(), false, SNBTStyle.COMPACT));
+        builder.append(SNBT.stringify(matchToken.pattern(), false, SNBTStyle.COMPACT));
         builder.append(Tokens.ARRAY_END);
     }
 
