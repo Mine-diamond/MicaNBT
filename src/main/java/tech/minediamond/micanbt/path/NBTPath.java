@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.path;
 
+import tech.minediamond.micanbt.path.nbtpathtoken.FilterToken;
 import tech.minediamond.micanbt.path.nbtpathtoken.PathToken;
 
 import java.util.Arrays;
@@ -36,6 +37,20 @@ public class NBTPath {
 
     public NBTPath resolveFromParts(PathToken... parts) {
         return mergeToken(this.tokens, parts);
+    }
+
+    public NBTPath getParent() {
+        int i = this.tokens.length - 2;
+        while (i >= 0 && tokens[i] instanceof FilterToken) {
+            i--;
+        }
+        int length = i + 1;
+        if (length == 0) {
+            return null;
+        }
+        PathToken[] newTokens = new PathToken[length];
+        System.arraycopy(tokens, 0, newTokens, 0, length);
+        return new NBTPath(newTokens);
     }
 
     private static NBTPath mergeToken(PathToken[] first, PathToken[] second) {

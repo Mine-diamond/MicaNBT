@@ -12,7 +12,7 @@ public record MatchToken(Tag pattern) implements PathToken{
     }
 
     @Override
-    public Object getAccessor(Tag container) {
+    public Integer getAccessor(Tag container) {
         return findIndex(container);
     }
 
