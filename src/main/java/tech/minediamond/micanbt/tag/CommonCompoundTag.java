@@ -1,5 +1,7 @@
 package tech.minediamond.micanbt.tag;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -18,7 +20,7 @@ public class CommonCompoundTag extends CompoundTag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public CommonCompoundTag(String name) {
+    public CommonCompoundTag(@NotNull String name) {
         this(name, new LinkedHashMap<>());
     }
 
@@ -26,18 +28,18 @@ public class CommonCompoundTag extends CompoundTag {
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.
-    public CommonCompoundTag(String name, Map<String, Tag> value) {
+    public CommonCompoundTag(@NotNull String name, @NotNull Map<String, Tag> value) {
         super(name);
         this.value = new LinkedHashMap<>(value);
     }
 
     @Override
-    public void setValue(Map<String, Tag> value) {
+    public void setValue(@NotNull Map<String, Tag> value) {
         this.value = new LinkedHashMap<>(value);
     }
 
     @Override
-    public void put(Tag tag) {
+    public void put(@NotNull Tag tag) {
         this.value.put(tag.getName(), tag);
     }
 
@@ -45,27 +47,27 @@ public class CommonCompoundTag extends CompoundTag {
     /// Existing tags with the same name will be overwritten.
     ///
     /// @param other The compound tag to copy data from.
-    public void putAll(CommonCompoundTag other) {
+    public void putAll(@NotNull CommonCompoundTag other) {
         this.value.putAll(other.getRawValue());
     }
 
     @Override
-    public Tag get(String tagName) {
+    public Tag get(@NotNull String tagName) {
         return this.value.get(tagName);
     }
 
     @Override
-    public Tag getOrDefault(String key, Tag defaultValue) {
+    public @NotNull Tag getOrDefault(@NotNull String key, @NotNull Tag defaultValue) {
         return this.value.getOrDefault(key, defaultValue);
     }
 
     @Override
-    public Tag computeIfAbsent(String key, java.util.function.Function<? super String, ? extends Tag> mappingFunction) {
+    public @NotNull Tag computeIfAbsent(@NotNull String key, java.util.function.@NotNull Function<? super String, ? extends Tag> mappingFunction) {
         return this.value.computeIfAbsent(key, mappingFunction);
     }
 
     @Override
-    public Tag remove(String tagName) {
+    public Tag remove(@NotNull String tagName) {
         return this.value.remove(tagName);
     }
 
@@ -75,12 +77,12 @@ public class CommonCompoundTag extends CompoundTag {
     }
 
     @Override
-    public boolean contains(String tagName) {
+    public boolean contains(@NotNull String tagName) {
         return this.value.containsKey(tagName);
     }
 
     @Override
-    public boolean contains(Tag tag) {
+    public boolean contains(@NotNull Tag tag) {
         return this.value.containsValue(tag);
     }
 
@@ -102,12 +104,12 @@ public class CommonCompoundTag extends CompoundTag {
     }
 
     @Override
-    public Iterator<Tag> iterator() {
+    public @NotNull Iterator<Tag> iterator() {
         return this.values().iterator();
     }
 
     @Override
-    public Map<String, Tag> getClonedValue() {
+    public @NotNull Map<String, Tag> getClonedValue() {
         Map<String, Tag> clonedMap = new LinkedHashMap<>(Math.max((int) (this.value.size() / .75f) + 1, 16));
         for (Map.Entry<String, Tag> entry : this.value.entrySet()) {
             clonedMap.put(entry.getKey(), entry.getValue().copy());
@@ -116,12 +118,12 @@ public class CommonCompoundTag extends CompoundTag {
     }
 
     @Override
-    public Map<String, Tag> getRawValue() {
+    public @NotNull Map<String, Tag> getRawValue() {
         return this.value;
     }
 
     @Override
-    public CommonCompoundTag copy() {
+    public @NotNull CommonCompoundTag copy() {
         Map<String, Tag> newMap = new LinkedHashMap<>(Math.max((int) (this.value.size() / .75f) + 1, 16));
         for (Entry<String, Tag> entry : this.value.entrySet()) {
             newMap.put(entry.getKey(), entry.getValue().copy());

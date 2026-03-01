@@ -1,5 +1,8 @@
 package tech.minediamond.micanbt.tag;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.path.nbtpathtoken.PathToken;
 import tech.minediamond.micanbt.snbt.SNBT;
 import tech.minediamond.micanbt.snbt.SNBTStyle;
@@ -42,14 +45,14 @@ public abstract class Tag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name.
-    public Tag(String name) {
+    public Tag(@NotNull String name) {
         this.name = name;
     }
 
     /// Gets the name of this tag.
     ///
     /// @return The name of this tag.
-    public final String getName() {
+    public final @NotNull String getName() {
         return this.name;
     }
 
@@ -58,14 +61,16 @@ public abstract class Tag {
     /// Modifying the returned value does not affect the state inside this tag
     ///
     /// @return The deep copied value of this tag.
-    public abstract Object getClonedValue();
+    @Contract(pure = true)
+    public abstract @NotNull Object getClonedValue();
 
     /// Gets the original reference of the value of this tag.
     ///
     /// Modifying the returned value may reflect in this tag.
     ///
     /// @return The original reference of value of this tag.
-    public abstract Object getRawValue();
+    @Contract(pure = true)
+    public abstract @NotNull Object getRawValue();
 
     /// Navigates the NBT tree starting from this tag and retrieves the tag located at
     /// the specified [NBTPath].
@@ -73,7 +78,8 @@ public abstract class Tag {
     /// @param nbtPath The pre-parsed path object.
     /// @return The [Tag] at the specified path, or `null` if the path cannot be resolved.
     /// @throws NBTPathParseException If the path format is invalid.
-    public Tag at(NBTPath nbtPath) {
+    @Contract(pure = true)
+    public Tag at(@NotNull NBTPath nbtPath) {
         return NBTFinder.get(this, nbtPath);
     }
 
@@ -85,7 +91,8 @@ public abstract class Tag {
     /// @param path The NBT path string to resolve.
     /// @return The [Tag] at the specified path, or `null` if the path cannot be resolved.
     /// @throws NBTPathParseException If the path format is invalid.
-    public Tag at(String path) {
+    @Contract(pure = true)
+    public Tag at(@NotNull String path) {
         return at(NBTPath.of(path));
     }
 
@@ -97,7 +104,8 @@ public abstract class Tag {
     /// @param parts The NBT path token string to resolve.
     /// @return The [Tag] at the specified path, or `null` if the path cannot be resolved.
     /// @throws NBTPathParseException If the path format is invalid.
-    public Tag atParts(PathToken... parts) {
+    @Contract(pure = true)
+    public Tag atParts(@Nullable PathToken... parts) {
         return at(NBTPath.fromParts(parts));
     }
 
@@ -105,7 +113,8 @@ public abstract class Tag {
     ///
     /// @param paths The NBT paths to found tag.
     /// @return The first [Tag] found in the incoming paths, or `null` if no tag is found in any path.
-    public Tag atAny(NBTPath... paths) {
+    @Contract(pure = true)
+    public Tag atAny(@NotNull NBTPath... paths) {
         return NBTFinder.findFirst(this, paths);
     }
 
@@ -114,19 +123,22 @@ public abstract class Tag {
     /// @param paths The NBT paths to found tag.
     /// @return The first [Tag] found in the incoming paths, or `null` if no tag is found in any path.
     /// @throws NBTPathParseException If the path format is invalid.
-    public Tag atAny(String... paths) {
+    @Contract(pure = true)
+    public Tag atAny(@NotNull String... paths) {
         return NBTFinder.findFirst(this, paths);
     }
 
     /// Get the tag type ID defined according to the NBT specification.
     ///
     /// @return ID of the tag type.
+    @Contract(pure = true)
     public abstract int getTagId();
 
     /// Creates and returns a copy of this tag.
     ///
     /// @return a new tag with the same content.
-    public abstract Tag copy();
+    @Contract(pure = true)
+    public abstract @NotNull Tag copy();
 
     @Override
     public boolean equals(Object o) {

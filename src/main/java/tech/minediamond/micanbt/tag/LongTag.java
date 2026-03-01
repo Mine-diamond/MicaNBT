@@ -1,5 +1,7 @@
 package tech.minediamond.micanbt.tag;
 
+import org.jetbrains.annotations.NotNull;
+
 /// TAG_Long (ID: {@value #ID}).
 ///
 /// Stores a `long` value.
@@ -15,7 +17,7 @@ public class LongTag extends Tag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public LongTag(String name) {
+    public LongTag(@NotNull String name) {
         this(name, 0);
     }
 
@@ -23,18 +25,18 @@ public class LongTag extends Tag {
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.
-    public LongTag(String name, long value) {
+    public LongTag(@NotNull String name, long value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public Long getClonedValue() {
+    public @NotNull Long getClonedValue() {
         return this.value;
     }
 
     @Override
-    public Long getRawValue() {
+    public @NotNull Long getRawValue() {
         return this.value;
     }
 
@@ -52,7 +54,7 @@ public class LongTag extends Tag {
     }
 
     @Override
-    public LongTag copy() {
+    public @NotNull LongTag copy() {
         return new LongTag(this.getName(), this.getClonedValue());
     }
 

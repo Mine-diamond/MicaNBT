@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.tag;
 
+import org.jetbrains.annotations.NotNull;
 import tech.minediamond.micanbt.util.map.OrderedListMap;
 
 import java.util.Comparator;
@@ -29,7 +30,7 @@ public class ReorderableCompoundTag extends CompoundTag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public ReorderableCompoundTag(String name) {
+    public ReorderableCompoundTag(@NotNull String name) {
         this(name, new OrderedListMap<>());
     }
 
@@ -37,30 +38,30 @@ public class ReorderableCompoundTag extends CompoundTag {
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.
-    public ReorderableCompoundTag(String name, OrderedListMap<String, Tag> value) {
+    public ReorderableCompoundTag(@NotNull String name, @NotNull OrderedListMap<String, Tag> value) {
         super(name);
         this.value = value;
     }
 
-    public ReorderableCompoundTag(String name, Map<String, Tag> map) {
+    public ReorderableCompoundTag(@NotNull String name, @NotNull Map<String, Tag> map) {
         super(name);
         this.value = new OrderedListMap<>(map);
     }
 
     @Override
-    public void setValue(Map<String, Tag> map) {
+    public void setValue(@NotNull Map<String, Tag> map) {
         this.value = new OrderedListMap<>(map);
     }
 
     /// Sets the internal map to the provided [OrderedListMap].
     ///
     /// @param map The new ordered map.
-    public void setValue(OrderedListMap<String, Tag> map) {
+    public void setValue(@NotNull OrderedListMap<String, Tag> map) {
         this.value = map;
     }
 
     @Override
-    public void put(Tag tag) {
+    public void put(@NotNull Tag tag) {
         this.value.put(tag.getName(), tag);
     }
 
@@ -68,14 +69,14 @@ public class ReorderableCompoundTag extends CompoundTag {
     ///
     /// @param index The target position.
     /// @param tag   The tag to insert.
-    public void put(int index, Tag tag) {
+    public void put(int index, @NotNull Tag tag) {
         this.value.put(tag.getName(), tag, index);
     }
 
     /// Adds all tags from another reorderable compound tag.
     ///
     /// @param other The source tag.
-    public void putAll(ReorderableCompoundTag other) {
+    public void putAll(@NotNull ReorderableCompoundTag other) {
         this.value.putAll(other.getRawValue());
     }
 
@@ -84,7 +85,7 @@ public class ReorderableCompoundTag extends CompoundTag {
     /// @param index The index to replace.
     /// @param tag   The new tag.
     /// @return The old tag that was replaced.
-    public Tag set(int index, Tag tag) {
+    public Tag set(int index, @NotNull Tag tag) {
         return this.value.replaceAt(index, tag.getName(), tag);
     }
 
@@ -93,13 +94,13 @@ public class ReorderableCompoundTag extends CompoundTag {
     /// @param oldTag The tag to be replaced.
     /// @param newTag The new tag.
     /// @return The old tag that was replaced.
-    public Tag replace(Tag oldTag, Tag newTag) {
+    public Tag replace(@NotNull Tag oldTag, @NotNull Tag newTag) {
         Objects.requireNonNull(oldTag, "tag to replace is null");
         return this.value.replaceAt(oldTag.getName(), newTag.getName(), newTag);
     }
 
     @Override
-    public Tag get(String tagName) {
+    public Tag get(@NotNull String tagName) {
         return this.value.get(tagName);
     }
 
@@ -112,12 +113,12 @@ public class ReorderableCompoundTag extends CompoundTag {
     }
 
     @Override
-    public Tag getOrDefault(String tagName, Tag defaultTag) {
+    public @NotNull Tag getOrDefault(@NotNull String tagName, @NotNull Tag defaultTag) {
         return this.value.getOrDefault(tagName, defaultTag);
     }
 
     @Override
-    public Tag computeIfAbsent(String key, Function<? super String, ? extends Tag> mappingFunction) {
+    public @NotNull Tag computeIfAbsent(@NotNull String key, @NotNull Function<? super String, ? extends Tag> mappingFunction) {
         return this.value.computeIfAbsent(key, mappingFunction);
     }
 
@@ -131,17 +132,17 @@ public class ReorderableCompoundTag extends CompoundTag {
     }
 
     @Override
-    public Tag remove(String tagName) {
+    public Tag remove(@NotNull String tagName) {
         return this.value.remove(tagName);
     }
 
     @Override
-    public boolean contains(String tagName) {
+    public boolean contains(@NotNull String tagName) {
         return this.value.containsKey(tagName);
     }
 
     @Override
-    public boolean contains(Tag tag) {
+    public boolean contains(@NotNull Tag tag) {
         return this.value.containsValue(tag);
     }
 
@@ -200,7 +201,7 @@ public class ReorderableCompoundTag extends CompoundTag {
     }
 
     @Override
-    public OrderedListMap<String, Tag> getClonedValue() {
+    public @NotNull OrderedListMap<String, Tag> getClonedValue() {
         OrderedListMap<String, Tag> copy = new OrderedListMap<>();
         for (Tag tag : value) {
             copy.put(tag.getName(), tag);
@@ -209,17 +210,17 @@ public class ReorderableCompoundTag extends CompoundTag {
     }
 
     @Override
-    public OrderedListMap<String, Tag> getRawValue() {
+    public @NotNull OrderedListMap<String, Tag> getRawValue() {
         return value;
     }
 
     @Override
-    public Iterator<Tag> iterator() {
+    public @NotNull Iterator<Tag> iterator() {
         return this.value.iterator();
     }
 
     @Override
-    public ReorderableCompoundTag copy() {
+    public @NotNull ReorderableCompoundTag copy() {
         return new ReorderableCompoundTag(getName(), getClonedValue());
     }
 }

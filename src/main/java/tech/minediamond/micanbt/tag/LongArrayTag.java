@@ -1,5 +1,7 @@
 package tech.minediamond.micanbt.tag;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 
 /// TAG_Long_Array (ID: {@value #ID}).
@@ -17,7 +19,7 @@ public class LongArrayTag extends Tag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public LongArrayTag(String name) {
+    public LongArrayTag(@NotNull String name) {
         this(name, new long[0]);
     }
 
@@ -25,18 +27,18 @@ public class LongArrayTag extends Tag {
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.
-    public LongArrayTag(String name, long[] value) {
+    public LongArrayTag(@NotNull String name, long @NotNull [] value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public long[] getClonedValue() {
+    public long @NotNull [] getClonedValue() {
         return this.value.clone();
     }
 
     @Override
-    public long[] getRawValue() {
+    public long @NotNull [] getRawValue() {
         return this.value;
     }
 
@@ -83,7 +85,7 @@ public class LongArrayTag extends Tag {
     }
 
     @Override
-    public LongArrayTag copy() {
+    public @NotNull LongArrayTag copy() {
         return new LongArrayTag(this.getName(), this.getClonedValue());
     }
 

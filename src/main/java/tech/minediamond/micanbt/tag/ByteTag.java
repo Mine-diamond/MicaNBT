@@ -1,5 +1,7 @@
 package tech.minediamond.micanbt.tag;
 
+import org.jetbrains.annotations.NotNull;
+
 /// TAG_Byte (ID: {@value #ID}).
 ///
 /// Stores a `byte` value.
@@ -15,7 +17,7 @@ public class ByteTag extends Tag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public ByteTag(String name) {
+    public ByteTag(@NotNull String name) {
         this(name, (byte) 0);
     }
 
@@ -23,18 +25,18 @@ public class ByteTag extends Tag {
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.
-    public ByteTag(String name, byte value) {
+    public ByteTag(@NotNull String name, byte value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public Byte getClonedValue() {
+    public @NotNull Byte getClonedValue() {
         return this.value;
     }
 
     @Override
-    public Byte getRawValue() {
+    public @NotNull Byte getRawValue() {
         return this.value;
     }
 
@@ -52,7 +54,7 @@ public class ByteTag extends Tag {
     }
 
     @Override
-    public ByteTag copy() {
+    public @NotNull ByteTag copy() {
         return new ByteTag(this.getName(), this.getClonedValue());
     }
 
