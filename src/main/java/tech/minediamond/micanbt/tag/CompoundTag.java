@@ -12,7 +12,7 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
 
     /// Creates a tag with blank name.
     public CompoundTag() {
-        super();
+        this("");
     }
 
     /// Creates a tag with the specified name.
