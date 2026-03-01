@@ -7,6 +7,11 @@ public class IntTag extends Tag {
     public static final int ID = 3;
     private int value;
 
+    /// Creates a tag with blank name.
+    public IntTag() {
+        this("");
+    }
+
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.

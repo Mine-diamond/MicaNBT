@@ -9,6 +9,11 @@ public class ByteArrayTag extends Tag {
     public static final int ID = 7;
     private byte[] value;
 
+    /// Creates a tag with blank name.
+    public ByteArrayTag() {
+        this("");
+    }
+
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.

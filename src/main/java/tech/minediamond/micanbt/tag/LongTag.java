@@ -7,6 +7,11 @@ public class LongTag extends Tag {
     public static final int ID = 4;
     private long value;
 
+    /// Creates a tag with blank name.
+    public LongTag() {
+        this("");
+    }
+
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.

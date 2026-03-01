@@ -7,6 +7,11 @@ public class FloatTag extends Tag {
     public static final int ID = 5;
     private float value;
 
+    /// Creates a tag with blank name.
+    public FloatTag() {
+        this("");
+    }
+
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.

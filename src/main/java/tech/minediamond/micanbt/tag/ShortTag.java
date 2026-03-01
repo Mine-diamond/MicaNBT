@@ -7,6 +7,11 @@ public class ShortTag extends Tag {
     public static final int ID = 2;
     private short value;
 
+    /// Creates a tag with blank name.
+    public ShortTag() {
+        this("");
+    }
+
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.

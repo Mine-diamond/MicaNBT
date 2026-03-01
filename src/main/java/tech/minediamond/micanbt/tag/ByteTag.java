@@ -7,6 +7,11 @@ public class ByteTag extends Tag {
     public static final int ID = 1;
     private byte value;
 
+    /// Creates a tag with blank name.
+    public ByteTag() {
+        this("");
+    }
+
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
