@@ -10,6 +10,11 @@ import java.util.Map.Entry;
 public class CommonCompoundTag extends CompoundTag {
     private Map<String, Tag> value;
 
+    /// Creates a tag with blank name.
+    public CommonCompoundTag() {
+        this("");
+    }
+
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.

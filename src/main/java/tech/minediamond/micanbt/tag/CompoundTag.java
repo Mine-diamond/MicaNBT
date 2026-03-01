@@ -10,6 +10,11 @@ import java.util.function.Predicate;
 public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     public static final int ID = 10;
 
+    /// Creates a tag with blank name.
+    public CompoundTag() {
+        this("");
+    }
+
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.

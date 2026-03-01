@@ -16,6 +16,11 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     private int typeId;
     private final List<T> value;
 
+    /// Creates a tag with blank name.
+    public ListTag() {
+        this("");
+    }
+
     /// Creates an empty list tag with the specified name and no defined type.
     ///
     /// @param name The name of the tag.

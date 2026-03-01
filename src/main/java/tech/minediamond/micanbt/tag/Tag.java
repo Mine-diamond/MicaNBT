@@ -34,6 +34,11 @@ import tech.minediamond.micanbt.path.NBTPathParseException;
 public abstract class Tag {
     private final String name;
 
+    /// Creates a tag with blank name.
+    public Tag() {
+        this.name = "";
+    }
+
     /// Creates a tag with the specified name.
     ///
     /// @param name The name.

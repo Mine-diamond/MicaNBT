@@ -7,6 +7,11 @@ public class DoubleTag extends Tag {
     public static final int ID = 6;
     private double value;
 
+    /// Creates a tag with blank name.
+    public DoubleTag() {
+        this("");
+    }
+
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
