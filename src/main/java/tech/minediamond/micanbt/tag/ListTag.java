@@ -1,5 +1,9 @@
 package tech.minediamond.micanbt.tag;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -24,7 +28,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// Creates an empty list tag with the specified name and no defined type.
     ///
     /// @param name The name of the tag.
-    public ListTag(String name) {
+    public ListTag(@NotNull String name) {
         super(name);
 
         this.value = new ArrayList<>();
@@ -34,7 +38,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     ///
     /// @param name   The name of the tag.
     /// @param typeId The NBT Tag ID of the elements this list will hold.
-    public ListTag(String name, int typeId) {
+    public ListTag(@NotNull String name, int typeId) {
         this(name);
 
         this.typeId = typeId;
@@ -46,7 +50,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// @param name  The name of the tag.
     /// @param value The initial list of tags to add.
     /// @throws IllegalArgumentException If the tags in the provided list are not of the same type.
-    public ListTag(String name, List<T> value) {
+    public ListTag(@NotNull String name, @NotNull List<T> value) {
         this(name);
 
         this.setValue(value);
@@ -54,7 +58,8 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
 
     @Override
     @SuppressWarnings("unchecked") // Safe cast: tag.copy() returns a Tag of the same concrete type
-    public List<T> getClonedValue() {
+    @Contract(pure = true)
+    public @NotNull List<T> getClonedValue() {
         List<T> clonedList = new ArrayList<>(Math.max(this.value.size(), 10));
         for (T tag : value) {
             clonedList.add((T) tag.copy());
@@ -63,7 +68,8 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     }
 
     @Override
-    public List<T> getRawValue() {
+    @Contract(pure = true)
+    public @NotNull List<T> getRawValue() {
         return this.value;
     }
 
@@ -71,7 +77,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     ///
     /// @param value The new list of tags.
     /// @throws IllegalArgumentException If the tags in the list are not of the same type or a tag is null.
-    public void setValue(List<T> value) {
+    public void setValue(@NotNull List<T> value) {
         checkType(value);
         this.value.clear();
         this.value.addAll(value);
@@ -94,7 +100,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     ///
     /// @param tag The tag to add. Must not be null.
     /// @throws IllegalArgumentException If the tag's type does not match the list's element type.
-    public void add(T tag) {
+    public void add(@NotNull T tag) {
         checkType(tag);
         this.value.add(tag);
     }
@@ -104,7 +110,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// @param tag   The tag to insert.
     /// @param index The index at which to insert.
     /// @throws IllegalArgumentException If the tag's type does not match the list's element type.
-    public void add(T tag, int index) {
+    public void add(@NotNull T tag, int index) {
         checkType(tag);
         this.value.add(index, tag);
     }
@@ -113,7 +119,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     ///
     /// @param tags The collection of tags to add.
     /// @throws IllegalArgumentException If any tag fails the type check.
-    public void addAll(Collection<T> tags) throws IllegalArgumentException {
+    public void addAll(@NotNull Collection<T> tags) throws IllegalArgumentException {
         checkType(tags);
         this.value.addAll(tags);
     }
@@ -139,6 +145,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// @param index Index of the tag to return.
     /// @return The tag at the specified index.
     /// @throws IndexOutOfBoundsException If the index is out of range.
+    @Contract(pure = true)
     public T get(int index) {
         return this.value.get(index);
     }
@@ -149,7 +156,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// @param tag   The tag to be stored at the specified position.
     /// @return The tag previously at the position.
     /// @throws IllegalArgumentException If the new tag's type does not match.
-    public T set(int index, T tag) {
+    public T set(int index,@NotNull T tag) {
         checkType(tag);
         return value.set(index, tag);
     }
@@ -158,11 +165,13 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     ///
     /// @param tag The tag to search for.
     /// @return The index of the tag, or -1 if not found.
+    @Contract(pure = true)
     public int indexOf(T tag) {
         return this.value.indexOf(tag);
     }
 
-    public int indexOf(Predicate<? super T> predicate) {
+    @Contract(pure = true)
+    public int indexOf(@NotNull Predicate<? super T> predicate) {
         for (int i = 0; i < value.size(); i++) {
             if (predicate.test(value.get(i))) {
                 return i;
@@ -171,7 +180,8 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
         return -1;
     }
 
-    public T find(Predicate<? super T> predicate) {
+    @Contract(pure = true)
+    public @Nullable T find(@NotNull Predicate<? super T> predicate) {
         for (T t : value) {
             if (predicate.test(t)) {
                 return t;
@@ -183,6 +193,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// Returns the number of tags in this list.
     ///
     /// @return The size of the list.
+    @Contract(pure = true)
     public int size() {
         return this.value.size();
     }
@@ -190,6 +201,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// Checks if the list is empty.
     ///
     /// @return `true` if the list contains no tags.
+    @Contract(pure = true)
     public boolean isEmpty() {
         return value.isEmpty();
     }
@@ -203,6 +215,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     ///
     /// @param tagName The name to check.
     /// @return `true` if the tag exists, `false` otherwise.
+    @Contract(pure = true)
     public boolean contains(String tagName) {
         if (tagName == null) {
             return false;
@@ -219,7 +232,8 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     ///
     /// @param tag The tag to check for.
     /// @return `true` if the tag exists, `false` otherwise.
-    public boolean contains(T tag) {
+    @Contract(pure = true)
+    public boolean contains(@Nullable T tag) {
         if (tag == null || tag.getTagId() != this.typeId) {
             return false;
         }
@@ -227,12 +241,13 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     }
 
     @Override
-    public Iterator<T> iterator() {
+    public @NotNull Iterator<T> iterator() {
         return this.value.iterator();
     }
 
     /// Returns a sequential Stream with this list as its source.
-    public Stream<T> stream() {
+    @Contract(pure = true)
+    public @NotNull Stream<T> stream() {
         return value.stream();
     }
 
@@ -269,7 +284,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
 
     @Override
     @SuppressWarnings("unchecked") // Safe cast: tag.copy() returns a Tag of the same concrete type
-    public ListTag<T> copy() {
+    public @NotNull ListTag<T> copy() {
         ListTag<T> copy = new ListTag<>(this.getName(), this.typeId);
         for (T tag : this.value) {
             copy.add((T) tag.copy());

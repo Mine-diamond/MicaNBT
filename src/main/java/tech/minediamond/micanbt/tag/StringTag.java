@@ -1,5 +1,7 @@
 package tech.minediamond.micanbt.tag;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Objects;
 
 /// TAG_String (ID: {@value #ID}).
@@ -17,7 +19,7 @@ public class StringTag extends Tag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public StringTag(String name) {
+    public StringTag(@NotNull String name) {
         this(name, "");
     }
 
@@ -25,25 +27,25 @@ public class StringTag extends Tag {
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.
-    public StringTag(String name, String value) {
+    public StringTag(@NotNull String name, String value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public String getClonedValue() {
+    public @NotNull String getClonedValue() {
         return this.value;
     }
 
     @Override
-    public String getRawValue() {
+    public @NotNull String getRawValue() {
         return this.value;
     }
 
     /// Sets the value of this tag.
     ///
     /// @param value New value of this tag.
-    public void setValue(String value) {
+    public void setValue(@NotNull String value) {
         this.value = value;
     }
 
@@ -54,7 +56,7 @@ public class StringTag extends Tag {
     }
 
     @Override
-    public StringTag copy() {
+    public @NotNull StringTag copy() {
         return new StringTag(this.getName(), this.getClonedValue());
     }
 

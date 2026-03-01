@@ -1,5 +1,7 @@
 package tech.minediamond.micanbt.chunk;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.nbt.NBT;
 import tech.minediamond.micanbt.nbt.NBTParseException;
 import tech.minediamond.micanbt.core.CompoundSelection;
@@ -22,7 +24,7 @@ public class Chunk {
 
     private final Region region;
 
-    private Chunk(CompoundTag compoundTag, int timestamp, ChunkPos chunkPos, boolean isChunkInitialized, Region region) {
+    private Chunk(@NotNull CompoundTag compoundTag, int timestamp, @NotNull ChunkPos chunkPos, boolean isChunkInitialized, @NotNull Region region) {
         this.chunkTag = compoundTag;
         this.timestamp = timestamp;
         this.chunkPos = chunkPos;
@@ -34,7 +36,7 @@ public class Chunk {
         this.region = region;
     }
 
-    private Chunk(int timestamp, ChunkPos chunkPos, Throwable cause, Region region) {
+    private Chunk(int timestamp, @NotNull ChunkPos chunkPos, @NotNull Throwable cause, @NotNull Region region) {
         this.chunkTag = null;
         this.timestamp = timestamp;
         this.chunkPos = chunkPos;
@@ -46,7 +48,7 @@ public class Chunk {
         this.region = region;
     }
 
-    public static Chunk of(DataInput dataInput, CompoundSelection compoundSelection, int timestamp, ChunkPos chunkPos, Region region) {
+    public static Chunk of(@NotNull DataInput dataInput, @NotNull CompoundSelection compoundSelection, int timestamp, @NotNull ChunkPos chunkPos, @NotNull Region region) {
         Tag parsed;
         try {
             parsed = NBT.read(dataInput, compoundSelection);
@@ -68,7 +70,7 @@ public class Chunk {
         return new Chunk(timestamp, chunkPos, cause, region);
     }
 
-    public CompoundTag getChunkTag() {
+    public @Nullable CompoundTag getChunkTag() {
         return chunkTag;
     }
 
@@ -76,7 +78,7 @@ public class Chunk {
         return timestamp;
     }
 
-    public ChunkPos getChunkPos() {
+    public @NotNull ChunkPos getChunkPos() {
         return chunkPos;
     }
 
@@ -88,11 +90,11 @@ public class Chunk {
         return isCorrupt;
     }
 
-    public Throwable getError() {
+    public @Nullable Throwable getError() {
         return error;
     }
 
-    public Region getRegion() {
+    public @NotNull Region getRegion() {
         return region;
     }
 

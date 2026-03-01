@@ -1,5 +1,7 @@
 package tech.minediamond.micanbt.tag;
 
+import org.jetbrains.annotations.NotNull;
+
 /// TAG_Short (ID: {@value #ID}).
 ///
 /// Stores a `short` value.
@@ -15,7 +17,7 @@ public class ShortTag extends Tag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public ShortTag(String name) {
+    public ShortTag(@NotNull String name) {
         this(name, (short) 0);
     }
 
@@ -23,18 +25,18 @@ public class ShortTag extends Tag {
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.
-    public ShortTag(String name, short value) {
+    public ShortTag(@NotNull String name, short value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public Short getClonedValue() {
+    public @NotNull Short getClonedValue() {
         return this.value;
     }
 
     @Override
-    public Short getRawValue() {
+    public @NotNull Short getRawValue() {
         return this.value;
     }
 
@@ -52,7 +54,7 @@ public class ShortTag extends Tag {
     }
 
     @Override
-    public ShortTag copy() {
+    public @NotNull ShortTag copy() {
         return new ShortTag(this.getName(), this.getClonedValue());
     }
 
