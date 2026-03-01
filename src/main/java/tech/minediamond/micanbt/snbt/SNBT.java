@@ -1,5 +1,7 @@
 package tech.minediamond.micanbt.snbt;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.Tag;
 
@@ -17,7 +19,8 @@ public class SNBT {
      * @param snbtStyle Whether to enable line wrapping. If {@code true}, output a beautified multi-line string; otherwise, output a single-line compressed string.
      * @return Serialized SNBT text.
      */
-    public static String stringify(Tag tag, boolean includeRootName, SNBTStyle snbtStyle) {
+    @Contract(pure = true)
+    public static @NotNull String stringify(@NotNull Tag tag, boolean includeRootName, @NotNull SNBTStyle snbtStyle) {
         return new SNBTWriter(tag, includeRootName, snbtStyle).getSNBTText();
     }
 
@@ -29,7 +32,7 @@ public class SNBT {
      * @param snbtStyle Whether to enable line wrapping. If {@code true}, output a beautified multi-line string; otherwise, output a single-line compressed string.
      * @throws IOException If an I/O error occurs during file writing.
      */
-    public static void write(Tag tag, boolean includeRootName, Path path, SNBTStyle snbtStyle) throws IOException {
+    public static void write(@NotNull Tag tag, boolean includeRootName, @NotNull Path path, @NotNull SNBTStyle snbtStyle) throws IOException {
         new SNBTWriter(tag, includeRootName, snbtStyle).write(path);
     }
 
@@ -40,7 +43,8 @@ public class SNBT {
      * @return The parsed NBT tag.
      * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail
      */
-    public static Tag parse(String SNBTText) {
+    @Contract(pure = true)
+    public static @NotNull Tag parse(@NotNull String SNBTText) {
         return new SNBTReader(SNBTText, CompoundSelection.COMMON_MAP).getTag();
     }
 
@@ -52,7 +56,8 @@ public class SNBT {
      * @return The parsed NBT tag.
      * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail.
      */
-    public static Tag parse(String SNBTText, CompoundSelection compoundSelection) {
+    @Contract(pure = true)
+    public static @NotNull Tag parse(@NotNull String SNBTText, @NotNull CompoundSelection compoundSelection) {
         return new SNBTReader(SNBTText, compoundSelection).getTag();
     }
 
@@ -64,7 +69,7 @@ public class SNBT {
      * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail
      * @throws IOException        If an I/O error occurs during file writing.
      */
-    public static Tag read(Path path) throws IOException {
+    public static @NotNull Tag read(@NotNull Path path) throws IOException {
         return new SNBTReader(path, CompoundSelection.COMMON_MAP).getTag();
     }
 
@@ -77,7 +82,7 @@ public class SNBT {
      * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail.
      * @throws IOException        If an I/O error occurs during file reading.
      */
-    public static Tag read(Path path, CompoundSelection compoundSelection) throws IOException {
+    public static @NotNull Tag read(@NotNull Path path, @NotNull CompoundSelection compoundSelection) throws IOException {
         return new SNBTReader(path, compoundSelection).getTag();
     }
 }
