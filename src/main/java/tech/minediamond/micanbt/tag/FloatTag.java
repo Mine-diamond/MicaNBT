@@ -1,7 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import org.jetbrains.annotations.NotNull;
-
 /// TAG_Float (ID: {@value #ID}).
 ///
 /// Stores a `float` value.
@@ -17,7 +15,7 @@ public class FloatTag extends Tag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public FloatTag(@NotNull String name) {
+    public FloatTag(String name) {
         this(name, 0);
     }
 
@@ -25,18 +23,18 @@ public class FloatTag extends Tag {
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.
-    public FloatTag(@NotNull String name, float value) {
+    public FloatTag(String name, float value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public @NotNull Float getClonedValue() {
+    public Float getClonedValue() {
         return this.value;
     }
 
     @Override
-    public @NotNull Float getRawValue() {
+    public Float getRawValue() {
         return this.value;
     }
 
@@ -54,7 +52,7 @@ public class FloatTag extends Tag {
     }
 
     @Override
-    public @NotNull FloatTag copy() {
+    public FloatTag copy() {
         return new FloatTag(this.getName(), this.getClonedValue());
     }
 

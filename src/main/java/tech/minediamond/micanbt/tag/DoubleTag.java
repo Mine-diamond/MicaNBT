@@ -1,7 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import org.jetbrains.annotations.NotNull;
-
 /// TAG_Double (ID: {@value #ID}).
 ///
 /// Stores a `double` value.
@@ -17,7 +15,7 @@ public class DoubleTag extends Tag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public DoubleTag(@NotNull String name) {
+    public DoubleTag(String name) {
         this(name, 0);
     }
 
@@ -25,18 +23,18 @@ public class DoubleTag extends Tag {
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.
-    public DoubleTag(@NotNull String name, double value) {
+    public DoubleTag(String name, double value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public @NotNull Double getClonedValue() {
+    public Double getClonedValue() {
         return this.value;
     }
 
     @Override
-    public @NotNull Double getRawValue() {
+    public Double getRawValue() {
         return this.value;
     }
 
@@ -54,7 +52,7 @@ public class DoubleTag extends Tag {
     }
 
     @Override
-    public @NotNull DoubleTag copy() {
+    public DoubleTag copy() {
         return new DoubleTag(this.getName(), this.getClonedValue());
     }
 

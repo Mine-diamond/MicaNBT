@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.nbt;
 
+import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.tag.*;
 
 import java.io.*;
@@ -155,9 +156,9 @@ public class NBTWriter {
     }
 
     public static class Builder {
-        private Path path = null;
-        private OutputStream stream = null;
-        private DataOutput dataOutput = null;
+        private @Nullable Path path = null;
+        private @Nullable OutputStream stream = null;
+        private @Nullable DataOutput dataOutput = null;
 
         private final CompoundTag tag;
         private NBTCompressType compressType = NBTCompressType.GZIP;

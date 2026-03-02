@@ -232,7 +232,7 @@ public class SNBTWriter {
 
     //All escape character supported by snbt and `"`
     private void escapeAndAppend(String input) {
-        if (input == null || input.isEmpty()) return;
+        if (input.isEmpty()) return;
 
         int length = input.length();
         for (int i = 0; i < length; i++) {

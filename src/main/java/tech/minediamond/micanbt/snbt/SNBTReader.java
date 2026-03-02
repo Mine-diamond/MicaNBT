@@ -381,7 +381,7 @@ public class SNBTReader {
         int prefixNum = 0;
         int suffixNum = defaultSuffixNum;
 
-        if (value == null || value.isEmpty()) {
+        if (value.isEmpty()) {
             throw new RuntimeException("Expected a non-empty string but found an empty string.");
         }
 

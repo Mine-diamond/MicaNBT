@@ -1,7 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 
 /// TAG_Int_Array (ID: {@value #ID}).
@@ -19,7 +17,7 @@ public class IntArrayTag extends Tag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public IntArrayTag(@NotNull String name) {
+    public IntArrayTag(String name) {
         this(name, new int[0]);
     }
 
@@ -27,18 +25,18 @@ public class IntArrayTag extends Tag {
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.
-    public IntArrayTag(@NotNull String name, int @NotNull [] value) {
+    public IntArrayTag(String name, int[] value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public int @NotNull [] getClonedValue() {
+    public int[] getClonedValue() {
         return this.value.clone();
     }
 
     @Override
-    public int @NotNull [] getRawValue() {
+    public int[] getRawValue() {
         return this.value;
     }
 
@@ -85,7 +83,7 @@ public class IntArrayTag extends Tag {
     }
 
     @Override
-    public @NotNull IntArrayTag copy() {
+    public IntArrayTag copy() {
         return new IntArrayTag(this.getName(), this.getClonedValue());
     }
 

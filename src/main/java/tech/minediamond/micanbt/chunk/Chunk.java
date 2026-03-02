@@ -1,30 +1,27 @@
 package tech.minediamond.micanbt.chunk;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.nbt.NBT;
-import tech.minediamond.micanbt.nbt.NBTParseException;
 import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.CompoundTag;
-import tech.minediamond.micanbt.tag.Tag;
 
 import java.io.DataInput;
 import java.io.IOException;
 
 public class Chunk {
 
-    private final CompoundTag chunkTag;
+    private final @Nullable CompoundTag chunkTag;
     private final int timestamp;
     private final ChunkPos chunkPos;
     private final boolean isChunkInitialized;
 
     private final boolean isCorrupt;
-    private final Throwable error;
+    private final @Nullable Throwable error;
 
     private final Region region;
 
-    private Chunk(@NotNull CompoundTag compoundTag, int timestamp, @NotNull ChunkPos chunkPos, boolean isChunkInitialized, @NotNull Region region) {
+    private Chunk(CompoundTag compoundTag, int timestamp, ChunkPos chunkPos, boolean isChunkInitialized, Region region) {
         this.chunkTag = compoundTag;
         this.timestamp = timestamp;
         this.chunkPos = chunkPos;
@@ -36,7 +33,7 @@ public class Chunk {
         this.region = region;
     }
 
-    private Chunk(int timestamp, @NotNull ChunkPos chunkPos, @NotNull Throwable cause, @NotNull Region region) {
+    private Chunk(int timestamp, ChunkPos chunkPos, Throwable cause, Region region) {
         this.chunkTag = null;
         this.timestamp = timestamp;
         this.chunkPos = chunkPos;
@@ -48,18 +45,14 @@ public class Chunk {
         this.region = region;
     }
 
-    public static Chunk of(@NotNull DataInput dataInput, @NotNull CompoundSelection compoundSelection, int timestamp, @NotNull ChunkPos chunkPos, @NotNull Region region) {
-        Tag parsed;
+    public static Chunk of(DataInput dataInput, CompoundSelection compoundSelection, int timestamp, ChunkPos chunkPos, Region region) {
+        CompoundTag parsed;
         try {
             parsed = NBT.read(dataInput, compoundSelection);
         } catch (IOException e) {
             return ofCorrupt(timestamp, chunkPos, e, region);
         }
-        if (parsed instanceof CompoundTag compoundTag) {
-            return new Chunk(compoundTag, timestamp, chunkPos, true, region);
-        } else {
-            return ofCorrupt(timestamp, chunkPos, new NBTParseException("Invalid Chunk Tag"), region);
-        }
+        return new Chunk(parsed, timestamp, chunkPos, true, region);
     }
 
     public static Chunk ofUninitialized(ChunkPos chunkPos, Region region) {
@@ -78,7 +71,7 @@ public class Chunk {
         return timestamp;
     }
 
-    public @NotNull ChunkPos getChunkPos() {
+    public ChunkPos getChunkPos() {
         return chunkPos;
     }
 
@@ -94,7 +87,7 @@ public class Chunk {
         return error;
     }
 
-    public @NotNull Region getRegion() {
+    public Region getRegion() {
         return region;
     }
 

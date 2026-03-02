@@ -1,7 +1,6 @@
 package tech.minediamond.micanbt.tag;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -22,26 +21,26 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public CompoundTag(@NotNull String name) {
+    public CompoundTag(String name) {
         super(name);
     }
 
     /// Replaces the current content of this compound tag with the provided map.
     ///
     /// @param map The map containing the new tags.
-    public abstract void setValue(@NotNull Map<String, Tag> map);
+    public abstract void setValue(Map<String, Tag> map);
 
     /// Adds a tag to this compound.
     ///
     /// @param tag The tag to add.
-    public abstract void put(@NotNull Tag tag);
+    public abstract void put(Tag tag);
 
     /// Retrieves a tag by its name.
     ///
     /// @param tagName The name of the tag to find.
     /// @return The tag associated with the name, or `null` if not found.
     @Contract(pure = true)
-    public abstract @Nullable Tag get(@NotNull String tagName);
+    public abstract @Nullable Tag get(String tagName);
 
     /// Retrieves a tag by its name, or returns a default value if the tag is missing.
     ///
@@ -49,17 +48,17 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     /// @param defaultValue The value to return if the key is not found.
     /// @return The tag associated with the key, or the default value.
     @Contract(pure = true)
-    public abstract @NotNull Tag getOrDefault(@NotNull String key, @NotNull Tag defaultValue);
+    public abstract Tag getOrDefault(String key, Tag defaultValue);
 
     /// Computes a tag value if the specified name is not already associated with a value.
     ///
     /// @param key             The name of the tag.
     /// @param mappingFunction The function to compute the value.
     /// @return The current (existing or computed) tag.
-    public abstract @NotNull Tag computeIfAbsent(@NotNull String key, @NotNull java.util.function.Function<? super String, ? extends Tag> mappingFunction);
+    public abstract Tag computeIfAbsent(String key, java.util.function.Function<? super String, ? extends Tag> mappingFunction);
 
     @Contract(pure = true)
-    public @Nullable String findKey(@NotNull Predicate<? super Tag> predicate) {
+    public @Nullable String findKey(Predicate<? super Tag> predicate) {
         for (Tag tag : this) {
             if (predicate.test(tag)) {
                 return tag.getName();
@@ -69,7 +68,7 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     }
 
     @Contract(pure = true)
-    public @Nullable Tag find(@NotNull Predicate<? super Tag> predicate) {
+    public @Nullable Tag find(Predicate<? super Tag> predicate) {
         for (Tag tag : this) {
             if (predicate.test(tag)) {
                 return tag;
@@ -82,21 +81,21 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     ///
     /// @param tagName The name of the tag to remove.
     /// @return The removed tag, or `null` if no tag was found with that name.
-    public abstract @Nullable Tag remove(@NotNull String tagName);
+    public abstract @Nullable Tag remove(String tagName);
 
     /// Checks if this compound contains a tag with the specified name.
     ///
     /// @param tagName The name to check.
     /// @return `true` if the tag exists, `false` otherwise.
     @Contract(pure = true)
-    public abstract boolean contains(@NotNull String tagName);
+    public abstract boolean contains(String tagName);
 
     /// Checks if this compound contains the specified tag.
     ///
     /// @param tag The tag to check for.
     /// @return `true` if the tag exists, `false` otherwise.
     @Contract(pure = true)
-    public abstract boolean contains(@NotNull Tag tag);
+    public abstract boolean contains(Tag tag);
 
     /// Checks if the compound tag contains no tags.
     ///
@@ -114,7 +113,7 @@ public abstract class CompoundTag extends Tag implements Iterable<Tag> {
     public abstract void clear();
 
     @Override
-    public abstract @NotNull CompoundTag copy();
+    public abstract CompoundTag copy();
 
     /// @return {@value #ID}
     @Override
