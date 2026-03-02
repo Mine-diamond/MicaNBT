@@ -1,7 +1,6 @@
 package tech.minediamond.micanbt.path;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.path.nbtpathtoken.PathToken;
 import tech.minediamond.micanbt.tag.Tag;
@@ -15,9 +14,9 @@ import java.util.List;
 ///
 /// @see NBTFinder
 public class NBTPath {
-    private final PathToken @NotNull [] tokens;
+    private final PathToken[] tokens;
 
-    private NBTPath(@NotNull PathToken @NotNull [] tokens) {
+    private NBTPath(PathToken[] tokens) {
         this.tokens = tokens;
     }
 
@@ -26,18 +25,18 @@ public class NBTPath {
     /// @param path The string representation of the NBT path.
     /// @return A new `NBTPath` instance representing the parsed string.
     @Contract("_ -> new")
-    public static @NotNull NBTPath of(@NotNull String path) {
+    public static NBTPath of(String path) {
         return new NBTPath(NBTPathReader.read(path));
     }
 
     @Contract("_ -> new")
-    public static @NotNull NBTPath fromParts(@NotNull PathToken... paths) {
-        if (paths == null || paths.length == 0) return new NBTPath(new PathToken[0]);
+    public static NBTPath fromParts(PathToken... paths) {
+        if (paths.length == 0) return new NBTPath(new PathToken[0]);
         return new NBTPath(paths.clone());
     }
 
     @Contract("_ -> new")
-    public static @NotNull NBTPath fromParts(@NotNull List<PathToken> path) {
+    public static NBTPath fromParts(List<PathToken> path) {
         if (path.isEmpty()) return new NBTPath(new PathToken[0]);
         return new NBTPath(path.toArray(new PathToken[0]));
     }
@@ -48,7 +47,7 @@ public class NBTPath {
     /// @param path The path to be appended.
     /// @return A new `NBTPath` representing the combined sequence of tokens.
     @Contract("_ -> new")
-    public @NotNull NBTPath resolve(@NotNull NBTPath path) {
+    public NBTPath resolve(NBTPath path) {
         return mergeToken(this.tokens, path.tokens);
     }
 
@@ -58,7 +57,7 @@ public class NBTPath {
     /// @return A new `NBTPath` representing the combined path.
     /// @see #of(String)
     @Contract("_ -> new")
-    public @NotNull NBTPath resolve(@NotNull String path) {
+    public NBTPath resolve(String path) {
         return mergeToken(this.tokens, NBTPath.of(path).tokens);
     }
 
@@ -67,7 +66,7 @@ public class NBTPath {
     /// @param parts The raw path segments (e.g., String for keys, Integer for indices) to append.
     /// @return A new `NBTPath` containing the merged tokens.
     @Contract("_ -> new")
-    public @NotNull NBTPath resolveFromParts(@NotNull PathToken... parts) {
+    public NBTPath resolveFromParts(PathToken... parts) {
         return mergeToken(this.tokens, parts);
     }
 
@@ -89,7 +88,7 @@ public class NBTPath {
         return new NBTPath(newTokens);
     }
 
-    private static NBTPath mergeToken(@NotNull PathToken[] first, @NotNull PathToken[] second) {
+    private static NBTPath mergeToken(PathToken[] first, PathToken[] second) {
         PathToken[] mergedTokens = new PathToken[first.length + second.length];
         System.arraycopy(first, 0, mergedTokens, 0, first.length);
         System.arraycopy(second, 0, mergedTokens, first.length, second.length);

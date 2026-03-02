@@ -1,11 +1,12 @@
 package tech.minediamond.micanbt.path.nbtpathtoken;
 
+import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.tag.CompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 
 public record FilterToken(CompoundTag pattern) implements PathToken {
     @Override
-    public Tag navigate(Tag container) {
+    public @Nullable Tag navigate(Tag container) {
         if (container instanceof CompoundTag compoundTag) {
             for (Tag tag : pattern) {
                 if (!compoundTag.contains(tag)) {

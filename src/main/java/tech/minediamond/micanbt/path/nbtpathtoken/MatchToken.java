@@ -1,12 +1,13 @@
 package tech.minediamond.micanbt.path.nbtpathtoken;
 
+import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.tag.ListTag;
 import tech.minediamond.micanbt.tag.Tag;
 
 public record MatchToken(Tag pattern) implements PathToken{
 
     @Override
-    public Tag navigate(Tag container) {
+    public @Nullable Tag navigate(Tag container) {
         int idx = findIndex(container);
         return idx != -1 ? ((ListTag<?>) container).get(idx) : null;
     }
