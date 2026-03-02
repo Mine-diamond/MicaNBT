@@ -1,6 +1,6 @@
 package tech.minediamond.micanbt.chunk;
 
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.core.CompoundSelection;
 
 import java.io.ByteArrayInputStream;
@@ -21,11 +21,11 @@ public class Region {
     public static final int CHUNKS_PER_REGION = 1024;
     public static final int SECTOR_LENGTH = 4 * 1024;
 
-    Path path;
+    @Nullable Path path;
     byte[] data;
     ChunkLocation[] chunkLocations;
     int[] timestamps;
-    Chunk[] chunks = new Chunk[CHUNKS_PER_REGION];
+    @Nullable Chunk[] chunks = new Chunk[CHUNKS_PER_REGION];
 
     CompoundSelection compoundSelection;
 
@@ -34,20 +34,20 @@ public class Region {
     private static final ForkJoinPool CHUNK_PARSER_EXECUTOR = new ForkJoinPool(Runtime.getRuntime().availableProcessors() / 2);
     private final Object[] locks = new Object[64];
 
-    public Region(byte @NotNull [] data, boolean preLoadChunk, @NotNull CompoundSelection compoundSelection) throws ExecutionException, InterruptedException {
+    public Region(byte[] data, boolean preLoadChunk, CompoundSelection compoundSelection) throws ExecutionException, InterruptedException {
         this.data = data;
         this.compoundSelection = compoundSelection;
         initialize(preLoadChunk);
     }
 
-    public Region(@NotNull Path path, boolean preLoadChunk, @NotNull CompoundSelection compoundSelection) throws IOException, InterruptedException, ExecutionException {
+    public Region(Path path, boolean preLoadChunk, CompoundSelection compoundSelection) throws IOException, InterruptedException, ExecutionException {
         this.path = path;
         this.compoundSelection = compoundSelection;
         data = Files.readAllBytes(path);
         initialize(preLoadChunk);
     }
 
-    public Region(@NotNull InputStream stream, boolean preLoadChunk, @NotNull CompoundSelection compoundSelection) throws IOException, InterruptedException, ExecutionException {
+    public Region(InputStream stream, boolean preLoadChunk, CompoundSelection compoundSelection) throws IOException, InterruptedException, ExecutionException {
         data = stream.readAllBytes();
         this.compoundSelection = compoundSelection;
         initialize(preLoadChunk);
@@ -84,7 +84,7 @@ public class Region {
         return timestamps;
     }
 
-    public @NotNull Chunk getChunk(int x, int z) {
+    public Chunk getChunk(int x, int z) {
         int index = ((z & 31) << 5) | (x & 31);
         if (chunks[index] == null) {
             synchronized (locks[index % locks.length]) {
@@ -96,7 +96,7 @@ public class Region {
         return chunks[index];
     }
 
-    private @NotNull Chunk parseChunk(int i) {
+    private Chunk parseChunk(int i) {
         int offset = chunkLocations[i].offset * SECTOR_LENGTH;
         Chunk.ChunkPos chunkPos = new Chunk.ChunkPos((i & 31), ((i >> 5) & 31));
         if (offset == 0) {
@@ -125,7 +125,7 @@ public class Region {
         }
     }
 
-    private @NotNull InputStream getByteArrayInputStream(int offset) {
+    private InputStream getByteArrayInputStream(int offset) {
         int chunkLength = ((data[offset] & 0xff) << 24)
                 + ((data[offset + 1] & 0xff) << 16)
                 + ((data[offset + 2] & 0xff) << 8)
