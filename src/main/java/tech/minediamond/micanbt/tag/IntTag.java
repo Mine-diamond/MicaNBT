@@ -1,7 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import org.jetbrains.annotations.NotNull;
-
 /// TAG_Int (ID: {@value #ID}).
 ///
 /// Stores a `int` value.
@@ -17,7 +15,7 @@ public class IntTag extends Tag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public IntTag(@NotNull String name) {
+    public IntTag(String name) {
         this(name, 0);
     }
 
@@ -25,18 +23,18 @@ public class IntTag extends Tag {
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.
-    public IntTag(@NotNull String name, int value) {
+    public IntTag(String name, int value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public @NotNull Integer getClonedValue() {
+    public Integer getClonedValue() {
         return this.value;
     }
 
     @Override
-    public @NotNull Integer getRawValue() {
+    public Integer getRawValue() {
         return this.value;
     }
 
@@ -54,7 +52,7 @@ public class IntTag extends Tag {
     }
 
     @Override
-    public @NotNull IntTag copy() {
+    public IntTag copy() {
         return new IntTag(this.getName(), this.getClonedValue());
     }
 

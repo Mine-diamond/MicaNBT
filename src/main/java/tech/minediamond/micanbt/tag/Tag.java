@@ -1,14 +1,13 @@
 package tech.minediamond.micanbt.tag;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tech.minediamond.micanbt.path.nbtpathtoken.PathToken;
-import tech.minediamond.micanbt.snbt.SNBT;
-import tech.minediamond.micanbt.snbt.SNBTStyle;
 import tech.minediamond.micanbt.path.NBTFinder;
 import tech.minediamond.micanbt.path.NBTPath;
 import tech.minediamond.micanbt.path.NBTPathParseException;
+import tech.minediamond.micanbt.path.nbtpathtoken.PathToken;
+import tech.minediamond.micanbt.snbt.SNBT;
+import tech.minediamond.micanbt.snbt.SNBTStyle;
 
 /// The base class for all NBT (Named Binary Tag) structures.
 ///
@@ -45,14 +44,14 @@ public abstract class Tag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name.
-    public Tag(@NotNull String name) {
+    public Tag(String name) {
         this.name = name;
     }
 
     /// Gets the name of this tag.
     ///
     /// @return The name of this tag.
-    public final @NotNull String getName() {
+    public final String getName() {
         return this.name;
     }
 
@@ -62,7 +61,7 @@ public abstract class Tag {
     ///
     /// @return The deep copied value of this tag.
     @Contract(pure = true)
-    public abstract @NotNull Object getClonedValue();
+    public abstract Object getClonedValue();
 
     /// Gets the original reference of the value of this tag.
     ///
@@ -70,7 +69,7 @@ public abstract class Tag {
     ///
     /// @return The original reference of value of this tag.
     @Contract(pure = true)
-    public abstract @NotNull Object getRawValue();
+    public abstract Object getRawValue();
 
     /// Navigates the NBT tree starting from this tag and retrieves the tag located at
     /// the specified [NBTPath].
@@ -79,7 +78,7 @@ public abstract class Tag {
     /// @return The [Tag] at the specified path, or `null` if the path cannot be resolved.
     /// @throws NBTPathParseException If the path format is invalid.
     @Contract(pure = true)
-    public Tag at(@NotNull NBTPath nbtPath) {
+    public @Nullable Tag at(NBTPath nbtPath) {
         return NBTFinder.get(this, nbtPath);
     }
 
@@ -92,7 +91,7 @@ public abstract class Tag {
     /// @return The [Tag] at the specified path, or `null` if the path cannot be resolved.
     /// @throws NBTPathParseException If the path format is invalid.
     @Contract(pure = true)
-    public Tag at(@NotNull String path) {
+    public @Nullable Tag at(String path) {
         return at(NBTPath.of(path));
     }
 
@@ -105,7 +104,7 @@ public abstract class Tag {
     /// @return The [Tag] at the specified path, or `null` if the path cannot be resolved.
     /// @throws NBTPathParseException If the path format is invalid.
     @Contract(pure = true)
-    public Tag atParts(@Nullable PathToken... parts) {
+    public @Nullable Tag atParts(PathToken... parts) {
         return at(NBTPath.fromParts(parts));
     }
 
@@ -114,7 +113,7 @@ public abstract class Tag {
     /// @param paths The NBT paths to found tag.
     /// @return The first [Tag] found in the incoming paths, or `null` if no tag is found in any path.
     @Contract(pure = true)
-    public Tag atAny(@NotNull NBTPath... paths) {
+    public @Nullable Tag atAny(NBTPath... paths) {
         return NBTFinder.findFirst(this, paths);
     }
 
@@ -124,7 +123,7 @@ public abstract class Tag {
     /// @return The first [Tag] found in the incoming paths, or `null` if no tag is found in any path.
     /// @throws NBTPathParseException If the path format is invalid.
     @Contract(pure = true)
-    public Tag atAny(@NotNull String... paths) {
+    public @Nullable Tag atAny(String... paths) {
         return NBTFinder.findFirst(this, paths);
     }
 
@@ -138,7 +137,7 @@ public abstract class Tag {
     ///
     /// @return a new tag with the same content.
     @Contract(pure = true)
-    public abstract @NotNull Tag copy();
+    public abstract Tag copy();
 
     @Override
     public boolean equals(Object o) {

@@ -1,7 +1,5 @@
 package tech.minediamond.micanbt.tag;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 
 /// TAG_Byte_Array (ID: {@value #ID}).
@@ -19,7 +17,7 @@ public class ByteArrayTag extends Tag {
     /// Creates a tag with the specified name.
     ///
     /// @param name The name of the tag.
-    public ByteArrayTag(@NotNull String name) {
+    public ByteArrayTag(String name) {
         this(name, new byte[0]);
     }
 
@@ -27,18 +25,18 @@ public class ByteArrayTag extends Tag {
     ///
     /// @param name  The name of the tag.
     /// @param value The value of the tag.
-    public ByteArrayTag(@NotNull String name, byte @NotNull [] value) {
+    public ByteArrayTag(String name, byte[] value) {
         super(name);
         this.value = value;
     }
 
     @Override
-    public byte @NotNull [] getClonedValue() {
+    public byte[] getClonedValue() {
         return this.value.clone();
     }
 
     @Override
-    public byte @NotNull [] getRawValue() {
+    public byte[] getRawValue() {
         return this.value;
     }
 
@@ -48,7 +46,7 @@ public class ByteArrayTag extends Tag {
     ///
     /// @param value New value of this tag.
     /// @throws NullPointerException The value passed in is null
-    public void setValue(byte @NotNull [] value) {
+    public void setValue(byte[] value) {
         this.value = value.clone();
     }
 
@@ -84,7 +82,7 @@ public class ByteArrayTag extends Tag {
     }
 
     @Override
-    public @NotNull ByteArrayTag copy() {
+    public ByteArrayTag copy() {
         return new ByteArrayTag(this.getName(), this.getClonedValue());
     }
 

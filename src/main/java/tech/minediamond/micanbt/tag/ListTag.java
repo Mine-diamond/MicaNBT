@@ -28,7 +28,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// Creates an empty list tag with the specified name and no defined type.
     ///
     /// @param name The name of the tag.
-    public ListTag(@NotNull String name) {
+    public ListTag(String name) {
         super(name);
 
         this.value = new ArrayList<>();
@@ -38,7 +38,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     ///
     /// @param name   The name of the tag.
     /// @param typeId The NBT Tag ID of the elements this list will hold.
-    public ListTag(@NotNull String name, int typeId) {
+    public ListTag(String name, int typeId) {
         this(name);
 
         this.typeId = typeId;
@@ -50,7 +50,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// @param name  The name of the tag.
     /// @param value The initial list of tags to add.
     /// @throws IllegalArgumentException If the tags in the provided list are not of the same type.
-    public ListTag(@NotNull String name, @NotNull List<T> value) {
+    public ListTag(String name, List<T> value) {
         this(name);
 
         this.setValue(value);
@@ -59,7 +59,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     @Override
     @SuppressWarnings("unchecked") // Safe cast: tag.copy() returns a Tag of the same concrete type
     @Contract(pure = true)
-    public @NotNull List<T> getClonedValue() {
+    public List<T> getClonedValue() {
         List<T> clonedList = new ArrayList<>(Math.max(this.value.size(), 10));
         for (T tag : value) {
             clonedList.add((T) tag.copy());
@@ -69,7 +69,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
 
     @Override
     @Contract(pure = true)
-    public @NotNull List<T> getRawValue() {
+    public List<T> getRawValue() {
         return this.value;
     }
 
@@ -77,7 +77,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     ///
     /// @param value The new list of tags.
     /// @throws IllegalArgumentException If the tags in the list are not of the same type or a tag is null.
-    public void setValue(@NotNull List<T> value) {
+    public void setValue(List<T> value) {
         checkType(value);
         this.value.clear();
         this.value.addAll(value);
@@ -119,7 +119,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     ///
     /// @param tags The collection of tags to add.
     /// @throws IllegalArgumentException If any tag fails the type check.
-    public void addAll(@NotNull Collection<T> tags) throws IllegalArgumentException {
+    public void addAll(Collection<T> tags) throws IllegalArgumentException {
         checkType(tags);
         this.value.addAll(tags);
     }
@@ -156,7 +156,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// @param tag   The tag to be stored at the specified position.
     /// @return The tag previously at the position.
     /// @throws IllegalArgumentException If the new tag's type does not match.
-    public T set(int index,@NotNull T tag) {
+    public T set(int index, @NotNull T tag) {
         checkType(tag);
         return value.set(index, tag);
     }
@@ -166,12 +166,12 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// @param tag The tag to search for.
     /// @return The index of the tag, or -1 if not found.
     @Contract(pure = true)
-    public int indexOf(T tag) {
+    public int indexOf(@Nullable T tag) {
         return this.value.indexOf(tag);
     }
 
     @Contract(pure = true)
-    public int indexOf(@NotNull Predicate<? super T> predicate) {
+    public int indexOf(Predicate<? super T> predicate) {
         for (int i = 0; i < value.size(); i++) {
             if (predicate.test(value.get(i))) {
                 return i;
@@ -181,7 +181,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     }
 
     @Contract(pure = true)
-    public @Nullable T find(@NotNull Predicate<? super T> predicate) {
+    public @Nullable T find(Predicate<? super T> predicate) {
         for (T t : value) {
             if (predicate.test(t)) {
                 return t;
@@ -216,7 +216,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     /// @param tagName The name to check.
     /// @return `true` if the tag exists, `false` otherwise.
     @Contract(pure = true)
-    public boolean contains(String tagName) {
+    public boolean contains(@Nullable String tagName) {
         if (tagName == null) {
             return false;
         }
@@ -241,13 +241,13 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
     }
 
     @Override
-    public @NotNull Iterator<T> iterator() {
+    public Iterator<T> iterator() {
         return this.value.iterator();
     }
 
     /// Returns a sequential Stream with this list as its source.
     @Contract(pure = true)
-    public @NotNull Stream<T> stream() {
+    public Stream<T> stream() {
         return value.stream();
     }
 
@@ -284,7 +284,7 @@ public class ListTag<T extends Tag> extends Tag implements Iterable<T> {
 
     @Override
     @SuppressWarnings("unchecked") // Safe cast: tag.copy() returns a Tag of the same concrete type
-    public @NotNull ListTag<T> copy() {
+    public ListTag<T> copy() {
         ListTag<T> copy = new ListTag<>(this.getName(), this.typeId);
         for (T tag : this.value) {
             copy.add((T) tag.copy());
