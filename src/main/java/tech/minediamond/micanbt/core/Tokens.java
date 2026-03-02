@@ -1,5 +1,7 @@
 package tech.minediamond.micanbt.core;
 
+import org.jetbrains.annotations.Nullable;
+
 public final class Tokens {
     private Tokens() {
     }
@@ -111,7 +113,7 @@ public final class Tokens {
      * @param s The string to evaluate.
      * @return True if the string is empty or contains characters that require quoting.
      */
-    public static boolean needQuotation(String s) {
+    public static boolean needQuotation(@Nullable String s) {
         if (s == null || s.isEmpty()) {
             return true;
         }
@@ -129,7 +131,7 @@ public final class Tokens {
         return c < 128 && !NOT_ALLOWED_UNQUOTE_CHARS_IN_NBT_PATH[c];
     }
 
-    public static boolean needQuotationInNBTPath(String s) {
+    public static boolean needQuotationInNBTPath(@Nullable String s) {
         if (s == null || s.isEmpty()) {
             return true;
         }
@@ -157,7 +159,7 @@ public final class Tokens {
      * @param s The string to check.
      * @return True if all characters are valid for a numeric literal.
      */
-    public static boolean mayNumber(String s) {
+    public static boolean mayNumber(@Nullable String s) {
         if (s == null || s.isEmpty()) return false;
 
         int len = s.length();

@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.util.map;
 
+import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.tag.Tag;
 
 import java.util.*;
@@ -96,14 +97,11 @@ public class OrderedListMap<K, V extends Tag> implements Iterable<V> {
         if (existing != null) return existing;
 
         V computed = mappingFunction.apply(key);
-        if (computed == null) {
-            throw new NullPointerException("mappingFunction returned null");
-        }
         put(key, computed);
         return computed;
     }
 
-    public V remove(K key) {
+    public @Nullable V remove(K key) {
         V old = internalMap.remove(key);
         if (old != null) {
             keys.remove(key);
@@ -187,7 +185,7 @@ public class OrderedListMap<K, V extends Tag> implements Iterable<V> {
 
     private class ValueIterator implements Iterator<V> {
         private final Iterator<K> keyIterator = keys.iterator();
-        private K lastKey = null;
+        private @Nullable K lastKey = null;
 
         @Override
         public boolean hasNext() {
