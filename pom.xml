@@ -21,7 +21,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.release>25</maven.compiler.release>
 
         <java.version>25</java.version>
 
@@ -164,7 +164,7 @@
                 </executions>
                 <configuration>
                     <show>public</show>
-                    <release>${java.version}</release> <!-- java 25 for markdown support -->
+                    <release>${java.version}</release>
                     <failOnError>true</failOnError>
                 </configuration>
             </plugin>
