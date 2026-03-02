@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.nbt;
 
+import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.*;
 
@@ -17,14 +18,14 @@ import java.util.zip.InflaterInputStream;
  * of compression types (GZIP, ZLIB, or Uncompressed) and configurable byte order.
  */
 public class NBTReader {
-    private final Path path;
-    private final byte[] data;
+    private final @Nullable Path path;
+    private final byte @Nullable [] data;
     private DataInput in;
-    private NBTCompressType compressType;
+    private @Nullable NBTCompressType compressType;
     private final boolean littleEndian;
     private final CompoundSelection compoundSelection;
 
-    private final CompoundTag tag;
+    private final @Nullable CompoundTag tag;
 
     private NBTReader(Builder builder) throws IOException {
         if (builder.path == null && builder.data == null && builder.dataInput == null) {
@@ -81,21 +82,21 @@ public class NBTReader {
      *
      * @return The parsed root {@link Tag}.
      */
-    public CompoundTag getTag() {
+    public @Nullable CompoundTag getTag() {
         return tag;
     }
 
-    private CompoundTag inferenceAndRead() throws IOException {
+    private @Nullable CompoundTag inferenceAndRead() throws IOException {
         return warpSource();
     }
 
-    private CompoundTag warpSource() throws IOException {
+    private @Nullable CompoundTag warpSource() throws IOException {
         try (InputStream is = path != null ? new BufferedInputStream(Files.newInputStream(path)) : new ByteArrayInputStream(data)) {
             return inferenceCompressType(is);
         }
     }
 
-    private CompoundTag inferenceCompressType(InputStream is) throws IOException {
+    private @Nullable CompoundTag inferenceCompressType(InputStream is) throws IOException {
         if (compressType == null) {
             is.mark(3);
             byte[] header = new byte[3];
@@ -122,12 +123,12 @@ public class NBTReader {
         }
     }
 
-    private CompoundTag inferenceLittleEndian(InputStream in) throws IOException {
+    private @Nullable CompoundTag inferenceLittleEndian(InputStream in) throws IOException {
         this.in = littleEndian ? new LittleEndianDataInputStream(in) : new DataInputStream(in);
         return readRoot();
     }
 
-    private CompoundTag readRoot() throws IOException {
+    private @Nullable CompoundTag readRoot() throws IOException {
         Tag root = readNamedTag();
         if (root instanceof CompoundTag compoundRootTag) {
             return compoundRootTag;
@@ -137,7 +138,7 @@ public class NBTReader {
         }
     }
 
-    private Tag readNamedTag() throws IOException {
+    private @Nullable Tag readNamedTag() throws IOException {
         int id = in.readUnsignedByte();
         if (id == 0) {
             return null;
@@ -226,11 +227,11 @@ public class NBTReader {
      */
     public static class Builder {
         // one of path, dataInput or data must be provided, and this is ensured through the constructor.
-        private Path path;
-        private DataInput dataInput;
-        private byte[] data;
+        private @Nullable Path path;
+        private @Nullable DataInput dataInput;
+        private byte @Nullable [] data;
         // compressed and littleEndian are only required when using path, not needed when using dataInput
-        private NBTCompressType compressType; // When not specified, it is automatically inferred; otherwise, the specified value is used.
+        private @Nullable NBTCompressType compressType; // When not specified, it is automatically inferred; otherwise, the specified value is used.
         private boolean littleEndian = false;
         private CompoundSelection compoundSelection = CompoundSelection.COMMON_MAP;
 

@@ -1,8 +1,6 @@
 package tech.minediamond.micanbt.nbt;
 
-import org.jetbrains.annotations.Blocking;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.CompoundTag;
 
@@ -19,7 +17,7 @@ public class NBT {
     /// @param path The path to the file.
     /// @return An NBTReader Builder.
     @Contract("_ -> new")
-    public static @NotNull NBTReader.Builder fromPath(@NotNull Path path) {
+    public static NBTReader.Builder fromPath(Path path) {
         return NBTReader.builder(path);
     }
 
@@ -28,7 +26,7 @@ public class NBT {
     /// @param input The data input source.
     /// @return An NBTReader Builder.
     @Contract("_ -> new")
-    public static @NotNull NBTReader.Builder fromDataInput(@NotNull DataInput input) {
+    public static NBTReader.Builder fromDataInput(DataInput input) {
         return NBTReader.builder(input);
     }
 
@@ -37,7 +35,7 @@ public class NBT {
     /// @param data The byte array.
     /// @return An NBTReader Builder.
     @Contract("_ -> new")
-    public static @NotNull NBTReader.Builder fromBytes(byte @NotNull [] data) {
+    public static NBTReader.Builder fromBytes(byte[] data) {
         return NBTReader.builder(data);
     }
 
@@ -46,7 +44,7 @@ public class NBT {
     /// @param path The path to the file.
     /// @return The parsed root [CompoundTag].
     /// @throws IOException If an I/O error occurs.
-    public static @NotNull CompoundTag read(@NotNull Path path) throws IOException {
+    public static CompoundTag read(Path path) throws IOException {
         return NBTReader.builder(path).getTag();
     }
 
@@ -58,7 +56,7 @@ public class NBT {
     /// @param compoundSelection The implementation strategy for CompoundTags.
     /// @return The parsed root [CompoundTag].
     /// @throws IOException If an I/O error occurs.
-    public static @NotNull CompoundTag read(@NotNull Path path, @NotNull NBTCompressType compressType, boolean littleEndian, @NotNull CompoundSelection compoundSelection) throws IOException {
+    public static CompoundTag read(Path path, NBTCompressType compressType, boolean littleEndian, CompoundSelection compoundSelection) throws IOException {
         return fromPath(path).compressType(compressType).littleEndian(littleEndian).compoundSelection(compoundSelection).getTag();
     }
 
@@ -67,7 +65,7 @@ public class NBT {
     /// @param dataInput The data input source.
     /// @return The parsed root [CompoundTag].
     /// @throws IOException If an I/O error occurs.
-    public static @NotNull CompoundTag read(@NotNull DataInput dataInput) throws IOException {
+    public static CompoundTag read(DataInput dataInput) throws IOException {
         return fromDataInput(dataInput).getTag();
     }
 
@@ -77,7 +75,7 @@ public class NBT {
     /// @param compoundSelection The implementation strategy for CompoundTags.
     /// @return The parsed root [CompoundTag].
     /// @throws IOException If an I/O error occurs.
-    public static @NotNull CompoundTag read(@NotNull DataInput dataInput, @NotNull CompoundSelection compoundSelection) throws IOException {
+    public static CompoundTag read(DataInput dataInput, CompoundSelection compoundSelection) throws IOException {
         return fromDataInput(dataInput).compoundSelection(compoundSelection).getTag();
     }
 
@@ -86,7 +84,7 @@ public class NBT {
     /// @param data The byte array containing NBT data.
     /// @return The parsed root [CompoundTag].
     /// @throws IOException If an I/O error occurs.
-    public static @NotNull CompoundTag read(byte @NotNull [] data) throws IOException {
+    public static CompoundTag read(byte[] data) throws IOException {
         return fromBytes(data).getTag();
     }
 
@@ -98,7 +96,7 @@ public class NBT {
     /// @param compoundSelection The implementation strategy for CompoundTags.
     /// @return The parsed root [CompoundTag].
     /// @throws IOException If an I/O error occurs.
-    public static @NotNull CompoundTag read(byte @NotNull [] data, @NotNull NBTCompressType compressType, boolean littleEndian, @NotNull CompoundSelection compoundSelection) throws IOException {
+    public static CompoundTag read(byte[] data, NBTCompressType compressType, boolean littleEndian, CompoundSelection compoundSelection) throws IOException {
         return fromBytes(data).compressType(compressType).littleEndian(littleEndian).compoundSelection(compoundSelection).getTag();
     }
 
@@ -109,7 +107,7 @@ public class NBT {
     /// @return An `NBTWriter.Builder` for configuration.
     /// @throws IOException If an I/O error occurs.
     @Contract("_, _ -> new")
-    public static @NotNull NBTWriter.Builder toPath(@NotNull CompoundTag tag, @NotNull Path path) throws IOException {
+    public static NBTWriter.Builder toPath(CompoundTag tag, Path path) throws IOException {
         return NBTWriter.builder(tag, path);
     }
 
@@ -120,7 +118,7 @@ public class NBT {
     /// @return An `NBTWriter.Builder` for configuration.
     /// @throws IOException If an I/O error occurs.
     @Contract("_, _ -> new")
-    public static @NotNull NBTWriter.Builder toStream(@NotNull CompoundTag tag, @NotNull OutputStream outputStream) throws IOException {
+    public static NBTWriter.Builder toStream(CompoundTag tag, OutputStream outputStream) throws IOException {
         return NBTWriter.builder(tag, outputStream);
     }
 
@@ -131,7 +129,7 @@ public class NBT {
     /// @return An `NBTWriter.Builder` for configuration.
     /// @throws IOException If an I/O error occurs.
     @Contract("_, _ -> new")
-    public static @NotNull NBTWriter.Builder toDataOutput(@NotNull CompoundTag tag, @NotNull DataOutput dataOutput) throws IOException {
+    public static NBTWriter.Builder toDataOutput(CompoundTag tag, DataOutput dataOutput) throws IOException {
         return NBTWriter.builder(tag, dataOutput);
     }
 
@@ -140,7 +138,7 @@ public class NBT {
     /// @param tag  The root `CompoundTag` to write.
     /// @param path The path to the file.
     /// @throws IOException If an I/O error occurs.
-    public static void write(@NotNull CompoundTag tag, @NotNull Path path) throws IOException {
+    public static void write(CompoundTag tag, Path path) throws IOException {
         toPath(tag, path).write();
     }
 
@@ -151,7 +149,7 @@ public class NBT {
     /// @param compressType The specific compression type to use.
     /// @param littleEndian Whether to use Little Endian byte order.
     /// @throws IOException If an I/O error occurs.
-    public static void write(@NotNull CompoundTag tag, @NotNull Path path, @NotNull NBTCompressType compressType, boolean littleEndian) throws IOException {
+    public static void write(CompoundTag tag, Path path, NBTCompressType compressType, boolean littleEndian) throws IOException {
         toPath(tag, path).compressType(compressType).littleEndian(littleEndian).write();
     }
 
@@ -160,7 +158,7 @@ public class NBT {
     /// @param tag          The root `CompoundTag` to write.
     /// @param outputStream The destination output stream.
     /// @throws IOException If an I/O error occurs.
-    public static void write(@NotNull CompoundTag tag, @NotNull OutputStream outputStream) throws IOException {
+    public static void write(CompoundTag tag, OutputStream outputStream) throws IOException {
         toStream(tag, outputStream).write();
     }
 
@@ -171,7 +169,7 @@ public class NBT {
     /// @param compressType The specific compression type to use.
     /// @param littleEndian Whether to use Little Endian byte order.
     /// @throws IOException If an I/O error occurs.
-    public static void write(@NotNull CompoundTag tag, @NotNull OutputStream outputStream, @NotNull NBTCompressType compressType, boolean littleEndian) throws IOException {
+    public static void write(CompoundTag tag, OutputStream outputStream, NBTCompressType compressType, boolean littleEndian) throws IOException {
         toStream(tag, outputStream).compressType(compressType).littleEndian(littleEndian).write();
     }
 
@@ -182,7 +180,7 @@ public class NBT {
     /// @param tag        The root `CompoundTag` to write.
     /// @param dataOutput The destination data output.
     /// @throws IOException If an I/O error occurs.
-    public static void write(@NotNull CompoundTag tag, @NotNull DataOutput dataOutput) throws IOException {
+    public static void write(CompoundTag tag, DataOutput dataOutput) throws IOException {
         toDataOutput(tag, dataOutput).write();
     }
 
@@ -192,7 +190,7 @@ public class NBT {
     /// @return A byte array containing the serialized NBT data.
     /// @throws IOException If an I/O error occurs.
     @Contract(pure = true)
-    public static byte @NotNull [] toBytes(@NotNull CompoundTag tag) throws IOException {
+    public static byte[] toBytes(CompoundTag tag) throws IOException {
         return NBTWriter.builder(tag).toByteArray();
     }
 
@@ -204,7 +202,7 @@ public class NBT {
     /// @return A byte array containing the serialized NBT data.
     /// @throws IOException If an I/O error occurs.
     @Contract(pure = true)
-    public static byte @NotNull [] toBytes(@NotNull CompoundTag tag, @NotNull NBTCompressType compressType, boolean littleEndian) throws IOException {
+    public static byte[] toBytes(CompoundTag tag, NBTCompressType compressType, boolean littleEndian) throws IOException {
         return NBTWriter.builder(tag).compressType(compressType).littleEndian(littleEndian).toByteArray();
     }
 }
