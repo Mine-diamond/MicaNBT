@@ -105,9 +105,8 @@ public class NBT {
     /// @param tag  The root `CompoundTag` to write.
     /// @param path The path to the file.
     /// @return An `NBTWriter.Builder` for configuration.
-    /// @throws IOException If an I/O error occurs.
     @Contract("_, _ -> new")
-    public static NBTWriter.Builder toPath(CompoundTag tag, Path path) throws IOException {
+    public static NBTWriter.Builder toPath(CompoundTag tag, Path path) {
         return NBTWriter.builder(tag, path);
     }
 
@@ -116,9 +115,8 @@ public class NBT {
     /// @param tag          The root `CompoundTag` to write.
     /// @param outputStream The destination output stream.
     /// @return An `NBTWriter.Builder` for configuration.
-    /// @throws IOException If an I/O error occurs.
     @Contract("_, _ -> new")
-    public static NBTWriter.Builder toStream(CompoundTag tag, OutputStream outputStream) throws IOException {
+    public static NBTWriter.Builder toStream(CompoundTag tag, OutputStream outputStream) {
         return NBTWriter.builder(tag, outputStream);
     }
 
@@ -127,9 +125,8 @@ public class NBT {
     /// @param tag        The root `CompoundTag` to write.
     /// @param dataOutput The destination data output.
     /// @return An `NBTWriter.Builder` for configuration.
-    /// @throws IOException If an I/O error occurs.
     @Contract("_, _ -> new")
-    public static NBTWriter.Builder toDataOutput(CompoundTag tag, DataOutput dataOutput) throws IOException {
+    public static NBTWriter.Builder toDataOutput(CompoundTag tag, DataOutput dataOutput) {
         return NBTWriter.builder(tag, dataOutput);
     }
 
