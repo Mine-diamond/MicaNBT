@@ -2,7 +2,6 @@ package tech.minediamond.micanbt.nbt;
 
 import net.jpountz.lz4.LZ4BlockInputStream;
 import org.jetbrains.annotations.Nullable;
-import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.*;
 
 import java.io.*;
@@ -27,7 +26,6 @@ public class NBTReader {
     private DataInput in;
     private @Nullable NBTCompressType compressType;
     private final boolean littleEndian;
-    private final CompoundSelection compoundSelection;
 
     private final CompoundTag tag;
 
@@ -39,7 +37,6 @@ public class NBTReader {
         this.data = builder.data;
         this.compressType = builder.compressType;
         this.littleEndian = builder.littleEndian;
-        this.compoundSelection = builder.compoundSelection;
         this.in = builder.dataInput;
         if (in != null) {
             tag = readRoot();
@@ -187,10 +184,7 @@ public class NBTReader {
     }
 
     private CompoundTag readCompoundTag(String name) throws IOException {
-        CompoundTag compoundTag = switch (compoundSelection) {
-            case COMMON_MAP -> new CommonCompoundTag(name);
-            case REORDERABLE_MAP -> new ReorderableCompoundTag(name);
-        };
+        CompoundTag compoundTag = new ReorderableCompoundTag(name);
         try {
             Tag tag;
             while ((tag = readNamedTag()) != null) {
@@ -250,7 +244,6 @@ public class NBTReader {
         // compressed and littleEndian are only required when using path, not needed when using dataInput
         private @Nullable NBTCompressType compressType; // When not specified, it is automatically inferred; otherwise, the specified value is used.
         private boolean littleEndian = false;
-        private CompoundSelection compoundSelection = CompoundSelection.COMMON_MAP;
 
         private Builder(Path path) {
             this.path = path;
@@ -285,17 +278,6 @@ public class NBTReader {
          */
         public Builder littleEndian(boolean littleEndian) {
             this.littleEndian = littleEndian;
-            return this;
-        }
-
-        /**
-         * Configures the internal map implementation used for {@link CompoundTag}.
-         *
-         * @param selection The selection strategy (e.g., Common Map or Reorderable Map).
-         * @return This builder instance.
-         */
-        public Builder compoundSelection(CompoundSelection selection) {
-            this.compoundSelection = selection;
             return this;
         }
 

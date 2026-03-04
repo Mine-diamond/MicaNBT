@@ -2,9 +2,8 @@ package tech.minediamond.micanbt.chunk;
 
 import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.nbt.NBT;
-import tech.minediamond.micanbt.core.CompoundSelection;
-import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.CompoundTag;
+import tech.minediamond.micanbt.tag.ReorderableCompoundTag;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -45,10 +44,10 @@ public class Chunk {
         this.region = region;
     }
 
-    public static Chunk of(DataInput dataInput, CompoundSelection compoundSelection, int timestamp, ChunkPos chunkPos, Region region) {
+    public static Chunk of(DataInput dataInput, int timestamp, ChunkPos chunkPos, Region region) {
         CompoundTag parsed;
         try {
-            parsed = NBT.read(dataInput, compoundSelection);
+            parsed = NBT.read(dataInput);
         } catch (IOException e) {
             return ofCorrupt(timestamp, chunkPos, e, region);
         }
@@ -56,7 +55,7 @@ public class Chunk {
     }
 
     public static Chunk ofUninitialized(ChunkPos chunkPos, Region region) {
-        return new Chunk(new CommonCompoundTag(""), 0, chunkPos, false, region);
+        return new Chunk(new ReorderableCompoundTag(""), 0, chunkPos, false, region);
     }
 
     public static Chunk ofCorrupt(int timestamp, ChunkPos chunkPos, Throwable cause, Region region) {

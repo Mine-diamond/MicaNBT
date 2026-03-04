@@ -1,7 +1,6 @@
 package tech.minediamond.micanbt.snbt;
 
 import tech.minediamond.micanbt.core.CharReader;
-import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.core.Tokens;
 import tech.minediamond.micanbt.tag.*;
 import tech.minediamond.micanbt.util.primitivearray.ByteArray;
@@ -15,14 +14,12 @@ import java.nio.file.Path;
 public class SNBTReader {
     private final CharReader snbtBuffer;
     private final Tag tag;
-    private final boolean useReorderableCompoundTag;
 
     private int depth = 0;
     private final StringBuilder reusableBuilder = new StringBuilder();
 
-    public SNBTReader(String SNBTText, CompoundSelection compoundSelection) {
+    public SNBTReader(String SNBTText) {
         this.snbtBuffer = new CharReader(SNBTText);
-        this.useReorderableCompoundTag = compoundSelection == CompoundSelection.REORDERABLE_MAP;
         try {
             tag = readRoot();
         } catch (Exception e) {
@@ -30,9 +27,8 @@ public class SNBTReader {
         }
     }
 
-    public SNBTReader(Path path, CompoundSelection compoundSelection) throws IOException {
+    public SNBTReader(Path path) throws IOException {
         this.snbtBuffer = new CharReader(Files.readString(path));
-        this.useReorderableCompoundTag = compoundSelection == CompoundSelection.REORDERABLE_MAP;
         try {
             tag = readRoot();
         } catch (Exception e) {
@@ -87,7 +83,7 @@ public class SNBTReader {
         if (depth > Tokens.MAX_NBT_NESTING_DEPTH) {
             throw new SNBTParseException("max nesting depth exceeded");
         }
-        CompoundTag compoundTag = useReorderableCompoundTag ? new ReorderableCompoundTag(name) : new CommonCompoundTag(name);
+        CompoundTag compoundTag = new ReorderableCompoundTag(name);
         snbtBuffer.skipOrThrow(Tokens.COMPOUND_BEGIN); // `{`
         snbtBuffer.skipEmptyChar();
         if (snbtBuffer.peekOrConsume(Tokens.COMPOUND_END)) { // `}`

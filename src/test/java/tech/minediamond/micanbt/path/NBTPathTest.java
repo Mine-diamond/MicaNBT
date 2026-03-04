@@ -32,7 +32,7 @@ public class NBTPathTest {
 
         assertRawToken("\"\":{id:\"minecraft:unbreaking\",lvl:10s}", new KeyToken("tag"), new KeyToken("Enchantments"), new IndexToken(1));
         assertRawToken("\"Slot\":13b", new KeyToken("tag"), new KeyToken("BlockEntityTag"), new KeyToken("Items"), new IndexToken(0), new KeyToken("Slot"));
-        CommonCompoundTag filterCompound = new CommonCompoundTag("");
+        ReorderableCompoundTag filterCompound = new ReorderableCompoundTag("");
         filterCompound.put(new ListTag<>("Data", List.of(new ByteTag("", (byte) 10), new ByteTag("", (byte) 20), new ByteTag("", (byte) 30))));
         assertRawToken("\"\":723",
                 new KeyToken("tag"),
