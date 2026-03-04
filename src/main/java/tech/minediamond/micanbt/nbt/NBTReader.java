@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.nbt;
 
+import net.jpountz.lz4.LZ4BlockInputStream;
 import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.*;
@@ -7,6 +8,7 @@ import tech.minediamond.micanbt.tag.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.InflaterInputStream;
 
@@ -18,6 +20,8 @@ import java.util.zip.InflaterInputStream;
  * of compression types (GZIP, ZLIB, or Uncompressed) and configurable byte order.
  */
 public class NBTReader {
+    private static final byte[] LZ4_MAGIC = new byte[]{'L', 'Z', '4', 'B', 'l', 'o', 'c', 'k'};
+
     private final @Nullable Path path;
     private final byte @Nullable [] data;
     private DataInput in;
@@ -98,17 +102,24 @@ public class NBTReader {
 
     private @Nullable CompoundTag inferenceCompressType(InputStream is) throws IOException {
         if (compressType == null) {
-            is.mark(3);
-            byte[] header = new byte[3];
-            if (is.read(header) < 3) {
-                throw new IOException("File is too small");
+
+            byte[] header = new byte[8];
+            is.mark(8);
+
+            int read = 0;
+            while (read < header.length) {
+                int n = is.read(header, read, header.length - read);
+                if (n == -1) break;
+                read += n;
             }
             is.reset();
 
-            if (header[0] == 0x1f && header[1] == (byte) 0x8b && header[2] == 0x08) {
+            if (read >= 3 && header[0] == 0x1f && header[1] == (byte) 0x8b && header[2] == 0x08) {
                 compressType = NBTCompressType.GZIP;
-            } else if ((header[0] & 0x0F) == 8 && (header[0] >>> 4) <= 7 && (header[0] * 256 + header[1]) % 31 == 0) {
+            } else if (read >= 2 && (header[0] & 0x0F) == 8 && (header[0] >>> 4) <= 7 && (header[0] * 256 + header[1]) % 31 == 0) {
                 compressType = NBTCompressType.ZLIB;
+            } else if (read >= 8 && Arrays.equals(LZ4_MAGIC, header)) {
+                compressType = NBTCompressType.LZ4;
             } else {
                 compressType = NBTCompressType.UNCOMPRESSED;
             }
@@ -118,6 +129,7 @@ public class NBTReader {
             case UNCOMPRESSED -> is;
             case GZIP -> new GZIPInputStream(is);
             case ZLIB -> new InflaterInputStream(is);
+            case LZ4 -> new LZ4BlockInputStream(is);
         }) {
             return inferenceLittleEndian(in);
         }
