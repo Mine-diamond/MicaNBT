@@ -94,32 +94,20 @@ public class NBTWriter {
     }
 
     private void writeTagValue(Tag tag) throws IOException {
-        if (tag instanceof CompoundTag compoundTag) {
-            writeCompoundTag(compoundTag);
-        } else if (tag instanceof ListTag<?> listTag) {
-            writeListTag(listTag);
-        } else if (tag instanceof StringTag stringTag) {
-            dataOutput.writeUTF(stringTag.getRawValue());
-        } else if (tag instanceof ByteArrayTag byteArrayTag) {
-            writeByteArrayTag(byteArrayTag);
-        } else if (tag instanceof IntArrayTag intArrayTag) {
-            writeIntArray(intArrayTag);
-        } else if (tag instanceof LongArrayTag longArrayTag) {
-            writeLongArray(longArrayTag);
-        } else if (tag instanceof ByteTag byteTag) {
-            dataOutput.writeByte(byteTag.getRawValue());
-        } else if (tag instanceof ShortTag shortTag) {
-            dataOutput.writeShort(shortTag.getRawValue());
-        } else if (tag instanceof IntTag intTag) {
-            dataOutput.writeInt(intTag.getRawValue());
-        } else if (tag instanceof LongTag longTag) {
-            dataOutput.writeLong(longTag.getRawValue());
-        } else if (tag instanceof FloatTag floatTag) {
-            dataOutput.writeFloat(floatTag.getRawValue());
-        } else if (tag instanceof DoubleTag doubleTag) {
-            dataOutput.writeDouble(doubleTag.getRawValue());
-        } else {
-            throw new IOException("Unsupported tag type: " + tag.getClass().getName());
+        switch (tag) {
+            case CompoundTag compoundTag -> writeCompoundTag(compoundTag);
+            case ListTag<?> listTag -> writeListTag(listTag);
+            case StringTag stringTag -> dataOutput.writeUTF(stringTag.getRawValue());
+            case ByteArrayTag byteArrayTag -> writeByteArrayTag(byteArrayTag);
+            case IntArrayTag intArrayTag -> writeIntArray(intArrayTag);
+            case LongArrayTag longArrayTag -> writeLongArray(longArrayTag);
+            case ByteTag byteTag -> dataOutput.writeByte(byteTag.getRawValue());
+            case ShortTag shortTag -> dataOutput.writeShort(shortTag.getRawValue());
+            case IntTag intTag -> dataOutput.writeInt(intTag.getRawValue());
+            case LongTag longTag -> dataOutput.writeLong(longTag.getRawValue());
+            case FloatTag floatTag -> dataOutput.writeFloat(floatTag.getRawValue());
+            case DoubleTag doubleTag -> dataOutput.writeDouble(doubleTag.getRawValue());
+            default -> throw new IOException("Unsupported tag type: " + tag.getClass().getName());
         }
     }
 

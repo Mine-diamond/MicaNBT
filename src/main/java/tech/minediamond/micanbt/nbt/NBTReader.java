@@ -29,7 +29,7 @@ public class NBTReader {
     private final boolean littleEndian;
     private final CompoundSelection compoundSelection;
 
-    private final @Nullable CompoundTag tag;
+    private final CompoundTag tag;
 
     private NBTReader(Builder builder) throws IOException {
         if (builder.path == null && builder.data == null && builder.dataInput == null) {
@@ -45,9 +45,6 @@ public class NBTReader {
             tag = readRoot();
         } else {
             tag = inferenceAndRead();
-        }
-        if (tag == null) {
-            throw new NBTParseException("Root tag is end tag");
         }
     }
 
@@ -86,21 +83,29 @@ public class NBTReader {
      *
      * @return The parsed root {@link Tag}.
      */
-    public @Nullable CompoundTag getTag() {
+    public CompoundTag getTag() {
         return tag;
     }
 
-    private @Nullable CompoundTag inferenceAndRead() throws IOException {
+    private CompoundTag inferenceAndRead() throws IOException {
         return warpSource();
     }
 
-    private @Nullable CompoundTag warpSource() throws IOException {
-        try (InputStream is = path != null ? new BufferedInputStream(Files.newInputStream(path)) : new ByteArrayInputStream(data)) {
-            return inferenceCompressType(is);
+    private CompoundTag warpSource() throws IOException {
+        if (path != null) {
+            try (InputStream is = new BufferedInputStream(Files.newInputStream(path))) {
+                return inferenceCompressType(is);
+            }
+        } else if (data != null) {
+            try (InputStream is = new ByteArrayInputStream(data)) {
+                return inferenceCompressType(is);
+            }
+        } else {
+            throw new IOException("No input source provided to NBTReader");
         }
     }
 
-    private @Nullable CompoundTag inferenceCompressType(InputStream is) throws IOException {
+    private CompoundTag inferenceCompressType(InputStream is) throws IOException {
         if (compressType == null) {
 
             byte[] header = new byte[8];
@@ -135,12 +140,12 @@ public class NBTReader {
         }
     }
 
-    private @Nullable CompoundTag inferenceLittleEndian(InputStream in) throws IOException {
+    private CompoundTag inferenceLittleEndian(InputStream in) throws IOException {
         this.in = littleEndian ? new LittleEndianDataInputStream(in) : new DataInputStream(in);
         return readRoot();
     }
 
-    private @Nullable CompoundTag readRoot() throws IOException {
+    private CompoundTag readRoot() throws IOException {
         Tag root = readNamedTag();
         if (root instanceof CompoundTag compoundRootTag) {
             return compoundRootTag;
