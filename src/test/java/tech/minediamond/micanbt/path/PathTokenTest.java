@@ -47,7 +47,7 @@ public class PathTokenTest {
         Tag stringListTag = SNBT.parse("[\"str\",\"str1\",\"str2\"]");
         Tag nonListTag = SNBT.parse("{str:\"hello\",int:2}");
 
-        verifyToken(token1, compoundListTag, 1, SNBT.parse("{str:\"value\"}"));
+        verifyToken(token1, compoundListTag, 0, SNBT.parse("{str:\"value\"}"));
         verifyToken(token2, compoundListTag, -1, null);
 
         verifyToken(token1, stringListTag, -1, null);

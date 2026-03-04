@@ -5,6 +5,7 @@ import org.junit.jupiter.api.io.TempDir;
 import tech.minediamond.micanbt.snbt.SNBT;
 import tech.minediamond.micanbt.snbt.SNBTStyle;
 import tech.minediamond.micanbt.tag.CommonCompoundTag;
+import tech.minediamond.micanbt.tag.ReorderableCompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class SNBTRoundTripTest {
     public void testSNBTRoundTrip() {
         Tag tag = Util.getBasicTag();
         Tag newTag = SNBT.parse(SNBT.stringify(tag, true, SNBTStyle.COMPACT));
-        assertInstanceOf(CommonCompoundTag.class, newTag);
+        assertInstanceOf(ReorderableCompoundTag.class, newTag);
 
         assertEquals(tag, newTag);
     }

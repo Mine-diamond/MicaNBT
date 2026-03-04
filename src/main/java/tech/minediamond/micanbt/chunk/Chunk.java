@@ -2,8 +2,8 @@ package tech.minediamond.micanbt.chunk;
 
 import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.nbt.NBT;
-import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.CompoundTag;
+import tech.minediamond.micanbt.tag.ReorderableCompoundTag;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class Chunk {
     }
 
     public static Chunk ofUninitialized(ChunkPos chunkPos, Region region) {
-        return new Chunk(new CommonCompoundTag(""), 0, chunkPos, false, region);
+        return new Chunk(new ReorderableCompoundTag(""), 0, chunkPos, false, region);
     }
 
     public static Chunk ofCorrupt(int timestamp, ChunkPos chunkPos, Throwable cause, Region region) {

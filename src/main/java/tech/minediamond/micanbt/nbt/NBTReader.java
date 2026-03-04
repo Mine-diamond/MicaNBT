@@ -184,7 +184,7 @@ public class NBTReader {
     }
 
     private CompoundTag readCompoundTag(String name) throws IOException {
-        CompoundTag compoundTag = new CommonCompoundTag(name);
+        CompoundTag compoundTag = new ReorderableCompoundTag(name);
         try {
             Tag tag;
             while ((tag = readNamedTag()) != null) {

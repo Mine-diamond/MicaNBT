@@ -4,8 +4,8 @@ import tech.minediamond.micanbt.tag.*;
 
 public class Util {
 
-    public static CommonCompoundTag getBasicTag() {
-        CommonCompoundTag tag = new CommonCompoundTag("tag");
+    public static ReorderableCompoundTag getBasicTag() {
+        ReorderableCompoundTag tag = new ReorderableCompoundTag("tag");
         tag.put(new ByteArrayTag("ByteArrayTag", new byte[]{1, 0, 3}));
         tag.put(new ByteTag("ByteTag", (byte) 2));
         tag.put(new DoubleTag("DoubleTag", 1.0));
