@@ -17,7 +17,7 @@ public class Util {
         tag.put(new ShortTag("ShortTag", (short) 2));
         tag.put(new StringTag("StringTag", "str"));
 
-        CommonCompoundTag subCompoundTag = new CommonCompoundTag("subCompoundTag");
+        ReorderableCompoundTag subCompoundTag = new ReorderableCompoundTag("subCompoundTag");
         subCompoundTag.put(new ByteArrayTag("ByteArrayTag", new byte[]{1, 0, 3}));
         subCompoundTag.put(new ByteTag("ByteTag", (byte) 2));
 
@@ -26,7 +26,7 @@ public class Util {
         listWithItem.add(new StringTag("", "str1"));
         listWithItem.add(new StringTag("", "str2"));
 
-        tag.put(new CommonCompoundTag("subEmptyCompoundTag"));
+        tag.put(new ReorderableCompoundTag("subEmptyCompoundTag"));
         tag.put(subCompoundTag);
         tag.put(listWithItem);
         tag.put(new StringTag("Name With Space", "add a \" here "));

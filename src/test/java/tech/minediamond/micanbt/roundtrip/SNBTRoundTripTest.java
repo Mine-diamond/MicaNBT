@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import tech.minediamond.micanbt.snbt.SNBT;
 import tech.minediamond.micanbt.snbt.SNBTStyle;
-import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.ReorderableCompoundTag;
 import tech.minediamond.micanbt.tag.Tag;
 

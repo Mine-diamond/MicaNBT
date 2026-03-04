@@ -3,7 +3,7 @@ package tech.minediamond.micanbt.path;
 import org.junit.jupiter.api.Test;
 import tech.minediamond.micanbt.path.nbtpathtoken.*;
 import tech.minediamond.micanbt.snbt.SNBT;
-import tech.minediamond.micanbt.tag.CommonCompoundTag;
+import tech.minediamond.micanbt.tag.ReorderableCompoundTag;
 import tech.minediamond.micanbt.tag.StringTag;
 import tech.minediamond.micanbt.tag.Tag;
 
@@ -81,7 +81,7 @@ public class PathTokenTest {
         assertFalse(new KeyToken("key").isModifier());
         assertFalse(new IndexToken(1).isModifier());
         assertFalse(new MatchToken(new StringTag("")).isModifier());
-        assertTrue(new FilterToken(new CommonCompoundTag("")).isModifier());
+        assertTrue(new FilterToken(new ReorderableCompoundTag("")).isModifier());
     }
 
     private <T extends PathToken> T getFirstToken(String pathStr, Class<T> expectedType) {
