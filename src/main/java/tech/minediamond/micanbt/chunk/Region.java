@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.chunk;
 
+import net.jpountz.lz4.LZ4BlockInputStream;
 import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.core.CompoundSelection;
 
@@ -114,6 +115,8 @@ public class Region {
                 }
                 case 0x03 -> { // Uncompressed
                 }
+                case 0x04 -> // LZ4
+                        input = new LZ4BlockInputStream(input);
                 default ->
                         throw new IOException("Unsupported compression method: " + Integer.toHexString(data[offset + 4] & 0xff));
             }

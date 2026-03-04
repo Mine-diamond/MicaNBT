@@ -1,5 +1,6 @@
 package tech.minediamond.micanbt.nbt;
 
+import net.jpountz.lz4.LZ4BlockOutputStream;
 import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.tag.*;
 
@@ -57,6 +58,7 @@ public class NBTWriter {
         try (OutputStream fos = Files.newOutputStream(path); BufferedOutputStream bos = new BufferedOutputStream(fos); OutputStream out = switch (compressType) {
             case GZIP -> new GZIPOutputStream(bos);
             case ZLIB -> new DeflaterOutputStream(bos);
+            case LZ4 -> new LZ4BlockOutputStream(bos);
             case UNCOMPRESSED -> bos;
         }; FilterOutputStream dos = littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out)) {
             this.dataOutput = (DataOutput) dos;
@@ -68,6 +70,7 @@ public class NBTWriter {
         try (BufferedOutputStream bos = new BufferedOutputStream(ops); OutputStream out = switch (compressType) {
             case GZIP -> new GZIPOutputStream(bos);
             case ZLIB -> new DeflaterOutputStream(bos);
+            case LZ4 -> new LZ4BlockOutputStream(bos);
             case UNCOMPRESSED -> bos;
         }; FilterOutputStream dos = littleEndian ? new LittleEndianDataOutputStream(out) : new DataOutputStream(out)) {
             this.dataOutput = (DataOutput) dos;

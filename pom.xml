@@ -27,6 +27,7 @@
 
         <junit.version>5.11.0</junit.version>
         <annotations.version>26.1.0</annotations.version>
+        <lz4-java.version>1.8.1</lz4-java.version>
 
         <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -87,6 +88,11 @@
             <artifactId>annotations</artifactId>
             <version>${annotations.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.lz4</groupId>
+            <artifactId>lz4-java</artifactId>
+            <version>${lz4-java.version}</version>
         </dependency>
     </dependencies>
 
