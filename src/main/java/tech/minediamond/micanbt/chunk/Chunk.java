@@ -2,7 +2,6 @@ package tech.minediamond.micanbt.chunk;
 
 import org.jetbrains.annotations.Nullable;
 import tech.minediamond.micanbt.nbt.NBT;
-import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.CommonCompoundTag;
 import tech.minediamond.micanbt.tag.CompoundTag;
 
@@ -45,10 +44,10 @@ public class Chunk {
         this.region = region;
     }
 
-    public static Chunk of(DataInput dataInput, CompoundSelection compoundSelection, int timestamp, ChunkPos chunkPos, Region region) {
+    public static Chunk of(DataInput dataInput, int timestamp, ChunkPos chunkPos, Region region) {
         CompoundTag parsed;
         try {
-            parsed = NBT.read(dataInput, compoundSelection);
+            parsed = NBT.read(dataInput);
         } catch (IOException e) {
             return ofCorrupt(timestamp, chunkPos, e, region);
         }

@@ -1,7 +1,6 @@
 package tech.minediamond.micanbt.nbt;
 
 import org.jetbrains.annotations.Contract;
-import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.CompoundTag;
 
 import java.io.DataInput;
@@ -53,11 +52,10 @@ public class NBT {
     /// @param path              The path to the file.
     /// @param compressType      The specific compression type to use.
     /// @param littleEndian      Whether to use Little Endian byte order.
-    /// @param compoundSelection The implementation strategy for CompoundTags.
     /// @return The parsed root [CompoundTag].
     /// @throws IOException If an I/O error occurs.
-    public static CompoundTag read(Path path, NBTCompressType compressType, boolean littleEndian, CompoundSelection compoundSelection) throws IOException {
-        return fromPath(path).compressType(compressType).littleEndian(littleEndian).compoundSelection(compoundSelection).getTag();
+    public static CompoundTag read(Path path, NBTCompressType compressType, boolean littleEndian) throws IOException {
+        return fromPath(path).compressType(compressType).littleEndian(littleEndian).getTag();
     }
 
     /// Reads the root NBT tag from a [DataInput].
@@ -67,16 +65,6 @@ public class NBT {
     /// @throws IOException If an I/O error occurs.
     public static CompoundTag read(DataInput dataInput) throws IOException {
         return fromDataInput(dataInput).getTag();
-    }
-
-    /// Reads the root NBT tag from a [DataInput] with a specific compound selection strategy.
-    ///
-    /// @param dataInput         The data input source.
-    /// @param compoundSelection The implementation strategy for CompoundTags.
-    /// @return The parsed root [CompoundTag].
-    /// @throws IOException If an I/O error occurs.
-    public static CompoundTag read(DataInput dataInput, CompoundSelection compoundSelection) throws IOException {
-        return fromDataInput(dataInput).compoundSelection(compoundSelection).getTag();
     }
 
     /// Reads the root NBT tag from a byte array with automatic settings.
@@ -93,11 +81,10 @@ public class NBT {
     /// @param data              The byte array.
     /// @param compressType      The specific compression type to use.
     /// @param littleEndian      Whether to use Little Endian byte order.
-    /// @param compoundSelection The implementation strategy for CompoundTags.
     /// @return The parsed root [CompoundTag].
     /// @throws IOException If an I/O error occurs.
-    public static CompoundTag read(byte[] data, NBTCompressType compressType, boolean littleEndian, CompoundSelection compoundSelection) throws IOException {
-        return fromBytes(data).compressType(compressType).littleEndian(littleEndian).compoundSelection(compoundSelection).getTag();
+    public static CompoundTag read(byte[] data, NBTCompressType compressType, boolean littleEndian) throws IOException {
+        return fromBytes(data).compressType(compressType).littleEndian(littleEndian).getTag();
     }
 
     /// Initiates a builder to write NBT data to a file path.

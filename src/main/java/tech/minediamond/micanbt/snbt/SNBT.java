@@ -1,7 +1,6 @@
 package tech.minediamond.micanbt.snbt;
 
 import org.jetbrains.annotations.Contract;
-import tech.minediamond.micanbt.core.CompoundSelection;
 import tech.minediamond.micanbt.tag.Tag;
 
 import java.io.IOException;
@@ -44,20 +43,7 @@ public class SNBT {
      */
     @Contract(pure = true)
     public static Tag parse(String SNBTText) {
-        return new SNBTReader(SNBTText, CompoundSelection.COMMON_MAP).getTag();
-    }
-
-    /**
-     * Parses an SNBT-formatted string back into a {@link Tag} object with a specific map implementation.
-     *
-     * @param SNBTText          A string conforming to the SNBT specification.
-     * @param compoundSelection The map implementation to use for compounds.
-     * @return The parsed NBT tag.
-     * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail.
-     */
-    @Contract(pure = true)
-    public static Tag parse(String SNBTText, CompoundSelection compoundSelection) {
-        return new SNBTReader(SNBTText, compoundSelection).getTag();
+        return new SNBTReader(SNBTText).getTag();
     }
 
     /**
@@ -69,19 +55,6 @@ public class SNBT {
      * @throws IOException        If an I/O error occurs during file writing.
      */
     public static Tag read(Path path) throws IOException {
-        return new SNBTReader(path, CompoundSelection.COMMON_MAP).getTag();
-    }
-
-    /**
-     * Parses an SNBT-formatted string from a file back into a {@link Tag} object with a specific map implementation.
-     *
-     * @param path              The file path storing SNBT data.
-     * @param compoundSelection The map implementation to use for compounds.
-     * @return The parsed NBT tag.
-     * @throws SNBTParseException If SNBT syntax is incorrect and causes parsing to fail.
-     * @throws IOException        If an I/O error occurs during file reading.
-     */
-    public static Tag read(Path path, CompoundSelection compoundSelection) throws IOException {
-        return new SNBTReader(path, compoundSelection).getTag();
+        return new SNBTReader(path).getTag();
     }
 }
